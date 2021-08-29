@@ -48,8 +48,8 @@ namespace WebApp.Pages.Battleship
 	        RuleSet? menuResult;
 	        if (!Game.Utils.TryBtnStart(Ships, BoardWidth, BoardHeight, AllowedPlacementType, ref errorMsgText, out menuResult))
 	        {
-		        ErrorMsg = errorMsgText;
-				return Page();
+					ErrorMsg = errorMsgText;
+					return Page();
 	        }
 	        if (menuResult == null) { throw new Exception("unexpected!");}
 	        BaseBattleship game = new WebBattle(

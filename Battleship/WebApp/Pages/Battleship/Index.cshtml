@@ -1,27 +1,10 @@
 ﻿@page
 @model WebApp.Pages.Battleship.Index
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-	<a asp-page="NewGame">
-		<h1>New Game</h1>
-	</a>
-	
-	<br/>
-	<a asp-page="LoadGame">
-		<h1>Load</h1>
-	</a>
-	
-	<br/>
-	<div>
-		<p>1.0.2b</p>
-	</div>
+<div class="page">
+    <partial name="Shared/_StartMenuPartial" />
 </div>
-</body>
-</html>
+
+<div class="page" style="display:none" id="NewGame">
+    <partial name="Shared/_NewGamePartial" />
+</div>

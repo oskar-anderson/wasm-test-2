@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -65,6 +66,30 @@
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Details.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Edit.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Pages\Battleship\Index - Copy %282%29 - Copy.cshtml.cs">
+        <DependentUpon>Index - Copy (2).cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy %282%29.cshtml.cs">
+        <DependentUpon>Index.cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy %283%29.cshtml.cs">
+        <DependentUpon>Index.cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy - Copy %282%29.cshtml.cs">
+        <DependentUpon>Index - Copy.cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy - Copy - Copy.cshtml.cs">
+        <DependentUpon>Index - Copy - Copy.cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy - Copy.cshtml.cs">
+        <DependentUpon>Index - Copy.cshtml.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Battleship\Index - Copy.cshtml.cs">
+        <DependentUpon>Index.cshtml.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
     
 </Project>

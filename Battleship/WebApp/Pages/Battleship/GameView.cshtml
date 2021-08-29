@@ -55,77 +55,58 @@
             </div>
             <div class="col-md-auto container">
                 <div style="display: none; position: fixed">
-                    <input type="radio" id="UP" name="KeyPress" value="UP"/>
-                    <input type="radio" id="DOWN" name="KeyPress" value="DOWN"/>
-                    <input type="radio" id="LEFT" name="KeyPress" value="LEFT"/>
-                    <input type="radio" id="RIGHT" name="KeyPress" value="RIGHT"/>
-        
-                    <input type="radio" id="Z" name="KeyPress" value="Z"/>
-                    <input type="radio" id="X" name="KeyPress" value="X"/>
-        
-                    <input type="radio" id="d1" name="KeyPress" value="d1"/>
-                    <input type="radio" id="d2" name="KeyPress" value="d2"/>
-                    <input type="radio" id="d3" name="KeyPress" value="d3"/>
-                    
-                    <input type="radio" id="takeBack" name="KeyPress" value="takeBack"/>
+                    <input type="radio" id="UP" name="KeyPress" value="UP" />
+                    <input type="radio" id="DOWN" name="KeyPress" value="DOWN" />
+                    <input type="radio" id="LEFT" name="KeyPress" value="LEFT" />
+                    <input type="radio" id="RIGHT" name="KeyPress" value="RIGHT" />
+
+                    <input type="radio" id="Z" name="KeyPress" value="Z" />
+                    <input type="radio" id="X" name="KeyPress" value="X" />
+
+                    <input type="radio" id="d1" name="KeyPress" value="d1" />
+                    <input type="radio" id="d2" name="KeyPress" value="d2" />
+                    <input type="radio" id="d3" name="KeyPress" value="d3" />
+
+                    <input type="radio" id="takeBack" name="KeyPress" value="takeBack" />
                 </div>
 
 
                 <div class="row">
                     <div class="col"></div>
                     <div class="col">
-                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('UP')" value="W"/>
+                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('UP')" value="W" />
                     </div>
                     <div class="col"></div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('LEFT')" value="A"/>
+                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('LEFT')" value="A" />
                     </div>
                     <div class="col">
-                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('DOWN')" value="S"/>
+                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('DOWN')" value="S" />
                     </div>
                     <div class="col">
-                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('RIGHT')" value="D"/>
+                        <input type="submit" style="width: 100%;" onclick="checkRadioWithId('RIGHT')" value="D" />
                     </div>
                 </div>
-                <br/>
+                <br />
                 @{
                     UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(Model.GameData);
-                    if (Model.GameData.State == GameState.Placement && shipPlacementStatus.isPlaceable || Model.GameData.State == GameState.Shooting)
-                    {
-                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('Z')" value="Z"/>
-                    }
-                    else
-                    {
-                        <input class="col" type="submit" style="width: 100%;" disabled="disabled" onclick="checkRadioWithId('Z')" value="Z"/>
-                    }
+                    <input class="col" type="submit" style="width: 100%;" 
+                           disabled="@(Model.GameData.State == GameState.Placement && shipPlacementStatus.isPlaceable || Model.GameData.State == GameState.Shooting ? "" : "disabled")"
+                           onclick="checkRadioWithId('Z')" value='Z' />
                     if (Model.GameData.State == GameState.Placement)
                     {
-                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('X')" value="Rotate"/>
+                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('X')" value="Rotate" />
+                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('d1')" value="Randomize" />
+                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('d2')" value="Clear" />
+                        <input class="col" type="submit" style="width: 100%;" disabled="@(shipPlacementStatus.isStartable ? "" : "disabled")"
+                               onclick="checkRadioWithId('d3')" value='Start' />
                     }
 
-                    if (Model.GameData.State == GameState.Placement)
-                    {
-                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('d1')" value="Randomize"/>
-                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('d2')" value="Clear"/>
-                    }
-
-                    if (Model.GameData.State == GameState.Placement)
-                    {
-                        if (shipPlacementStatus.isStartable)
-                        {
-                            <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('d3')" value="Start"/>
-                        }
-                        else
-                        {
-                            <input class="col" type="submit" style="width: 100%;" disabled="disabled" onclick="checkRadioWithId('d3')" value="Start"/>
-                        }
-                    }
-                    
                     if (Model.GameData.State == GameState.Shooting)
                     {
-                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('takeBack')" value="Take Back"/>
+                        <input class="col" type="submit" style="width: 100%;" onclick="checkRadioWithId('takeBack')" value="Take Back" />
                     }
                 }
             </div>
@@ -160,8 +141,6 @@ function displayToggle(id) {
   var x = document.getElementById(id);
   if (x.style.display === "none") {
     x.style.display = "block";
-  } else {
-    x.style.display = "none";
   }
 } 
 </script>

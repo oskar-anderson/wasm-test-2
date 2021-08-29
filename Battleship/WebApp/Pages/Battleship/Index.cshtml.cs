@@ -6,7 +6,7 @@ namespace WebApp.Pages.Battleship
     {
         public void OnGet()
         {
-            
+            // System.Diagnostics.Debug.WriteLine("In Page Index, Function OnGet");
         }
     }
 }

@@ -1,0 +1,116 @@
+﻿
+
+<h3>Ruleset:</h3>
+<form method="post">
+    <div class="form-group">
+        <label for="BoardHeight">BoardHeight</label>
+        <input class="form-control" type="range" min="10" max="40" name="BoardHeight" id="BoardHeight" value="10">
+        <label id="BoardHeightIndicator"></label>
+    </div>
+    <div class="form-group">
+        <label for="BoardWidth">BoardWidth</label>
+        <input class="form-control" type="range" min="10" max="40" name="BoardWidth" id="BoardWidth" value="10">
+        <label id="BoardWidthIndicator"></label>
+    </div>
+    <div class="form-group">
+        <label for="AllowedPlacementType">AllowedPlacementType</label>
+        <select class="form-control" name="AllowedPlacementType" id="AllowedPlacementType">
+            <option value="0">No overlap</option>
+            <option value="1">No sides</option>
+            <option value="2" selected="selected">No corners</option>
+        </select>
+    </div>
+    <div>
+        <label for="Ships">Ships</label>
+        <input class="form-control" type="text" name="Ships" id="Ships" value="1x5n1; 1x4n2; 1x3n3; 1x2n4" />
+    </div>
+    <div style="color: red" id="rulesetError"></div>
+    <button type="button" onclick="launchGame()" class="btn btn-primary">Start</button>
+</form>
+
+
+<script>
+    var sliderHeight = document.getElementById("BoardHeight");
+    var outputHeight = document.getElementById("BoardHeightIndicator");
+    outputHeight.innerHTML = sliderHeight.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    sliderHeight.oninput = function () {
+        outputHeight.innerHTML = this.value;
+    };
+
+    var sliderWidth = document.getElementById("BoardWidth");
+    var outputWidth = document.getElementById("BoardWidthIndicator");
+    outputWidth.innerHTML = sliderWidth.value;
+
+    sliderWidth.oninput = function () {
+        outputWidth.innerHTML = this.value;
+    }
+
+    class GameSettings {
+        
+        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
+            this.BoardHeight = _boardHeight;
+            this.BoardWidth = _boardWidth;
+            this.AllowedPlacementType = _allowedPlacementType;
+            this.Ships = _ships;
+        }
+    }
+
+    async function launchGame() {
+        let settings = getGameSettings();
+        console.log(settings);
+        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
+        let json = await checkGameSettingsValidity(settings, url);
+        if (!json.areSettingsValid) {
+            document.getElementById("rulesetError").innerHTML = json.errorMessage;
+            return;
+        }
+        url = "https://" + window.location.host + "/api/Game/StartGame";
+        json = await startGame(settings, url);
+    }
+
+    function getGameSettings() {
+        let height = parseInt(document.getElementById("BoardHeight").value);
+        let width = parseInt(document.getElementById("BoardWidth").value);
+        let allowedPlacementType = parseInt(document.getElementById("AllowedPlacementType").value);
+        let ships = document.getElementById("Ships").value;
+
+        let input = new GameSettings(height, width, allowedPlacementType, ships);
+        return input;
+    }
+
+    async function checkGameSettingsValidity(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+            then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+
+    async function startGame(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+            then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+</script>
