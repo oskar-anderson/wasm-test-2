@@ -1,10 +1,94 @@
 ﻿@page
 @model WebApp.Pages.Battleship.Index
 
-<div class="page">
-    <partial name="Shared/_StartMenuPartial" />
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.1/mustache.min.js"></script>
 
-<div class="page" style="display:none" id="NewGame">
-    <partial name="Shared/_NewGamePartial" />
-</div>
+<div id="mainBody"></div>
+
+<script>
+
+    function render(target, data = { } ) {
+      let template = fetch(target).then(response => response.text());
+      let rendered = Mustache.render(template, data);
+      document.getElementById('mainBody').innerHTML = rendered;
+    }
+
+    render("./Shared/_StartMenuPartial.txt");
+
+    function startNewGame() {
+        render("./Shared/_NewGamePartial.txt");
+    }
+
+
+    // Start NewGamePartial
+    class GameSettings {
+
+        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
+            this.BoardHeight = _boardHeight;
+            this.BoardWidth = _boardWidth;
+            this.AllowedPlacementType = _allowedPlacementType;
+            this.Ships = _ships;
+        }
+    }
+
+    async function launchGame() {
+        let settings = getGameSettings();
+        console.log(settings);
+        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
+        let json = await checkGameSettingsValidity(settings, url);
+        if (!json.areSettingsValid) {
+            document.getElementById("rulesetError").innerHTML = json.errorMessage;
+            return;
+        }
+        url = "https://" + window.location.host + "/api/Game/StartGame";
+        json = await startGame(settings, url);
+        render("/GameViewJs.txt", json);
+    }
+
+    function getGameSettings() {
+        let height = parseInt(document.getElementById("BoardHeight").value);
+        let width = parseInt(document.getElementById("BoardWidth").value);
+        let allowedPlacementType = parseInt(document.getElementById("AllowedPlacementType").value);
+        let ships = document.getElementById("Ships").value;
+
+        let input = new GameSettings(height, width, allowedPlacementType, ships);
+        return input;
+    }
+
+    async function checkGameSettingsValidity(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+            then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+
+    async function startGame(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+            then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+
+    // End NewGamePartial
+
+</script>

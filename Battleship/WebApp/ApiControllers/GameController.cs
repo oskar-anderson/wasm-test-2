@@ -8,6 +8,8 @@ using Domain.Model.Api;
 using Game;
 using Domain.Model;
 using System.Text.Json;
+using Domain.Tile;
+using Domain;
 
 namespace WebApp.ApiControllers
 {
@@ -52,6 +54,46 @@ namespace WebApp.ApiControllers
 			GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
 			var gameDataSerialized = JsonSerializer.Serialize(gameDataSerializableSave, new JsonSerializerOptions() { WriteIndented = true });
 			return Ok(gameDataSerialized);
+		}
+
+
+		[HttpPost("IsOver")]
+		[Consumes("application/json")]
+		[Produces("application/json")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
+		public ActionResult<ValidGameSettingsOut> IsOver(GameData gameData)
+		{
+			bool isOver = false;
+			string winner = "";
+			switch (gameData.State)
+			{
+				case GameState.Placement:
+					break;
+				case GameState.Shooting:
+					isOver = true;
+					foreach (var ship in gameData.InactivePlayer.Ships)
+					{
+						if (ship.ToPoints().Any(point => gameData.Board2D.Get(point) != TextureValue.HitShip))
+						{
+							isOver = false;
+							winner = gameData.ActivePlayer.Name;
+							break;
+						}
+					}
+					break;
+				case GameState.GameOver:
+					isOver = true;
+					winner = gameData.ActivePlayer.Name;
+					break;
+				default:
+					throw new Exception("unexpected!");
+			}
+			var result = new IsOverOut()
+			{
+				IsOver = isOver,
+				Winner = winner
+			};
+			return Ok(result);
 		}
 	}
 }

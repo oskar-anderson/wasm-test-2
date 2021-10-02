@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using ConsoleGameEngineCore;
 using Game;
 
+#pragma warning disable CS0162 // Unreachable code detected
 namespace ConsoleApp
 {
     public class ConsoleInput : BaseC_Input, BaseI_Input
@@ -124,8 +125,8 @@ namespace ConsoleApp
         {
             if (false)
             {
-                return engine.GetKey((ConsoleKey) (int) key);
-            }
+            return engine.GetKey((ConsoleKey) (int) key);
+         }
             short s = GetAsyncKeyState((int) key);
             return (s & 0x8000) > 0;
         }

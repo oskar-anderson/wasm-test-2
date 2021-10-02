@@ -4,7 +4,7 @@
 <form method="post">
     <div class="form-group">
         <label for="BoardHeight">BoardHeight</label>
-        <input class="form-control" type="range" min="10" max="40" name="BoardHeight" id="BoardHeight" value="10">
+        <input class="form-control" type="range" min="10" max="40" name="BoardHeight" id="BoardHeight" value="10"/>
         <label id="BoardHeightIndicator"></label>
     </div>
     <div class="form-group">
@@ -47,70 +47,4 @@
         outputWidth.innerHTML = this.value;
     }
 
-    class GameSettings {
-        
-        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
-            this.BoardHeight = _boardHeight;
-            this.BoardWidth = _boardWidth;
-            this.AllowedPlacementType = _allowedPlacementType;
-            this.Ships = _ships;
-        }
-    }
-
-    async function launchGame() {
-        let settings = getGameSettings();
-        console.log(settings);
-        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
-        let json = await checkGameSettingsValidity(settings, url);
-        if (!json.areSettingsValid) {
-            document.getElementById("rulesetError").innerHTML = json.errorMessage;
-            return;
-        }
-        url = "https://" + window.location.host + "/api/Game/StartGame";
-        json = await startGame(settings, url);
-    }
-
-    function getGameSettings() {
-        let height = parseInt(document.getElementById("BoardHeight").value);
-        let width = parseInt(document.getElementById("BoardWidth").value);
-        let allowedPlacementType = parseInt(document.getElementById("AllowedPlacementType").value);
-        let ships = document.getElementById("Ships").value;
-
-        let input = new GameSettings(height, width, allowedPlacementType, ships);
-        return input;
-    }
-
-    async function checkGameSettingsValidity(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-            then((data) => {
-                console.log(data);
-                return data;
-            }).catch((err) => {
-                console.error(err);
-            });
-    }
-
-    async function startGame(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-            then((data) => {
-                console.log(data);
-                return data;
-            }).catch((err) => {
-                console.error(err);
-            });
-    }
 </script>

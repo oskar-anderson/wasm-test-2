@@ -1,0 +1,77 @@
+﻿@page
+@using Domain.Model
+@using Domain.Tile
+@using Game
+@model WebApp.Pages.Battleship.GameView
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Battleship</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
+</head>
+<style>
+</style>
+<body>
+    <h2>Battleship</h2>
+    <script>
+        url = "https://" + window.location.host + "/api/Game/IsOver";
+        json = await isGameOver(gameData, url);
+    </script>
+    { { #json.isOver } }
+        <script type="text/x-mustache" id="template">
+            <div>
+                <h3>Game Over! {{ json.winner }} Won!</h3>
+                <p style="text-align: center">
+                    <a onclick="startNewGame()">Try Again</a>
+                </p>
+            </div>
+        </script>
+    { { /json.isOver } }
+    {{ ^json.isOver } }
+        <h3>{{ Model.GameData.ActivePlayer.Name }} turn</h3>
+    { { /json.isOver } }
+    
+</body>
+</html>
+<script>
+
+function checkRadioWithId(id) {
+  document.getElementById(id).checked = true;
+}
+
+function checkCheckboxWithId(id) {
+  document.getElementById(id).checked = true;
+}
+
+function displayToggle(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  }
+}
+
+    function tryAgain() {
+        showById('GameViewJs');
+    }
+
+    async function isGameOver(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+            then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+</script>
