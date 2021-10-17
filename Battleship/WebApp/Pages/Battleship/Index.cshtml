@@ -1,24 +1,92 @@
 ﻿@page
 @model WebApp.Pages.Battleship.Index
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.1/mustache.min.js"></script>
+<head>
+    <script src="~/js/mustache.js"></script>
+</head>
 
 <div id="mainBody"></div>
 
 <script>
 
-    function render(target, data = { } ) {
-      let template = fetch(target).then(response => response.text());
-      let rendered = Mustache.render(template, data);
-      document.getElementById('mainBody').innerHTML = rendered;
+
+
+    function render(template, data = {}) {
+        console.log(template);
+      // let template = fetch(target).then(response => response.text());
+
+        // decode html entities
+        template = new DOMParser().parseFromString(template, "text/html").documentElement.textContent;
+        console.log(template);
+
+        // replace marked variables with values
+        rendered = Mustache.render(template, data);
+        console.log(rendered);
+
+        let frag = parsePartialHtml(rendered);
+        fixParsedScriptsToExecute(frag);
+        document.getElementById('mainBody').appendChild(frag);
+
+        // let jsExecuteTrick = document.createElement('div');
+        // jsExecuteTrick.innerHTML = template;
+        // document.getElementById('mainBody').innerHTML = template;
+        // executeScripts();
     }
 
-    render("./Shared/_StartMenuPartial.txt");
+    render("@Model.StartMenuPartial");
+
+    function executeScripts() {
+        for (let script of Array.from(document.scripts)) {
+            script.replaceWith(document.importNode(script, true), script);
+            script.parentNode.replaceChild(script, script);
+        }
+    }
 
     function startNewGame() {
-        render("./Shared/_NewGamePartial.txt");
+        render("@Model.NewGamePartial");
+        let s1 = document.createElement('script');
+        s1.innerHTML = "" +
+            'var sliderHeight = document.getElementById("BoardHeight");' +
+            'var outputHeight = document.getElementById("BoardHeightIndicator");' +
+            'outputHeight.innerHTML = sliderHeight.value;' +
+            'sliderHeight.oninput = function () { outputHeight.innerHTML = this.value; }';
+        document.getElementById('mainBody').appendChild(s1);
+        
     }
 
+    /**
+     *
+     * @@param { string } html
+     */
+    function parsePartialHtml(html) {
+        let doc = new DOMParser().parseFromString(html, "text/html")
+        let frag = document.createDocumentFragment();
+
+        if (doc.childNodes.length !== 0) {
+            frag.appendChild(doc.childNodes[0]);
+        } else {
+            console.error('unexpected! doc.childNodes.length is ' + doc.childNodes.length);
+        }
+        return frag;
+    }
+
+
+    /**
+     *
+     * @@param { DocumentFragment } frag
+     */
+    function fixParsedScriptsToExecute(frag) {
+        let scripts = frag.querySelectorAll('script');
+
+        for (let i = 0; i < scripts.length; i++) {
+            let script = scripts[i];
+            let fixedScript = document.createElement('script');
+            fixedScript.type = script.type;
+            fixedScript.innerHTML = script.innerHTML;
+
+            script.parentNode.replaceChild(fixedScript, script);
+        }
+    }
 
     // Start NewGamePartial
     class GameSettings {
