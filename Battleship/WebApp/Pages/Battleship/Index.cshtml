@@ -13,24 +13,19 @@
 
     function render(template, data = {}) {
         console.log(template);
-      // let template = fetch(target).then(response => response.text());
 
         // decode html entities
         template = new DOMParser().parseFromString(template, "text/html").documentElement.textContent;
         console.log(template);
 
         // replace marked variables with values
-        rendered = Mustache.render(template, data);
+        let rendered = Mustache.render(template, data);
         console.log(rendered);
 
         let frag = parsePartialHtml(rendered);
         fixParsedScriptsToExecute(frag);
+        document.getElementById('mainBody').innerHTML = "";
         document.getElementById('mainBody').appendChild(frag);
-
-        // let jsExecuteTrick = document.createElement('div');
-        // jsExecuteTrick.innerHTML = template;
-        // document.getElementById('mainBody').innerHTML = template;
-        // executeScripts();
     }
 
     render("@Model.StartMenuPartial");
@@ -44,13 +39,6 @@
 
     function startNewGame() {
         render("@Model.NewGamePartial");
-        let s1 = document.createElement('script');
-        s1.innerHTML = "" +
-            'var sliderHeight = document.getElementById("BoardHeight");' +
-            'var outputHeight = document.getElementById("BoardHeightIndicator");' +
-            'outputHeight.innerHTML = sliderHeight.value;' +
-            'sliderHeight.oninput = function () { outputHeight.innerHTML = this.value; }';
-        document.getElementById('mainBody').appendChild(s1);
         
     }
 

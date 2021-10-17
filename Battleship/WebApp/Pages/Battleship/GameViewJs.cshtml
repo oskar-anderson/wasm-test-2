@@ -18,8 +18,9 @@
 <body>
     <h2>Battleship</h2>
     <script>
-        url = "https://" + window.location.host + "/api/Game/IsOver";
-        json = await isGameOver(gameData, url);
+        let gameData = "{{ gameData }}";
+        let url = "https://" + window.location.host + "/api/Game/IsOver";
+        let json = await isGameOver(gameData, url);
     </script>
     { { #json.isOver } }
         <script type="text/x-mustache" id="template">
@@ -48,7 +49,7 @@ function checkCheckboxWithId(id) {
 }
 
 function displayToggle(id) {
-  var x = document.getElementById(id);
+  let x = document.getElementById(id);
   if (x.style.display === "none") {
     x.style.display = "block";
   }
