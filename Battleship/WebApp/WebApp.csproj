@@ -12,6 +12,9 @@
     <ItemGroup>
       <None Remove="Pages\Shared\_NewGamePartial.html" />
       <None Remove="Pages\Shared\_StartMenuPartial.html" />
+      <None Update="Pages\Shared\_Debug-GameView.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -104,6 +107,12 @@
       <Compile Update="Pages\Battleship\Index - Copy.cshtml.cs">
         <DependentUpon>Index.cshtml.cs</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Pages\Shared\_GameView.html">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
     
 </Project>

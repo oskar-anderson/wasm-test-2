@@ -3,6 +3,8 @@
 
 <head>
     <script src="~/js/mustache.js"></script>
+    <script src="~/js/RazorExpress.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/raz@0.0.80/raz.js"></script> -->
 </head>
 
 <div id="mainBody"></div>
@@ -10,36 +12,42 @@
 <script>
 
 
-
     function render(template, data = {}) {
-        console.log(template);
+        // console.log(template);
 
         // decode html entities
         template = new DOMParser().parseFromString(template, "text/html").documentElement.textContent;
-        console.log(template);
+        // console.log(template);
 
         // replace marked variables with values
-        let rendered = Mustache.render(template, data);
+        let rendered = raz.render(template, data);
         console.log(rendered);
+        console.log("before parsePartialHtml");
 
         let frag = parsePartialHtml(rendered);
         fixParsedScriptsToExecute(frag);
+        console.log("after fixParsedScriptsToExecute(frag);");
         document.getElementById('mainBody').innerHTML = "";
         document.getElementById('mainBody').appendChild(frag);
     }
 
-    render("@Model.StartMenuPartial");
+    renderByName("StartMenu");
 
-    function executeScripts() {
-        for (let script of Array.from(document.scripts)) {
-            script.replaceWith(document.importNode(script, true), script);
-            script.parentNode.replaceChild(script, script);
+    function renderByName(name, gameData = {}) {
+        switch (name) {
+            case "GameView":
+                render("@Model.GameViewPartial", gameData);
+                break;
+            case "NewGame":
+                render("@Model.NewGamePartial");
+                break;
+            case "StartMenu":
+                render("@Model.StartMenuPartial");
+                break;
+            default:
+                console.error("Invalid render name");
+          
         }
-    }
-
-    function startNewGame() {
-        render("@Model.NewGamePartial");
-        
     }
 
     /**
@@ -47,7 +55,7 @@
      * @@param { string } html
      */
     function parsePartialHtml(html) {
-        let doc = new DOMParser().parseFromString(html, "text/html")
+        let doc = new DOMParser().parseFromString(html, "text/html");
         let frag = document.createDocumentFragment();
 
         if (doc.childNodes.length !== 0) {
@@ -75,76 +83,5 @@
             script.parentNode.replaceChild(fixedScript, script);
         }
     }
-
-    // Start NewGamePartial
-    class GameSettings {
-
-        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
-            this.BoardHeight = _boardHeight;
-            this.BoardWidth = _boardWidth;
-            this.AllowedPlacementType = _allowedPlacementType;
-            this.Ships = _ships;
-        }
-    }
-
-    async function launchGame() {
-        let settings = getGameSettings();
-        console.log(settings);
-        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
-        let json = await checkGameSettingsValidity(settings, url);
-        if (!json.areSettingsValid) {
-            document.getElementById("rulesetError").innerHTML = json.errorMessage;
-            return;
-        }
-        url = "https://" + window.location.host + "/api/Game/StartGame";
-        json = await startGame(settings, url);
-        render("/GameViewJs.txt", json);
-    }
-
-    function getGameSettings() {
-        let height = parseInt(document.getElementById("BoardHeight").value);
-        let width = parseInt(document.getElementById("BoardWidth").value);
-        let allowedPlacementType = parseInt(document.getElementById("AllowedPlacementType").value);
-        let ships = document.getElementById("Ships").value;
-
-        let input = new GameSettings(height, width, allowedPlacementType, ships);
-        return input;
-    }
-
-    async function checkGameSettingsValidity(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-            then((data) => {
-                console.log(data);
-                return data;
-            }).catch((err) => {
-                console.error(err);
-            });
-    }
-
-    async function startGame(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-            then((data) => {
-                console.log(data);
-                return data;
-            }).catch((err) => {
-                console.error(err);
-            });
-    }
-
-    // End NewGamePartial
 
 </script>

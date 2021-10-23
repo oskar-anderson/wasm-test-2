@@ -61,7 +61,7 @@ namespace WebApp.ApiControllers
 		[Consumes("application/json")]
 		[Produces("application/json")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
-		public ActionResult<ValidGameSettingsOut> IsOver(GameData gameData)
+		public ActionResult<ValidGameSettingsOut> IsOver(GameDataSerializable gameData)
 		{
 			bool isOver = false;
 			string winner = "";
@@ -94,6 +94,24 @@ namespace WebApp.ApiControllers
 				Winner = winner
 			};
 			return Ok(result);
+		}
+
+		[HttpPost("DoGame")]
+		[Consumes("application/json")]
+		[Produces("application/json")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
+		public ActionResult<TileData.CharInfo[][]> DoGame(GameDataSerializable gameDataSerializable)
+		{
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData);
+            
+			game.Initialize();
+			game.Update(1d, game.GameData);
+			game.GameData.FrameCount++;
+
+			TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
+			BaseDraw.GetDrawArea(game.GameData, ref map);
+			return Ok(map.ToJaggedArray());
 		}
 	}
 }

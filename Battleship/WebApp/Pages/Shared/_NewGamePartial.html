@@ -30,8 +30,8 @@
 
 
 <script>
-    var sliderHeight = document.getElementById("BoardHeight");
-    var outputHeight = document.getElementById("BoardHeightIndicator");
+    let sliderHeight = document.getElementById("BoardHeight");
+    let outputHeight = document.getElementById("BoardHeightIndicator");
     outputHeight.innerHTML = sliderHeight.value; // Display the default slider value
 
     // Update the current slider value (each time you drag the slider handle)
@@ -39,12 +39,83 @@
         outputHeight.innerHTML = this.value;
     };
 
-    var sliderWidth = document.getElementById("BoardWidth");
-    var outputWidth = document.getElementById("BoardWidthIndicator");
+    let sliderWidth = document.getElementById("BoardWidth");
+    let outputWidth = document.getElementById("BoardWidthIndicator");
     outputWidth.innerHTML = sliderWidth.value;
 
     sliderWidth.oninput = function () {
         outputWidth.innerHTML = this.value;
+    };
+
+    class GameSettings {
+
+        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
+            this.BoardHeight = _boardHeight;
+            this.BoardWidth = _boardWidth;
+            this.AllowedPlacementType = _allowedPlacementType;
+            this.Ships = _ships;
+        }
     }
+
+
+    async function launchGame() {
+        let settings = getGameSettings();
+        console.log(settings);
+        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
+        let gameSettingsValidity = await checkGameSettingsValidity(settings, url);
+        if (!gameSettingsValidity.areSettingsValid) {
+            document.getElementById("rulesetError").innerHTML = gameSettingsValidity.errorMessage;
+            return;
+        }
+        url = "https://" + window.location.host + "/api/Game/StartGame";
+        let gameData = await startGame(settings, url);
+        gameData = JSON.parse(gameData);
+        renderByName("GameView", gameData);
+    }
+
+    function getGameSettings() {
+        let height = parseInt(document.getElementById("BoardHeight").value);
+        let width = parseInt(document.getElementById("BoardWidth").value);
+        let allowedPlacementType = parseInt(document.getElementById("AllowedPlacementType").value);
+        let ships = document.getElementById("Ships").value;
+
+        let input = new GameSettings(height, width, allowedPlacementType, ships);
+        return input;
+    }
+
+    async function checkGameSettingsValidity(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+        then((data) => {
+            console.log(data);
+            return data;
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
+
+    async function startGame(input, url) {
+        await console.log(url);
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+        then((data) => {
+            console.log(data);
+            return data;
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
+
 
 </script>

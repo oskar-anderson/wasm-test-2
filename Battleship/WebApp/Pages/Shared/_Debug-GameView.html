@@ -1,0 +1,77 @@
+﻿<html lang="en">
+<head>
+    <title>Battleship</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
+</head>
+<style>
+
+</style>
+<script>
+    function isGameOverJSNonRazor() {
+        return { "isOver": false, "winner": "player A" };
+    }
+    document.getElementById("data-holder1").innerText
+</script>
+<body>
+    <div>
+        <h2>Scope test</h2>
+        @{
+            let temp = JSON.stringify(Model);
+        }
+        <pre id="gameData">@temp</pre>
+        <pre>@JSON.stringify(Model);</pre>
+        
+        <h2>Variable access test</h2>
+        <pre>@Model.BoardSerializationFriendly</pre>
+        
+        <h2>DOM access test - Failed</h2>
+        <span style="display: none" id="data-holder1">{ "name": "John" }</span>
+        <span style="display: none" id="data-holder2">hola</span>
+        <pre>@document.getElementById("data-holder1")</pre>
+        <pre>@document.getElementById("data-holder2")</pre>
+        <!--
+            <pre>@isGameOverJSNonRazor()</pre>
+        -->
+        
+
+
+        <h2>Function call test</h2>
+
+        @{
+            function isGameOverJS() {
+                return { "isOver": false, "winner": "player A" };
+            }
+
+            function getData1() {
+                return "hello";
+            }
+            let gameOver = isGameOverJS();
+        }
+        <div>@gameOver.isOver</div>
+        <div>
+            @{
+                Html.encode(getData1());
+            }
+        </div>
+
+        @{
+            if(gameOver.isOver) {
+            <div>
+                <h3>Game Over! @gameOver.winner Won!</h3>
+                <p style="text-align: center">
+                    <a onclick="">Try Again</a>
+                </p>
+            </div>
+            } else {
+                <h3>player turn</h3>
+            }
+        }
+        
+
+
+
+    </div>
+</body>
+</html>
