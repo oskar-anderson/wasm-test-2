@@ -1,0 +1,35 @@
+﻿<script>
+
+    class GameViewRenderModel {
+        constructor(_gameData, _board, _shipPlacementStatus) {
+            this.GameData = _gameData;
+            this.Board = _board;
+            this.ShipPlacementStatus = _shipPlacementStatus;
+        }
+    }
+    
+    main();
+
+    function main() {
+        let gameData = @JSON.stringify(Model);
+        let data = startGame(gameData);
+        renderByName("GameView", data);
+    }
+
+    async function startGame(gameData) {
+        let url = "https://" + window.location.host + "/api/Game/GetDrawArea";
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(gameData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json()).
+        then((data) => {
+            console.log(data);
+            return data;
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
+</script>

@@ -10,6 +10,7 @@ using Domain.Model;
 using System.Text.Json;
 using Domain.Tile;
 using Domain;
+using WebApp.ApiControllers.Models;
 
 namespace WebApp.ApiControllers
 {
@@ -52,49 +53,16 @@ namespace WebApp.ApiControllers
 				-1
 			);
 			GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
-			var gameDataSerialized = JsonSerializer.Serialize(gameDataSerializableSave, new JsonSerializerOptions() { WriteIndented = true });
-			return Ok(gameDataSerialized);
+			
+			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
+			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
+			
+			GameViewDTO result = new GameViewDTO(gameDataSerializableSave, board, "todo");
+			string serializedResult = JsonSerializer.Serialize(result, new JsonSerializerOptions() { WriteIndented = true });
+			
+			return Ok(serializedResult);
 		}
-
-
-		[HttpPost("IsOver")]
-		[Consumes("application/json")]
-		[Produces("application/json")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
-		public ActionResult<ValidGameSettingsOut> IsOver(GameDataSerializable gameData)
-		{
-			bool isOver = false;
-			string winner = "";
-			switch (gameData.State)
-			{
-				case GameState.Placement:
-					break;
-				case GameState.Shooting:
-					isOver = true;
-					foreach (var ship in gameData.InactivePlayer.Ships)
-					{
-						if (ship.ToPoints().Any(point => gameData.Board2D.Get(point) != TextureValue.HitShip))
-						{
-							isOver = false;
-							winner = gameData.ActivePlayer.Name;
-							break;
-						}
-					}
-					break;
-				case GameState.GameOver:
-					isOver = true;
-					winner = gameData.ActivePlayer.Name;
-					break;
-				default:
-					throw new Exception("unexpected!");
-			}
-			var result = new IsOverOut()
-			{
-				IsOver = isOver,
-				Winner = winner
-			};
-			return Ok(result);
-		}
+		
 
 		[HttpPost("DoGame")]
 		[Consumes("application/json")]
@@ -108,10 +76,36 @@ namespace WebApp.ApiControllers
 			game.Initialize();
 			game.Update(1d, game.GameData);
 			game.GameData.FrameCount++;
+			
+			GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
 
+			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
+			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
+			
+			GameViewDTO result = new GameViewDTO(gameDataSerializableSave, board, "todo");
+			
+			return Ok(GetDrawArea(game.GameData));
+		}
+		
+		[HttpPost("GetDrawArea")]
+		[Consumes("application/json")]
+		[Produces("application/json")]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
+		public ActionResult<TileData.CharInfo[][]> GetDrawArea(GameDataSerializable gameDataSerializable)
+		{
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData);
+            
+			game.Initialize();
+
+			return Ok(GetDrawArea(game.GameData));
+		}
+		
+		private TileData.CharInfo[][] GetDrawArea(GameData gameData)
+		{
 			TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
-			BaseDraw.GetDrawArea(game.GameData, ref map);
-			return Ok(map.ToJaggedArray());
+			BaseDraw.GetDrawArea(gameData, ref map);
+			return map.ToJaggedArray();
 		}
 	}
 }

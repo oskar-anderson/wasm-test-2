@@ -4,6 +4,10 @@
 <head>
     <script src="~/js/mustache.js"></script>
     <script src="~/js/RazorExpress.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
+    
     <!-- <script src="https://cdn.jsdelivr.net/npm/raz@0.0.80/raz.js"></script> -->
 </head>
 
@@ -33,10 +37,13 @@
 
     renderByName("StartMenu");
 
-    function renderByName(name, gameData = {}) {
+    function renderByName(name, model = {}) {
         switch (name) {
             case "GameView":
-                render("@Model.GameViewPartial", gameData);
+                render("@Model.GameViewPartial", model);
+                break;
+            case "GameViewController":
+                render("@Model.GameViewControllerPartial", model);
                 break;
             case "NewGame":
                 render("@Model.NewGamePartial");

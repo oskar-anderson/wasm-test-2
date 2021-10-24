@@ -11,15 +11,15 @@
     
 
     @{ 
-        if(Model.GameData.State === 2) {
+        if(Model.State === 2) {
             <div>
-                <h3>Game Over! @Model.GameData.ActivePlayer.Name Won!</h3>
+                <h3>Game Over! @Model.ActivePlayer.Name Won!</h3>
                 <p style="text-align: center">
                     <a onclick="renderByName('StartMenu')">Try Again</a>
                 </p>
             </div>
         } else {
-            <h3>@Model.GameData.ActivePlayer.Name turn</h3>
+            <h3>@Model.ActivePlayer.Name turn</h3>
         }
     }
     
@@ -49,13 +49,38 @@
                             14: "rgb(249,   241,    165)",            // Yellow
                             15: "rgb(242,   242,    242)"             // White
                         };
+
+
+                        async function startGame(input, url) {
+                            await console.log(url);
+                            return await fetch(url, {
+                                method: 'POST',
+                                body: JSON.stringify(input),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then((response) => response.json()).
+                            then((data) => {
+                                console.log(data);
+                                return data;
+                            }).catch((err) => {
+                                console.error(err);
+                            });
+                        }
                     
-                        for (let y = 0; y < Model.Board.length; y++)
+                        let t = "ttt";
+                        <em>@t</em>
+                        for (let y = 0; y < Model.BoardSerializationFriendly.length; y++)
                         {
+                            let a = "aaa";
+                            <em>@a</em>
                             <p style="display: flex; margin-top: 0; margin-bottom: 0;">
-                                @for (let x = 0; x < Model.Board[0].length; x++)
+                                @for (let x = 0; x < Model.BoardSerializationFriendly[0].length; x++)
                                 {
-                                    let charInfo = Model.Board[y][x];
+                                    let b = "bbb";
+                                    <em style="color: @b;">@b</em>
+                                    let charInfo = Model.BoardSerializationFriendly[y][x];
+                                    <em>@charInfo</em>
                                     let colCss = ColorIntToCssString[charInfo.Color];
                                     let character = charInfo.Glyph;
                                     character = character === " " ? "." : character;
