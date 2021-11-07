@@ -114,12 +114,31 @@
 
 </body>
 </html>
-<script>
+<script type="module">
 
     main();
 
     function main() {
-
+        document.addEventListener("keypress", function onEvent(event) {
+            let keyDict = {
+                "ArrowUp" : "",
+                "ArrowDown" : "",
+                "ArrowLeft" : "",
+                "ArrowRight" : "",
+                "Z" : "",
+                "X" : "",
+                "1" : "",
+                "2" : "",
+                "3" : ""
+            };
+            for (var key in keyDict) {
+                if (event.key === key) {
+                    let action = keyDict[key];
+                    console.log(action);
+                    // move
+                }
+            }
+        })
     }
     
 

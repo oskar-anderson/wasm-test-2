@@ -25,27 +25,35 @@
         <input class="form-control" type="text" name="Ships" id="Ships" value="1x5n1; 1x4n2; 1x3n3; 1x2n4" />
     </div>
     <div style="color: red" id="rulesetError"></div>
-    <button type="button" onclick="launchGame()" class="btn btn-primary">Start</button>
+    <button type="button" id="Start" class="btn btn-primary">Start</button>
 </form>
 
 
-<script>
-    let sliderHeight = document.getElementById("BoardHeight");
-    let outputHeight = document.getElementById("BoardHeightIndicator");
-    outputHeight.innerHTML = sliderHeight.value; // Display the default slider value
+<script type="module">
+    
+    main();
+    
+    function main() {
+        let sliderHeight = document.getElementById("BoardHeight");
+        let outputHeight = document.getElementById("BoardHeightIndicator");
+        outputHeight.innerHTML = sliderHeight.value; // Display the default slider value
+    
+        // Update the current slider value (each time you drag the slider handle)
+        sliderHeight.oninput = function () {
+            outputHeight.innerHTML = this.value;
+        };
+    
+        let sliderWidth = document.getElementById("BoardWidth");
+        let outputWidth = document.getElementById("BoardWidthIndicator");
+        outputWidth.innerHTML = sliderWidth.value;
+    
+        sliderWidth.oninput = function () {
+            outputWidth.innerHTML = this.value;
+        };
+        
+        document.querySelector("#Start").addEventListener("click", launchGame);
+    }
 
-    // Update the current slider value (each time you drag the slider handle)
-    sliderHeight.oninput = function () {
-        outputHeight.innerHTML = this.value;
-    };
-
-    let sliderWidth = document.getElementById("BoardWidth");
-    let outputWidth = document.getElementById("BoardWidthIndicator");
-    outputWidth.innerHTML = sliderWidth.value;
-
-    sliderWidth.oninput = function () {
-        outputWidth.innerHTML = this.value;
-    };
 
     class GameSettings {
 
@@ -61,18 +69,19 @@
     async function launchGame() {
         let settings = getGameSettings();
         console.log(settings);
-        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
-        let gameSettingsValidity = await checkGameSettingsValidity(settings, url);
+        let GameMethods = await importModule("GameMethods");
+        
+        let gameSettingsValidity = await GameMethods.CheckGameSettingsValidity(settings);
         if (!gameSettingsValidity.areSettingsValid) {
             document.getElementById("rulesetError").innerHTML = gameSettingsValidity.errorMessage;
             return;
         }
-        url = "https://" + window.location.host + "/api/Game/StartGame";
-        let gameData = await startGame(settings, url);
-        gameData = JSON.parse(gameData);
-        renderByName("GameView", gameData);
+        let gameViewDTO = await GameMethods.StartGame(settings);
+        let gameViewData = await GameMethods.DoGame(gameViewDTO.GameData);
+        console.log("calling render");
+        renderByName("GameView", gameViewDTO);
     }
-
+    
     function getGameSettings() {
         let height = parseInt(document.getElementById("BoardHeight").value);
         let width = parseInt(document.getElementById("BoardWidth").value);
@@ -81,40 +90,6 @@
 
         let input = new GameSettings(height, width, allowedPlacementType, ships);
         return input;
-    }
-
-    async function checkGameSettingsValidity(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-        then((data) => {
-            console.log(data);
-            return data;
-        }).catch((err) => {
-            console.error(err);
-        });
-    }
-
-    async function startGame(input, url) {
-        await console.log(url);
-        return await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(input),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => response.json()).
-        then((data) => {
-            console.log(data);
-            return data;
-        }).catch((err) => {
-            console.error(err);
-        });
     }
 
 

@@ -21,8 +21,6 @@ namespace WebApp.ApiControllers
 		[HttpPost("CheckValidGameSettings")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
-		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ValidGameSettingsOut))]
 		public ActionResult<ValidGameSettingsOut> CheckValidGameSettings(ValidGameSettingsInRuleSet settings)
 		{
 			System.Diagnostics.Debug.WriteLine("In CheckValidGameSettings");
@@ -41,8 +39,7 @@ namespace WebApp.ApiControllers
 		[HttpPost("StartGame")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
-		public ActionResult<ValidGameSettingsOut> StartGame(ValidGameSettingsInRuleSet settings)
+		public ActionResult<string> StartGame(ValidGameSettingsInRuleSet settings)
 		{
 			BaseBattleship game = new WebBattle(
 				settings.BoardHeight,
@@ -52,12 +49,12 @@ namespace WebApp.ApiControllers
 				-1,
 				-1
 			);
-			GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
+			GameDataSerializable gameDataSerializable = new GameDataSerializable(game.GameData);
 			
 			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
 			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
 			
-			GameViewDTO result = new GameViewDTO(gameDataSerializableSave, board, "todo");
+			GameViewDTO result = new GameViewDTO(gameDataSerializable, board, "todo");
 			string serializedResult = JsonSerializer.Serialize(result, new JsonSerializerOptions() { WriteIndented = true });
 			
 			return Ok(serializedResult);
@@ -67,8 +64,7 @@ namespace WebApp.ApiControllers
 		[HttpPost("DoGame")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
-		public ActionResult<TileData.CharInfo[][]> DoGame(GameDataSerializable gameDataSerializable)
+		public ActionResult<GameViewDTO> DoGame(GameDataSerializable gameDataSerializable)
 		{
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
 			BaseBattleship game = new WebBattle(gameData);
@@ -84,13 +80,12 @@ namespace WebApp.ApiControllers
 			
 			GameViewDTO result = new GameViewDTO(gameDataSerializableSave, board, "todo");
 			
-			return Ok(GetDrawArea(game.GameData));
+			return Ok(result);
 		}
 		
 		[HttpPost("GetDrawArea")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ValidGameSettingsOut))]
 		public ActionResult<TileData.CharInfo[][]> GetDrawArea(GameDataSerializable gameDataSerializable)
 		{
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);

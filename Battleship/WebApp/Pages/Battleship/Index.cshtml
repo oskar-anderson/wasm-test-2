@@ -6,15 +6,14 @@
     <script src="~/js/RazorExpress.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
-    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
     <!-- <script src="https://cdn.jsdelivr.net/npm/raz@0.0.80/raz.js"></script> -->
 </head>
 
 <div id="mainBody"></div>
 
 <script>
-
 
     function render(template, data = {}) {
         // console.log(template);
@@ -25,12 +24,12 @@
 
         // replace marked variables with values
         let rendered = raz.render(template, data);
-        console.log(rendered);
-        console.log("before parsePartialHtml");
+        // console.log(rendered);
+        // console.log("before parsePartialHtml");
 
         let frag = parsePartialHtml(rendered);
         fixParsedScriptsToExecute(frag);
-        console.log("after fixParsedScriptsToExecute(frag);");
+        // console.log("after fixParsedScriptsToExecute(frag);");
         document.getElementById('mainBody').innerHTML = "";
         document.getElementById('mainBody').appendChild(frag);
     }
