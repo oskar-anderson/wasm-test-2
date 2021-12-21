@@ -13,9 +13,6 @@ namespace Domain.Model
         public override PlayerSerializable ActivePlayer { get; set; } = null!;
         public override PlayerSerializable InactivePlayer { get; set; } = null!;
         public override List<Sprite> Sprites { get; set; } = null!;
-        // Cannot be serialized by System.Text.Json - the entire reason this class exists
-        [JsonIgnore] 
-        public override string[,] Board2D { get; set; } = null!;
         public string[][] BoardSerializationFriendly { get; set; } = null!;
         public override int AllowedPlacementType { get; set; }
         public override List<Point> ShipSizes { get; set; } = null!;

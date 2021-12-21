@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -107,7 +108,7 @@ namespace DAL
             using AppDbContext ctx = new AppDbContext();
             DbGameData dbGameData = ctx.GameData
                 .Include(d => d.ActivePlayer)
-                .Include(d => d.InactivePlayer).FirstOrDefault(x => x.ID == id);
+                .Include(d => d.InactivePlayer).FirstOrDefault(x => x.ID == id) ?? throw new InvalidOperationException($"Game with ID: {id} not found!");
             
             if (dbGameData != null)
             {

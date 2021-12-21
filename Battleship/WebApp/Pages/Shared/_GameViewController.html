@@ -1,23 +1,69 @@
-﻿<script>
+﻿<div id="GameViewFrame">
+    Programm failed! JavaScript should have rendered content here.
+    <div id="data" style="display: none">@JSON.stringify(Model)</div>
+</div>
 
-    class GameViewRenderModel {
-        constructor(_gameData, _board, _shipPlacementStatus) {
-            this.GameData = _gameData;
-            this.Board = _board;
-            this.ShipPlacementStatus = _shipPlacementStatus;
-        }
-    }
+<script type="module">
+    let GameMethods = await Imports.importGameMethods();
+    let gameViewDto = null;
     
     main();
     
     async function main() {
-        let GameMethods = await importModule("GameMethods");
-        let gameData = @JSON.stringify(Model);
-        while (true) {
-            let data = GameMethods.StartGame(gameData);
-            renderByName("GameView", data);
+        console.log("1");
+        let model = JSON.parse(document.getElementById("data").innerHTML);
+        console.log(typeof model);
+        console.log(model);
+        console.log(model.GameViewDto.GameData);
+        // document.getElementById("GameViewFrame").innerHTML = model.gamePartialHtml;
+        
+        let gameLoop = async function() {
+            gameViewDto = await GameMethods.DoGame(model.GameViewDto.GameData);
+            renderByName("GameView", gameViewDto, "GameViewFrame");
         }
-    }
+        gameLoop();
+        registerListeners()
 
+        
+    }
     
+
+    function registerListeners() {
+        document.addEventListener("keydown", function onEvent(event) {
+            console.log("Pressed key:");
+            console.log(event.code);
+            console.log(event);
+            let keyDict = {
+                "ArrowUp" : "ArrowUp",
+                "ArrowDown" : "ArrowDown",
+                "ArrowLeft" : "ArrowLeft",
+                "ArrowRight" : "ArrowRight",
+                "KeyZ" : "KeyZ",
+                "KeyX" : "KeyX",
+                "Digit1" : "Digit1",
+                "Digit2" : "Digit2",
+                "Digit3" : "Digit3"
+            };
+            for (let key in keyDict) {
+                if (event.code === key) {
+                    let action = keyDict[key];
+                    console.log(action);
+                    if (action === "ArrowUp") {
+                        // game.Input.KeyStatuses[UsedKeyKeys.A] = new KeyStatus(true, true);
+                        // gameViewDto.GameData.Game.Input.KeyStatuses[]
+                    }
+                    if (action === "ArrowDown") {
+                        
+                    }
+                    if (action === "ArrowLeft") {
+                        
+                    }
+                    if (action === "ArrowRight") {
+                        
+                    }
+                    // move
+                }
+            }
+        })
+    }
 </script>

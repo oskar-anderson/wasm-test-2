@@ -1,11 +1,7 @@
 ﻿export default class GameMethods {
-
-    constructor() {
-        
-    }
     
     static async CheckGameSettingsValidity(settings) {
-        let url = "https://" + window.location.host + "/api/Game/CheckValidGameSettings";
+        let url = window.location.protocol + "//" + window.location.host + "/api/Game/CheckValidGameSettings";
         return await fetch(url, {
             method: 'POST',
             body: JSON.stringify(settings),
@@ -14,6 +10,7 @@
             }
         }).then((response) => response.json()).
             then((data) => {
+                data = JSON.parse(data);
                 console.log(data);
                 return data;
             }).catch((err) => {
@@ -22,7 +19,7 @@
     }
 
     static async StartGame(settings) {
-        let url = "https://" + window.location.host + "/api/Game/StartGame";
+        let url = window.location.protocol + "//" + window.location.host + "/api/Game/StartGame";
         return await fetch(url, {
             method: 'POST',
             body: JSON.stringify(settings),
@@ -31,7 +28,6 @@
             }
         }).then((response) => response.json()).
             then((data) => {
-                console.log(data);
                 data = JSON.parse(data);
                 console.log(data);
                 return data;
@@ -41,7 +37,7 @@
     }
 
     static async DoGame(gameData) {
-        let url = "https://" + window.location.host + "/api/Game/DoGame";
+        let url = window.location.protocol + "//" + window.location.host + "/api/Game/DoGame";
         await console.log("In DoGame");
         await console.log(gameData);
         return await fetch(url, {
@@ -52,6 +48,7 @@
             }
         }).then((response) => response.json()).
             then((data) => {
+                data = JSON.parse(data);
                 console.log(data);
                 return data;
             }).catch((err) => {

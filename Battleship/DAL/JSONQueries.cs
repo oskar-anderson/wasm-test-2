@@ -45,7 +45,7 @@ namespace DAL
         
         public static GameData GetGameStateFromString(string jsonString)
         {
-            GameDataSerializable dbGameData = JsonSerializer.Deserialize<GameDataSerializable>(jsonString);
+            GameDataSerializable dbGameData = JsonSerializer.Deserialize<GameDataSerializable>(jsonString) ?? throw new InvalidOperationException($"{jsonString} cannot be deserialized!");
             return GameDataSerializable.ToGameModelSerializable(dbGameData);
         }
 
@@ -54,7 +54,7 @@ namespace DAL
             // 2020-10-12
             var defaultName = "save_" + DateTime.Now.ToString("yyyy-MM-dd") + ".json";
             Console.Write($"File name ({defaultName}):");
-            string customName = Console.ReadLine();
+            string customName = Console.ReadLine() ?? throw new InvalidOperationException("Something went wrong!");
             string fileName = string.IsNullOrWhiteSpace(customName) ? 
                 defaultName : 
                 "save_" + customName  + ".json";

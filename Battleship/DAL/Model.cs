@@ -39,9 +39,6 @@ namespace DAL
             }
         }
 
-        [NotMapped]
-        // Cannot be serialized by System.Text.Json
-        public override string[,] Board2D { get; set; } = null!;
         
         [NotMapped]
         public string[][] BoardJagged { get; set; } = null!;

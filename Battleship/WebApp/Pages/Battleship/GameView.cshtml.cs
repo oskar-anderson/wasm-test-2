@@ -96,7 +96,7 @@ namespace WebApp.Pages.Battleship
             {
                 return OnPostSave();
             }
-            GameDataSerializable gameDataSerializableLoad = JsonSerializer.Deserialize<GameDataSerializable>(GameDataSerialized);
+            GameDataSerializable gameDataSerializableLoad = JsonSerializer.Deserialize<GameDataSerializable>(GameDataSerialized) ?? throw new InvalidOperationException($"{GameDataSerialized} cannot be deserialized!");
             GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializableLoad);
             BaseBattleship game = new WebBattle(gameData);
             game.Initialize();
@@ -161,7 +161,7 @@ namespace WebApp.Pages.Battleship
 
         public IActionResult OnPostSave()
         {
-            GameDataSerializable gameDataSerializableLoad = JsonSerializer.Deserialize<GameDataSerializable>(GameDataSerialized);
+            GameDataSerializable gameDataSerializableLoad = JsonSerializer.Deserialize<GameDataSerializable>(GameDataSerialized) ?? throw new InvalidOperationException($"{GameDataSerialized} cannot be deserialized!");
             GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializableLoad);
             
             DbQueries.Save(gameData);

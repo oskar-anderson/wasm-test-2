@@ -10,7 +10,6 @@ namespace Domain.Model
         public abstract TPlayer ActivePlayer { get; set; }
         public abstract TPlayer InactivePlayer { get; set; }
         public abstract List<Sprite> Sprites { get; set; }
-        public abstract string[,] Board2D { get; set; }
         public abstract int AllowedPlacementType { get; set; }
         public abstract List<Point> ShipSizes { get; set; }
         public abstract GameState State { get; set; }

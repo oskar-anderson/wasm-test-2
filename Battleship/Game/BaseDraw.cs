@@ -139,7 +139,6 @@ namespace Game
 
         public static void CenterCamera(Player player)
         {
-            int i = player.Sprite.Pos.X * TileData.Width - 4 * TileData.Width;
             player.fCameraPixelPosX = player.Sprite.Pos.X * TileData.Width - 4 * TileData.Width;
             player.fCameraPixelPosY = player.Sprite.Pos.Y * TileData.Height - 4 * TileData.Height;
         }

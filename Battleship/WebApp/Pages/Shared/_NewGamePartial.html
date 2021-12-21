@@ -30,6 +30,8 @@
 
 
 <script type="module">
+    let GameMethods = await Imports.importGameMethods();
+    let GameSettings = await Imports.importGameSettings();
     
     main();
     
@@ -55,31 +57,19 @@
     }
 
 
-    class GameSettings {
-
-        constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
-            this.BoardHeight = _boardHeight;
-            this.BoardWidth = _boardWidth;
-            this.AllowedPlacementType = _allowedPlacementType;
-            this.Ships = _ships;
-        }
-    }
-
-
     async function launchGame() {
         let settings = getGameSettings();
         console.log(settings);
-        let GameMethods = await importModule("GameMethods");
         
         let gameSettingsValidity = await GameMethods.CheckGameSettingsValidity(settings);
-        if (!gameSettingsValidity.areSettingsValid) {
-            document.getElementById("rulesetError").innerHTML = gameSettingsValidity.errorMessage;
+        if (!gameSettingsValidity.AreSettingsValid) {
+            document.getElementById("rulesetError").innerHTML = gameSettingsValidity.ErrorMessage;
             return;
         }
         let gameViewDTO = await GameMethods.StartGame(settings);
-        let gameViewData = await GameMethods.DoGame(gameViewDTO.GameData);
+        // let gameViewData = await GameMethods.DoGame(gameViewDTO.GameData);
         console.log("calling render");
-        renderByName("GameView", gameViewDTO);
+        renderByName("GameViewController", gameViewDTO);
     }
     
     function getGameSettings() {

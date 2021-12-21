@@ -14,7 +14,14 @@ namespace Domain.Model
     {
         public override Player ActivePlayer { get; set; } = null!;
         public override Player InactivePlayer { get; set; } = null!;
-        public override string[,] Board2D { get; set; } = null!;
+        // Board2D is a useful helper property in game logic for storing data,
+        // but not needed to preserve game state.
+        // Jagged array is not serializable by System.Text.Json:
+        // * Use JsonIgnore tag in derived class for serialization
+        // * Has to be nullable for REST api function parameter auto deserialization
+        //      otherwise field is required validation error occurs despite JsonIgnore tag.
+        // * NewtonSoft seems to handel jagged array serialization, but I am sticking with the builtin serialization
+        public string[,] Board2D { get; set; } = null!;
         public override List<Sprite> Sprites { get; set; } = null!;
         public override int AllowedPlacementType { get; set; }
         public override List<Point> ShipSizes { get; set; } = null!;

@@ -201,7 +201,7 @@ namespace Tests
             foreach (var item in items)
                 serializeMe.Order.Push(item);
             string serialized = JsonSerializer.Serialize(serializeMe);
-            SerializeMe deserialized = JsonSerializer.Deserialize<SerializeMe>(serialized);
+            SerializeMe deserialized = JsonSerializer.Deserialize<SerializeMe>(serialized) ?? throw new InvalidOperationException($"{serialized} cannot be deserialized!");
             for (int i = 0; i < items.Count; i++)
             {
                 Console.WriteLine("deserialized: " + deserialized.Order.Pop() + "; original: " + serializeMe.Order.Pop());
