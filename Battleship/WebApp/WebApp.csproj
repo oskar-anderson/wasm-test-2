@@ -27,6 +27,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
     </ItemGroup>
 
@@ -38,6 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="wwwroot\jsSrc" />
       <Folder Include="wwwroot\font\PressStart2P" />
     </ItemGroup>
 
@@ -89,6 +94,7 @@
       <Content Include="Pages\Shared\_StartMenuPartial.html">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Content Include="wwwroot\js\GameMethods.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -119,6 +125,14 @@
       <None Update="Pages\Shared\_GameView.html">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="wwwroot\js\model\CharInfo.ts" />
+      <TypeScriptCompile Include="wwwroot\js\model\GameSettings.ts" />
+      <TypeScriptCompile Include="wwwroot\js\model\GameView.ts" />
+      <TypeScriptCompile Include="wwwroot\js\model\ValidGameSettings.ts" />
+      <TypeScriptCompile Include="wwwroot\js\site.ts" />
     </ItemGroup>
     
 </Project>

@@ -58,12 +58,14 @@
 
 
     async function launchGame() {
+        console.log("in launchGame");
         let settings = getGameSettings();
+        console.log("after getGameSettings");
         console.log(settings);
         
         let gameSettingsValidity = await GameMethods.CheckGameSettingsValidity(settings);
-        if (!gameSettingsValidity.AreSettingsValid) {
-            document.getElementById("rulesetError").innerHTML = gameSettingsValidity.ErrorMessage;
+        if (!gameSettingsValidity.areSettingsValid) {
+            document.getElementById("rulesetError").innerHTML = gameSettingsValidity.errorMessage;
             return;
         }
         let gameViewDTO = await GameMethods.StartGame(settings);

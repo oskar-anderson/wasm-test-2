@@ -1,5 +1,4 @@
-﻿export default class GameSettings {
-
+export default class GameSettings {
     constructor(_boardHeight, _boardWidth, _allowedPlacementType, _ships) {
         this.BoardHeight = _boardHeight;
         this.BoardWidth = _boardWidth;
@@ -7,3 +6,4 @@
         this.Ships = _ships;
     }
 }
+//# sourceMappingURL=GameSettings.js.map

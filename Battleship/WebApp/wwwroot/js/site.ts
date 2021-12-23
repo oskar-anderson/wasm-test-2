@@ -7,8 +7,12 @@
 // because I do not understand where the .js files are located after compilation.
 // I didnt want to duplicate the wwwroot folder by coping its content to the compilation directory.
 // wwwroot folder seems handle imports nicely.
+
+
+
 class Imports {
-     static async importModule(moduleName) {
+    
+     static async importModule(moduleName: string) {
         console.log("in importModule");
         try {
             let {default: module} = await import(`./${moduleName}.js`);
@@ -29,6 +33,7 @@ class Imports {
                 break;
             case "GameSettings":
                 try {
+                    // @ts-ignore
                     let {default: GameSettings} = await import('./GameSettings.js');
                     return GameSettings;
                 } catch (error) {
@@ -43,12 +48,15 @@ class Imports {
 
     // Doing only 1 import in 1 function lets Rider IDE provide type support for the return value
     static async importGameSettings() {
-        let {default: lib} = await import('./model/GameSettings.js');
+        // @ts-ignore
+        let {default: lib} = await import('../jsSrc/model/GameSettings.js');
         return lib;
     }
     
-    static async importGameMethods() {
-        let {default: lib} = await import('./GameMethods.js');
+    static async importGameMethods(): Promise<object> {
+        console.log("in importGameMethods");
+        // @ts-ignore
+        let {default: lib} = await import('../jsSrc/GameMethods.js');
         return lib;
     }
 }

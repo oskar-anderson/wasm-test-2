@@ -34,7 +34,9 @@
         document.getElementById(targetElementId).appendChild(frag);
     }
     renderByName("StartMenu");
-
+    let x = "@Model.GameViewPartial";
+    console.log(x);
+        
     function renderByName(name, model = {}, targetElementId = "mainBody") {
         switch (name) {
             case "GameView":

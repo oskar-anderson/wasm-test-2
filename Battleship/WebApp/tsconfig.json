@@ -1,0 +1,28 @@
+﻿{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "target": "ES6",
+    "lib": [
+      "ES7",
+      "DOM"
+    ],
+    "outDir": "wwwroot/jsSrc/"
+  },
+  "include": [
+    "wwwroot/js/"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -12,6 +12,9 @@
     async function main() {
         console.log("1");
         let model = JSON.parse(document.getElementById("data").innerHTML);
+        let x = "@Model";
+        console.log(typeof x);
+        console.log(x);
         console.log(typeof model);
         console.log(model);
         console.log(model.GameViewDto.GameData);
