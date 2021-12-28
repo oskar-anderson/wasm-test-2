@@ -1,1 +1,1 @@
-{"version":3,"file":"CharInfo.js","sourceRoot":"","sources":["../../js/model/CharInfo.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,QAAQ;IAIzB,YAAY,KAAa,EAAE,KAAa;QACpC,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;IACvB,CAAC;CACJ"}
+{"version":3,"file":"CharInfo.js","sourceRoot":"","sources":["../../ts/model/CharInfo.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,QAAQ;IAIzB,YAAY,KAAa,EAAE,KAAa;QACpC,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;IACvB,CAAC;CACJ"}

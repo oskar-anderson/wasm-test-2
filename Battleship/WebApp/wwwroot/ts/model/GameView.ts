@@ -17,6 +17,8 @@ export default class GameView {
     }
 
     public static mapJsonToObject(json: string): GameView {
+        console.log("mapJsonToObject");
+        console.log(json);
         let obj = JSON.parse(json);
         return new GameView(obj.GameData, obj.Board, obj.ShipPlacementStatus);
     }

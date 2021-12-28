@@ -5,6 +5,7 @@
 
 .idea
 # User-specific files
+jsSrc/
 *.rsuser
 *.suo
 *.user

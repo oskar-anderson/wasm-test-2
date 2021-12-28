@@ -2,98 +2,23 @@
 @model WebApp.Pages.Battleship.Index
 
 <head>
-    <script src="~/js/mustache.js"></script>
-    <script src="~/js/RazorExpress.js"></script>
+    <script src="~/jsVendor/mustache.js"></script>
+    <script src="~/jsVendor/RazorExpress.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Battleship</title>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/raz@0.0.80/raz.js"></script> -->
 </head>
 
-<div id="mainBody"></div>
+<div id="mainBody">
+    Content goes here, If you see this message JS has failed!
+</div>
 
-<script>
+<script type="module">
+    import Rendering from "/jsSrc/Rendering.js";
 
-    function render(template, data = {}, targetElementId) {
-        // console.log(template);
-
-        // decode html entities
-        template = new DOMParser().parseFromString(template, "text/html").documentElement.textContent;
-        // console.log(template);
-
-        // replace marked variables with values
-        let rendered = raz.render(template, data);
-        // console.log(rendered);
-        // console.log("before parsePartialHtml");
-
-        let frag = parsePartialHtml(rendered);
-        fixParsedScriptsToExecute(frag);
-        // console.log("after fixParsedScriptsToExecute(frag);");
-        document.getElementById(targetElementId).innerHTML = "";
-        document.getElementById(targetElementId).appendChild(frag);
-    }
-    renderByName("StartMenu");
-    let x = "@Model.GameViewPartial";
-    console.log(x);
-        
-    function renderByName(name, model = {}, targetElementId = "mainBody") {
-        switch (name) {
-            case "GameView":
-                console.log("in index.cshtml renderByName GameView");
-                console.log(model);
-                render("@Model.GameViewPartial", model, targetElementId);
-                break;
-            case "GameViewController":
-                let _model = { GameViewDto: model, GamePartialHtml: "@Model.GameViewPartial" };
-                console.log("in index.cshtml renderByName GameViewController");
-                console.log(_model);
-                render("@Model.GameViewControllerPartial", _model, targetElementId);
-                break;
-            case "NewGame":
-                render("@Model.NewGamePartial", {}, targetElementId);
-                break;
-            case "StartMenu":
-                render("@Model.StartMenuPartial", {}, targetElementId);
-                break;
-            default:
-                console.error("Invalid render name");
-          
-        }
-    }
-
-    /**
-     *
-     * @@param { string } html
-     */
-    function parsePartialHtml(html) {
-        let doc = new DOMParser().parseFromString(html, "text/html");
-        let frag = document.createDocumentFragment();
-
-        if (doc.childNodes.length !== 0) {
-            frag.appendChild(doc.childNodes[0]);
-        } else {
-            console.error('unexpected! doc.childNodes.length is ' + doc.childNodes.length);
-        }
-        return frag;
-    }
-
-
-    /**
-     *
-     * @@param { DocumentFragment } frag
-     */
-    function fixParsedScriptsToExecute(frag) {
-        let scripts = frag.querySelectorAll('script');
-
-        for (let i = 0; i < scripts.length; i++) {
-            let script = scripts[i];
-            let fixedScript = document.createElement('script');
-            fixedScript.type = script.type;
-            fixedScript.innerHTML = script.innerHTML;
-
-            script.parentNode.replaceChild(fixedScript, script);
-        }
-    }
+    Rendering.renderByName("StartMenu");
 
 </script>

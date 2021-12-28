@@ -1,0 +1,21 @@
+﻿
+
+<a id="newGameBtn">
+    <h1>New Game</h1>
+</a>
+
+
+<br />
+<div>
+    <p>1.1.0</p>
+</div>
+
+<script type="module">
+    import Rendering from "../jsSrc/Rendering.js";
+    
+    
+    document.getElementById("newGameBtn")
+        .addEventListener("click", () => Rendering.renderByName('NewGame'));
+    
+    
+</script>

@@ -10,20 +10,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Pages\Shared\_NewGamePartial.html" />
-      <None Remove="Pages\Shared\_StartMenuPartial.html" />
-      <None Update="Pages\Shared\_Debug-GameView.html">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Pages\Shared\_GameView-syntaxHighlightingTest.raz">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Pages\Shared\_GameViewController.html">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
@@ -42,21 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\jsSrc" />
-      <Folder Include="wwwroot\font\PressStart2P" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Pages\GameData\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameData\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameData\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameData\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameData\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Player\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Player\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Player\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Player\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Player\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\GameDataCRUD\Create.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\GameDataCRUD\Delete.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\GameDataCRUD\Details.cshtml" />
@@ -67,11 +38,6 @@
       <_ContentIncludedByDefault Remove="Pages\PlayerCRUD\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\PlayerCRUD\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\PlayerCRUD\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameDataCRUD2\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameDataCRUD2\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameDataCRUD2\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameDataCRUD2\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\GameDataCRUD2\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -86,53 +52,16 @@
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Edit.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Index.cshtml" />
     </ItemGroup>
-
+    <!--  
+    Lines like this should be removed:
     <ItemGroup>
-      <Content Include="Pages\Shared\_NewGamePartial.html">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Pages\Shared\_StartMenuPartial.html">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="wwwroot\js\GameMethods.ts" />
+        <TypeScriptCompile Include="wwwroot\ts\ServerRestApiGameMethods.ts" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Pages\Battleship\Index - Copy %282%29 - Copy.cshtml.cs">
-        <DependentUpon>Index - Copy (2).cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy %282%29.cshtml.cs">
-        <DependentUpon>Index.cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy %283%29.cshtml.cs">
-        <DependentUpon>Index.cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy - Copy %282%29.cshtml.cs">
-        <DependentUpon>Index - Copy.cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy - Copy - Copy.cshtml.cs">
-        <DependentUpon>Index - Copy - Copy.cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy - Copy.cshtml.cs">
-        <DependentUpon>Index - Copy.cshtml.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Battleship\Index - Copy.cshtml.cs">
-        <DependentUpon>Index.cshtml.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Pages\Shared\_GameView.html">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <TypeScriptCompile Include="wwwroot\js\model\CharInfo.ts" />
-      <TypeScriptCompile Include="wwwroot\js\model\GameSettings.ts" />
-      <TypeScriptCompile Include="wwwroot\js\model\GameView.ts" />
-      <TypeScriptCompile Include="wwwroot\js\model\ValidGameSettings.ts" />
-      <TypeScriptCompile Include="wwwroot\js\site.ts" />
-    </ItemGroup>
+    
+    Not sure what this code actually does.
+    It doesn't seem to do anything.
+    Rider will start duplicating *.ts files in the solution viewer.
+    There seems to be no way to disable Rider from adding these lines automatically.
+    -->
     
 </Project>

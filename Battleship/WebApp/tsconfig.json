@@ -20,7 +20,7 @@
     "outDir": "wwwroot/jsSrc/"
   },
   "include": [
-    "wwwroot/js/"
+    "wwwroot/ts/**/*.ts"
   ],
   "exclude": [
     "node_modules"
