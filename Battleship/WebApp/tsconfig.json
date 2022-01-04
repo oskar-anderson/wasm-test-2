@@ -14,8 +14,8 @@
     "sourceMap": true,
     "target": "ES6",
     "lib": [
-      "ES7",
-      "DOM"
+      "es7",
+      "dom"
     ],
     "outDir": "wwwroot/jsSrc/"
   },

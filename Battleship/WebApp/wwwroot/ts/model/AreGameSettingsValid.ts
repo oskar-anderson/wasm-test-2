@@ -1,4 +1,4 @@
-﻿export default class ValidGameSettings {
+﻿export default class AreGameSettingsValid {
     areSettingsValid: boolean;
     errorMessage: string;
 
@@ -12,8 +12,8 @@
         this.errorMessage = errorMessage;
     }
     
-    public static mapJsonToObject(json: string): ValidGameSettings {
+    public static mapJsonToObject(json: string): AreGameSettingsValid {
         let obj = JSON.parse(json);
-        return new ValidGameSettings(obj.AreSettingsValid, obj.ErrorMessage);
+        return new AreGameSettingsValid(obj.AreSettingsValid, obj.ErrorMessage);
     }
 }
