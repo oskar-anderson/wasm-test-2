@@ -14,6 +14,7 @@ namespace Domain.Model
         public abstract List<Point> ShipSizes { get; set; }
         public abstract GameState State { get; set; }
         public abstract int FrameCount { get; set; }
+        public abstract Input Input { get; set; }
     }
 
     public enum GameState

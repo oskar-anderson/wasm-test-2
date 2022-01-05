@@ -43,31 +43,31 @@ namespace Domain.Tile
             public void SetSpriteToSelectedTileRed() { Texture = SelectedTileRed.Value; }
             public void SetSpriteToSelectedTileGreen() { Texture = SelectedTileGreen.Value; }
             
-            public static readonly TileProperty SelectedTileRed = new TileProperty(SpriteTextureValue.SelectedTileRed, new StringBuilder()
+            public static readonly TileData.TileProperty SelectedTileRed = new TileData.TileProperty(SpriteTextureValue.SelectedTileRed, new StringBuilder()
                     .Append("~~~~")
                     .Append("~@@~")
                     .Append("~@@~")
                     .Append("~~~~"),
                 new int[]
                 {
-                    C.DC, C.DC, C.DC, C.DC,
-                    C.DC, C.DR, C.DR, C.DC,
-                    C.DC, C.DR, C.DR, C.DC,
-                    C.DC, C.DC, C.DC, C.DC
+                    TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC,
+                    TileData.C.DC, TileData.C.DR, TileData.C.DR, TileData.C.DC,
+                    TileData.C.DC, TileData.C.DR, TileData.C.DR, TileData.C.DC,
+                    TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC
                 }, false
                 );
             
-            public static readonly TileProperty SelectedTileGreen = new TileProperty(SpriteTextureValue.SelectedTileGreen, new StringBuilder()
+            public static readonly TileData.TileProperty SelectedTileGreen = new TileData.TileProperty(SpriteTextureValue.SelectedTileGreen, new StringBuilder()
                     .Append("~~~~")
                     .Append("~@@~")
                     .Append("~@@~")
                     .Append("~~~~"),
                 new int[]
                 {
-                    C.DC, C.DC, C.DC, C.DC,
-                    C.DC, C._G, C._G, C.DC,
-                    C.DC, C._G, C._G, C.DC,
-                    C.DC, C.DC, C.DC, C.DC
+                    TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC,
+                    TileData.C.DC, TileData.C._G, TileData.C._G, TileData.C.DC,
+                    TileData.C.DC, TileData.C._G, TileData.C._G, TileData.C.DC,
+                    TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC
                 }, false
                 );
         }

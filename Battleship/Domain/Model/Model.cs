@@ -27,6 +27,7 @@ namespace Domain.Model
         public override List<Point> ShipSizes { get; set; } = null!;
         public override GameState State { get; set; } = GameState.Placement;
         public override int FrameCount { get; set; }
+        public override Input Input { get; set; } = null!;
 
         public GameData()
         {

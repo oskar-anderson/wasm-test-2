@@ -6,7 +6,6 @@ using System.Text.Json;
 using Domain;
 using Domain.Model;
 using Domain.Tile;
-using Game;
 using RogueSharp;
 
 namespace DAL
@@ -71,6 +70,18 @@ namespace DAL
         }
         public override GameState State { get; set; }
         public override int FrameCount { get; set; }
+        [NotMapped] public override Input Input { get; set; } = null!;
+        public string InputDbFriendly 
+        {
+            get => JsonSerializer.Serialize(Input);
+            set
+            {
+                if (value != null)
+                { 
+                    Input = JsonSerializer.Deserialize<Input>(value);                    
+                }
+            }
+        }
 
         public DbGameData()
         {
@@ -90,6 +101,7 @@ namespace DAL
             ShipSizes = gameData.ShipSizes;
             State = gameData.State;
             FrameCount = gameData.FrameCount;
+            Input = gameData.Input;
         }
 
         public static GameData ToGameModel(DbGameData gameData)
@@ -105,7 +117,8 @@ namespace DAL
                 AllowedPlacementType = gameData.AllowedPlacementType,
                 ShipSizes = gameData.ShipSizes,
                 State = gameData.State,
-                FrameCount = gameData.FrameCount
+                FrameCount = gameData.FrameCount,
+                Input = gameData.Input
             };
             return game;
         }

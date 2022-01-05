@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DAL;
-using Domain;
 using Domain.Model;
 using Domain.Tile;
 using Game;
@@ -80,9 +79,8 @@ namespace WebApp.Pages.Battleship
                 DbQueries.Delete(id);
             }
 
-            BaseBattleship game = new WebBattle(gameData);
+            BaseBattleship game = new WebBattle(gameData, new WebInputV2(Input.GetDefaultInput()));
             
-            game.Initialize();
             DoGame(game);
             GameData = game.GameData;
             GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
@@ -98,53 +96,150 @@ namespace WebApp.Pages.Battleship
             }
             GameDataSerializable gameDataSerializableLoad = JsonSerializer.Deserialize<GameDataSerializable>(GameDataSerialized) ?? throw new InvalidOperationException($"{GameDataSerialized} cannot be deserialized!");
             GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializableLoad);
-            BaseBattleship game = new WebBattle(gameData);
-            game.Initialize();
+            
+            var keyboardKeys = new List<Input.KeyboardInput.KeyboardKey>();
             
             switch (KeyPress)
             {
                 case "LEFT":
-                    game.Input.KeyStatuses[UsedKeyKeys.A] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyA,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "RIGHT":
-                    game.Input.KeyStatuses[UsedKeyKeys.D] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyD,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "UP":
-                    game.Input.KeyStatuses[UsedKeyKeys.W] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyW,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "DOWN":
-                    game.Input.KeyStatuses[UsedKeyKeys.S] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyS,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "Z":
-                    game.Input.KeyStatuses[UsedKeyKeys.Z] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyZ,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "X":
-                    game.Input.KeyStatuses[UsedKeyKeys.X] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyX,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "d1":
-                    game.Input.KeyStatuses[UsedKeyKeys.D1] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit1,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "d2":
-                    game.Input.KeyStatuses[UsedKeyKeys.D2] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit2,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "d3":
-                    game.Input.KeyStatuses[UsedKeyKeys.D3] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit3,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 
                 case "takeBack":
-                    game.Input.KeyStatuses[UsedKeyKeys.R] = new KeyStatus(true, true);
+                    keyboardKeys.Add(new Input.KeyboardInput.KeyboardKey()
+                    {
+                        Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyR,
+                        Values = new List<Input.BtnState>()
+                        {
+                            Input.BtnState.Pressed,
+                            Input.BtnState.Echo
+                        }
+                    });
                     break;
                 default:
                     throw new Exception("unexpected!");
             }
+            Input input = new Input()
+            {
+                Keyboard = new Input.KeyboardInput()
+                {
+                    KeyboardState = keyboardKeys
+                },
+                Mouse = new Input.MouseInput()
+                {
+                    LeftButton = new List<Input.BtnState>() { Input.BtnState.Released },
+                    MiddleButton = new List<Input.BtnState>() { Input.BtnState.Released },
+                    RightButton = new List<Input.BtnState>() { Input.BtnState.Released },
+                    ScrollWheel = 0,
+                    X = 0,
+                    Y = 0
+                }
+            };
+            BaseBattleship game = new WebBattle(gameData, new WebInputV2(input));
 
             DoGame(game);
             GameData = game.GameData;
@@ -155,7 +250,7 @@ namespace WebApp.Pages.Battleship
 
         private void DoGame(BaseBattleship game)
         {
-            game.Update(1d, game.GameData);
+            BaseBattleship.Update(1d, game);
             GameBoard = WebDrawLogic.GetDraw(game.GameData);
         }
 

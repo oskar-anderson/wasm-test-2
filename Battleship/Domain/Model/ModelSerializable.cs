@@ -18,6 +18,7 @@ namespace Domain.Model
         public override List<Point> ShipSizes { get; set; } = null!;
         public override GameState State { get; set; }
         public override int FrameCount { get; set; }
+        public override Input Input { get; set; } = null!;
 
         public GameDataSerializable()
         {
@@ -34,6 +35,7 @@ namespace Domain.Model
             ShipSizes = gameData.ShipSizes;
             State = gameData.State;
             FrameCount = gameData.FrameCount;
+            Input = gameData.Input;
         }
 
         public static GameData ToGameModelSerializable(GameDataSerializable gameData)
@@ -49,7 +51,8 @@ namespace Domain.Model
                 AllowedPlacementType = gameData.AllowedPlacementType,
                 ShipSizes = gameData.ShipSizes,
                 State = gameData.State,
-                FrameCount = gameData.FrameCount
+                FrameCount = gameData.FrameCount,
+                Input = gameData.Input
             };
             return game;
         }

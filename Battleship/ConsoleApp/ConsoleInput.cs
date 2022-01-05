@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ConsoleGameEngineCore;
+using Domain;
+using Domain.Model;
 using Game;
 
 #pragma warning disable CS0162 // Unreachable code detected

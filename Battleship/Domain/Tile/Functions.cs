@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Domain.Model;
 using RogueSharp;
 using Troschuetz.Random.Generators;
 

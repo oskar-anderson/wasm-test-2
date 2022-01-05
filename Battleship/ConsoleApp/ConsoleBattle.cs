@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ConsoleGameEngineCore;
+using Domain;
 using Domain.Model;
 using Game;
 using IrrKlang;
@@ -24,16 +25,16 @@ namespace ConsoleApp
 
        public ConsoleBattle(GameData gameData) : base(gameData)
        {
-          
+          Initialize();
        }
 
        public ConsoleBattle(int boardHeight, int boardWidth, string ships, int allowAdjacentPlacement, int startingPlayerType, int secondPlayerType)
           : base(boardHeight, boardWidth, ships, allowAdjacentPlacement, startingPlayerType, secondPlayerType)
        {
-          
+          Initialize();
        }
-       
-       public override void Initialize()
+
+       private void Initialize()
        {
           ConsoleEngine = new ConsoleEngine(ScreenWidth, ScreenHeight, FontW, FontH);
           Console.OutputEncoding = Encoding.Unicode;
@@ -44,9 +45,8 @@ namespace ConsoleApp
              // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
              SoundEngineOptionFlag.LoadPlugins;
           SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-          Input = new ConsoleInput(ConsoleEngine);
           UpdateLogicExitEvent = Helper.FixConsole;
-          UpdateLogic = new UpdateLogic(UpdateLogicExitEvent, Input, SoundEngine);
+          Input = new ConsoleInputV2(ConsoleEngine);
        }
 
        /// <param name="gameTime">Provides a snapshot of timing values.</param>

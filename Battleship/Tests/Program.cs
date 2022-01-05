@@ -4,13 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using Domain.Model;
-using Game;
 using RogueSharp;
 using Troschuetz.Random.Generators;
-using Game.Pack;
 using IrrKlang;
 using NUnit.Framework;
 using System.Text.Json.Serialization;
+using Game.Pack;
 
 namespace Tests
 {

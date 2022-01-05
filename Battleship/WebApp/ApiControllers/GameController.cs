@@ -6,11 +6,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Model.Api;
-using Game;
-using Domain.Model;
 using System.Text.Json;
-using Domain.Tile;
 using Domain;
+using Domain.Tile;
+using Domain.Model;
+using Game;
 using WebApp.ApiControllers.Models;
 
 namespace WebApp.ApiControllers
@@ -29,7 +29,7 @@ namespace WebApp.ApiControllers
 		{
 			System.Diagnostics.Debug.WriteLine("In CheckValidGameSettings");
 			string errorMsgText = "";
-			bool areSettingsValid = Game.Utils.TryBtnStart(settings.Ships, settings.BoardWidth, settings.BoardHeight, settings.AllowedPlacementType, ref errorMsgText, out _);
+			bool areSettingsValid = Utils.TryBtnStart(settings.Ships, settings.BoardWidth, settings.BoardHeight, settings.AllowedPlacementType, ref errorMsgText, out _);
 			var result = new ValidGameSettingsOut()
 			{
 				AreSettingsValid = areSettingsValid,
@@ -51,7 +51,8 @@ namespace WebApp.ApiControllers
 				settings.Ships,
 				settings.AllowedPlacementType,
 				-1,
-				-1
+				-1,
+				new WebInputV2(Input.GetDefaultInput())
 			);
 			GameViewDTO gameViewDto = GetGameViewDto(game);
 			return TurnApiReturnValueToJson(gameViewDto);
@@ -63,14 +64,13 @@ namespace WebApp.ApiControllers
 		[Produces("application/json")]
 		// Unfortunately API input has to be string otherwise automatic deserialization to the class fails
 		// if the class has a property with a JSONIgnore tag
-		public ActionResult<string> DoGame(GameDataSerializable gameDataSerializable)
+		public ActionResult<string> DoGame(GameDataAndInput gameDataAndInput)
 		{
 			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
-			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData);
-            
-			game.Initialize();
-			game.Update(1d, game.GameData);
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData, new WebInputV2(gameDataAndInput.Input));
+			
+			BaseBattleship.Update(1d, game);
 			game.GameData.FrameCount++;
 
 			GameViewDTO gameViewDto = GetGameViewDto(game);
@@ -80,13 +80,10 @@ namespace WebApp.ApiControllers
 		[HttpPost("GetDrawArea")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		public ActionResult<string> GetDrawArea(GameDataSerializable gameDataSerializable)
+		public ActionResult<string> GetDrawArea(GameDataAndInput gameDataAndInput)
 		{
-			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData);
-            
-			game.Initialize();
-
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData, new WebInputV2(gameDataAndInput.Input));
 			TileData.CharInfo[][] drawArea = GetDrawArea(game.GameData);
 			return TurnApiReturnValueToJson(drawArea);
 		}

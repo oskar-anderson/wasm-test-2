@@ -49,8 +49,26 @@ namespace ConsoleApp
                         throw new Exception("unexpected");
                 }
 
-                BaseBattleship.GameResult gameData = game.Run();
-                if (gameData.IsOver)
+                GameResult Gameloop(BaseBattleship game)
+                {
+                    DateTime startTime = DateTime.Now;
+                    while (true)
+                    {
+                        double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
+                        startTime = DateTime.Now;
+                        double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
+                        bool running = BaseBattleship.Update(timeCap, game);
+                        if (!running) { break; }
+                        game.Draw(timeCap, game.GameData);
+                    }
+                    
+                    var gameResult = new GameResult(UpdateLogic.IsOver(game.GameData, out string winner), game.GameData);
+
+                    return gameResult;
+                }
+
+                GameResult gameResult = Gameloop(game);
+                if (gameResult.IsOver)
                 {
                     return;
                 }
@@ -77,15 +95,15 @@ namespace ConsoleApp
                     }
                     if (result == PauseMenu.PauseResult.Cont)
                     {
-                        game = new ConsoleBattle(gameData.Data);
+                        game = new ConsoleBattle(gameResult.Data);
                     }
                     if (result == PauseMenu.PauseResult.LoadDb 
                         || result == PauseMenu.PauseResult.LoadJson
                         || result == PauseMenu.PauseResult.Cont)
                     {
                         Console.CursorVisible = false;
-                        gameData = game.Run();
-                        if (gameData.IsOver)
+                        gameResult = Gameloop(game);
+                        if (gameResult.IsOver)
                         {
                             return;
                         }
@@ -95,10 +113,10 @@ namespace ConsoleApp
                 switch (result)
                 {
                     case PauseMenu.PauseResult.SaveDb:
-                        DbQueries.SaveAndDeleteOthers(gameData.Data);
+                        DbQueries.SaveAndDeleteOthers(gameResult.Data);
                         break;
                     case PauseMenu.PauseResult.SaveJson:
-                        DataManager.SaveGameAction(gameData.Data);
+                        DataManager.SaveGameAction(gameResult.Data);
                         break;
                     case PauseMenu.PauseResult.MainMenu:
                         menuTree = new List<Menu.MenuAction>() { Menu.getMenuMain() };

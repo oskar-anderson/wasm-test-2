@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Domain.Model.Api
+﻿namespace Domain.Model.Api
 {
 	public class ValidGameSettingsOut
 	{

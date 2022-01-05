@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ConsoleApp.TerminalGuiPlus;
 using Domain;
+using Domain.Model;
 using RogueSharp;
 using Terminal.Gui;
 using static ConsoleApp.GameMenu.ColorSchemeHolder;

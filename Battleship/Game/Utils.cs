@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Domain;
+using Domain.Model;
 using RogueSharp;
 
 namespace Game

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Domain;
 using Domain.Model;
 using Domain.Tile;
@@ -19,55 +17,51 @@ namespace Game
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     public class UpdateLogic
     {
-       private readonly BaseBattleship.UpdateLogicExitEventDelegate UpdateLogicExitEvent;
-       private readonly BaseI_Input Input;
-       private readonly ISoundEngine SoundEngine;
-
-       public UpdateLogic(BaseBattleship.UpdateLogicExitEventDelegate updateLogicExitEventDelegate, BaseI_Input input, ISoundEngine soundEngine)
-       {
-          UpdateLogicExitEvent = updateLogicExitEventDelegate;
-          Input = input;
-          SoundEngine = soundEngine;
-       }
-
        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-       /// <param name="gameData">Game data</param>
-       public bool Update(double gameTime, GameData gameData)
+       /// <param name="basegame">Base game with game data, input, web/console exit logic</param>
+       public static bool Update(double gameTime, BaseBattleship basegame)
        {
-          Input.UpdateKeyboardState();
-          if (gameData.State == GameState.GameOver)
+          basegame.GameData.Input = basegame.Input.UpdateInput(basegame.GameData.Input);
+          if (basegame.GameData.State == GameState.GameOver)
           {
-             if (Input.KeyStatuses[UsedKeyKeys.Z].IsPressed || Input.KeyStatuses[UsedKeyKeys.Escape].IsPressed)
-             { 
-                UpdateLogicExitEvent();
-                return false;
-             }
-             return true;
-          }
-
-          if (Input.KeyStatuses[UsedKeyKeys.Escape].IsPressed)
-          {
-             UpdateLogicExitEvent();
+             if (!basegame.GameData.Input.Keyboard.KeyboardState
+                    .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyZ && 
+                              x.Values.Contains(Input.BtnState.Pressed)) 
+                 && !basegame.GameData.Input.Keyboard.KeyboardState
+                    .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Escape && 
+                              x.Values.Contains(Input.BtnState.Pressed)) 
+                 ) return true;
+             basegame.UpdateLogicExitEvent();
              return false;
           }
 
-          gameData.ActivePlayer.fKeyboardMoveTimeout = (float) Math.Max(-1f, gameData.ActivePlayer.fKeyboardMoveTimeout - gameTime);
-          HandlePlayerMovement(out bool posChanged, gameData.ActivePlayer, gameData.Board2D);
-          gameData.ActivePlayer.fKeyboardMoveTimeout = posChanged ? 0.1f : gameData.ActivePlayer.fKeyboardMoveTimeout;
+          if (basegame.GameData.Input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Escape && 
+                       x.Values.Contains(Input.BtnState.Pressed))
+             )
+          {
+             basegame.UpdateLogicExitEvent();
+             return false;
+          }
+
+          basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = (float) Math.Max(-1f, basegame.GameData.ActivePlayer.fKeyboardMoveTimeout - gameTime);
+          HandlePlayerMovement(out bool posChanged, basegame.GameData.ActivePlayer, basegame.GameData.Board2D, basegame.GameData.Input);
+          basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = posChanged ? 0.1f : basegame.GameData.ActivePlayer.fKeyboardMoveTimeout;
           
-          ResolvePhase(gameData);
+          ResolvePhase(basegame);
           
 
-          HandleZooming(gameData.ActivePlayer);
-          HandleKeyboardPanning(gameTime, gameData.ActivePlayer);
-          HandleMousePanning(gameData.ActivePlayer);
-          HandleMouseSelection(gameData.ActivePlayer);
+          HandleZooming(basegame.GameData.ActivePlayer, basegame.GameData.Input);
+          HandleKeyboardPanning(gameTime, basegame.GameData.ActivePlayer, basegame.GameData.Input);
+          HandleMousePanning(basegame.GameData.ActivePlayer, basegame.GameData.Input);
+          HandleMouseSelection(basegame.GameData.ActivePlayer, basegame.GameData.Input);
           
           return true;
        }
 
-       private void ResolvePhase(GameData gameData)
+       private static void ResolvePhase(BaseBattleship basegame)
        {
+          var gameData = basegame.GameData;
           switch (gameData.State)
           {
              case GameState.Placement:
@@ -75,14 +69,14 @@ namespace Game
                    gameData.ActivePlayer.Sprite.SetSpriteToSelectedTileRed();
                 else
                    gameData.ActivePlayer.Sprite.SetSpriteToSelectedTileGreen();
-                UsedKeyKeys dialogAction = UsedKeyKeys.Z;
-                UsedKeyKeys dialogRot = UsedKeyKeys.X;
-                UsedKeyKeys dialogRandomize = UsedKeyKeys.D1;
-                UsedKeyKeys dialogClear = UsedKeyKeys.D2;
-                UsedKeyKeys dialogStart = UsedKeyKeys.D3;
+                var dialogAction = Input.KeyboardInput.KeyboardIdentifierList.KeyZ;
+                var dialogRot = Input.KeyboardInput.KeyboardIdentifierList.KeyX;
+                var dialogRandomize = Input.KeyboardInput.KeyboardIdentifierList.Digit1;
+                var dialogClear = Input.KeyboardInput.KeyboardIdentifierList.Digit2;
+                var dialogStart = Input.KeyboardInput.KeyboardIdentifierList.Digit3;
 
                 ShipPlacementStatus shipPlacementStatus = GetShipPlacementStatus(gameData);
-                Dictionary<UsedKeyKeys, Player.DialogItem> activeKeys = new Dictionary<UsedKeyKeys, Player.DialogItem>() 
+                Dictionary<Input.KeyboardInput.KeyboardIdentifier, Player.DialogItem> activeKeys = new Dictionary<Input.KeyboardInput.KeyboardIdentifier, Player.DialogItem>() 
                 {
                    { dialogAction, new Player.DialogItem(shipPlacementStatus.isPlaceable, "Z", "Place") },
                    { dialogRot, new Player.DialogItem(shipPlacementStatus.hitboxRect != null,"X", "Rotate") },
@@ -91,7 +85,11 @@ namespace Game
                    { dialogStart, new Player.DialogItem(shipPlacementStatus.isStartable,"3", "Start") }
                 };
 
-                if (activeKeys[dialogStart].isActive && Input.KeyStatuses[dialogStart].IsPressed)
+                if (activeKeys[dialogStart].isActive && gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == dialogStart && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo))
+                    )
                 {
                    (gameData.ActivePlayer, gameData.InactivePlayer) = (gameData.InactivePlayer, gameData.ActivePlayer);
                    shipPlacementStatus = GetShipPlacementStatus(gameData);
@@ -118,7 +116,10 @@ namespace Game
                    }
                 }
                           
-                if (activeKeys[dialogRandomize].isActive && Input.KeyStatuses[dialogRandomize].IsPressed)
+                if (activeKeys[dialogRandomize].isActive && gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == dialogRandomize && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo)))
                 {
                    string[,] refreshedBoard = TileFunctions.GetRndSeaTiles(
                       gameData.ActivePlayer.BoardBounds.Width, 
@@ -142,7 +143,11 @@ namespace Game
                    shipPlacementStatus = GetShipPlacementStatus(gameData);
                 }
 
-                if (activeKeys[dialogClear].isActive && Input.KeyStatuses[dialogClear].IsPressed)
+                if (activeKeys[dialogClear].isActive && gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == dialogClear && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo))
+                    )
                 {
                    gameData.ActivePlayer.Ships.Clear();
                    gameData.ActivePlayer.ShipBeingPlacedIdx = 0;
@@ -153,16 +158,25 @@ namespace Game
                    shipPlacementStatus = GetShipPlacementStatus(gameData);
                 }
 
-                if (shipPlacementStatus.isPlaceable && activeKeys[dialogAction].isActive && Input.KeyStatuses[dialogAction].IsPressed)
+                if (shipPlacementStatus.isPlaceable && activeKeys[dialogAction].isActive && 
+                    gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == dialogAction && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo))
+                    )
                 {
                    if (shipPlacementStatus.modelPoints == null || shipPlacementStatus.hitboxRect == null) { throw new Exception("Unexpected!");}
                    PlaceShip(shipPlacementStatus.modelPoints, (Rectangle) shipPlacementStatus.hitboxRect, 
                       gameData.Board2D, gameData.ActivePlayer, 
                       gameData.ShipSizes.Count, gameData.ActivePlayer.Sprite);
-                   SoundEngine.Play2D("../../../../../media/flashlight_holster.ogg");
+                   basegame.SoundEngine.Play2D("../../../../../media/flashlight_holster.ogg");
                 }
 
-                if (activeKeys[dialogRot].isActive && Input.KeyStatuses[dialogRot].IsPressed)
+                if (activeKeys[dialogRot].isActive && gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == dialogRot && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo))
+                    )
                 {
                    gameData.ActivePlayer.IsHorizontalPlacement = !gameData.ActivePlayer.IsHorizontalPlacement;
                 }
@@ -171,7 +185,10 @@ namespace Game
              
              case GameState.Shooting:
                 string selectedOppTileValue = gameData.Board2D.Get(gameData.ActivePlayer.Sprite.Pos);
-                if (Input.KeyStatuses[UsedKeyKeys.Z].IsPressed && 
+                if (gameData.Input.Keyboard.KeyboardState
+                       .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyZ && 
+                                 x.Values.Contains(Input.BtnState.Pressed) && 
+                                 ! x.Values.Contains(Input.BtnState.Echo)) && 
                     !(TextureValue.HitShip == selectedOppTileValue || 
                       TextureValue.HitWater == selectedOppTileValue)
                     )
@@ -188,7 +205,7 @@ namespace Game
                       gameData.Board2D.Set(gameData.ActivePlayer.Sprite.Pos, TextureValue.HitWater);
                       (gameData.ActivePlayer, gameData.InactivePlayer) = (gameData.InactivePlayer, gameData.ActivePlayer);
 
-                      SoundEngine.Play2D("../../../../../media/Water_Impact_2.wav");
+                      basegame.SoundEngine.Play2D("../../../../../media/Water_Impact_2.wav");
                       return;
                    }
                    if (TextureValue.IntactShip == selectedOppTileValue)
@@ -212,7 +229,7 @@ namespace Game
                             selectedOppTileValue,
                             TextureValue.HitShip, 
                             changes));
-                         SoundEngine.Play2D("../../../../../media/bigExp.wav");
+                         basegame.SoundEngine.Play2D("../../../../../media/bigExp.wav");
 
                          if (IsOver(gameData, out string winner))
                          {
@@ -229,7 +246,7 @@ namespace Game
                                TextureValue.HitShip, 
                                null)
                          );
-                         SoundEngine.Play2D("../../../../../media/missileExplode.wav");
+                         basegame.SoundEngine.Play2D("../../../../../media/missileExplode.wav");
                       }
                    }
                    else {
@@ -237,7 +254,11 @@ namespace Game
                    }
                 }
 
-                if (Input.KeyStatuses[UsedKeyKeys.R].IsPressed && gameData.ActivePlayer.ShootingHistory.Count != 0)
+                if (gameData.Input.Keyboard.KeyboardState
+                      .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyR && 
+                                x.Values.Contains(Input.BtnState.Pressed) && 
+                                ! x.Values.Contains(Input.BtnState.Echo))
+                    && gameData.ActivePlayer.ShootingHistory.Count != 0)
                 {
                    ShootingHistoryItem historyItem = gameData.ActivePlayer.ShootingHistory.Last();
                    gameData.ActivePlayer.ShootingHistory.Remove(historyItem);
@@ -400,11 +421,18 @@ namespace Game
        }
 
 
-       private void HandlePlayerMovement(out bool posChanged, Player player, string[,] board)
+       private static void HandlePlayerMovement(out bool posChanged, Player player, string[,] board, Input input)
        {
           Point playerPosBefore = new Point(player.Sprite.Pos.X, player.Sprite.Pos.Y);
           Rectangle bounds = new Rectangle(0,0, board.GetWidth(), board.GetHeight());
-          if (Input.KeyStatuses[UsedKeyKeys.A].IsDown || Input.KeyStatuses[UsedKeyKeys.LeftArrow].IsDown)
+          if (input.Keyboard.KeyboardState
+                 .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyA && 
+                           x.Values.Contains(Input.BtnState.Pressed) 
+                           || 
+                           x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft && 
+                           x.Values.Contains(Input.BtnState.Pressed)
+                           )
+          )
           {
              if (player.Sprite.Pos.X > bounds.Left && player.fKeyboardMoveTimeout < 0)
              {
@@ -417,7 +445,14 @@ namespace Game
              }
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.S].IsDown || Input.KeyStatuses[UsedKeyKeys.DownArrow].IsDown)
+          if (input.Keyboard.KeyboardState
+                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyS && 
+                          x.Values.Contains(Input.BtnState.Pressed) 
+                          || 
+                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowDown && 
+                          x.Values.Contains(Input.BtnState.Pressed)
+                )
+             )
           {
              if (player.Sprite.Pos.Y < bounds.Bottom - 1 && player.fKeyboardMoveTimeout < 0)
              {
@@ -430,7 +465,14 @@ namespace Game
              }
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.D].IsDown || Input.KeyStatuses[UsedKeyKeys.RightArrow].IsDown)
+          if (input.Keyboard.KeyboardState
+                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyD && 
+                          x.Values.Contains(Input.BtnState.Pressed) 
+                          || 
+                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowRight && 
+                          x.Values.Contains(Input.BtnState.Pressed)
+                )
+             )
           {
              if (player.Sprite.Pos.X < bounds.Right - 1 && player.fKeyboardMoveTimeout < 0)
              {
@@ -443,7 +485,14 @@ namespace Game
              }
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.W].IsDown || Input.KeyStatuses[UsedKeyKeys.UpArrow].IsDown)
+          if (input.Keyboard.KeyboardState
+                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyW && 
+                          x.Values.Contains(Input.BtnState.Pressed) 
+                          || 
+                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowUp && 
+                          x.Values.Contains(Input.BtnState.Pressed)
+                )
+             )
           {
              if (player.Sprite.Pos.Y > bounds.Top && player.fKeyboardMoveTimeout < 0)
              {
@@ -553,53 +602,73 @@ namespace Game
           
        }
 
-       private void HandleKeyboardPanning(double gameTime, Player player)
+       private static void HandleKeyboardPanning(double gameTime, Player player, Input input)
        {
-          if (Input.KeyStatuses[UsedKeyKeys.J].IsDown)
+          if (input.Keyboard.KeyboardState
+                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyJ && 
+                          x.Values.Contains(Input.BtnState.Pressed) 
+                )
+             )
           {
              player.fCameraPixelPosX -= (float) (50 * gameTime);
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.K].IsDown)
+          if (input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyK && 
+                       x.Values.Contains(Input.BtnState.Pressed) 
+             )
+          )
           {
              player.fCameraPixelPosY += (float) (50 * gameTime);
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.L].IsDown)
+          if (input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyL && 
+                       x.Values.Contains(Input.BtnState.Pressed) 
+             )
+          )
           {
              player.fCameraPixelPosX += (float) (50 * gameTime);
           }
 
-          if (Input.KeyStatuses[UsedKeyKeys.I].IsDown)
+          if (input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyI && 
+                       x.Values.Contains(Input.BtnState.Pressed) 
+             )
+          )
           {
              player.fCameraPixelPosY -= (float) (50 * gameTime);
           }
        }
 
-       private void HandleMousePanning(Player player)
+       private static void HandleMousePanning(Player player, Input input)
        {
-          var input = Input.GetMousePos();
-          if (!Input.KeyStatuses[UsedKeyKeys.MouseLeft].IsDown)
+          var mousePos = new Point(input.Mouse.X, input.Mouse.Y);
+          if (!input.Mouse.LeftButton.Contains(Input.BtnState.Pressed))
           {
-             player.pMouseStartPixelPan = input;
+             player.pMouseStartPixelPan = mousePos;
              return;
           }
           
-          player.fCameraPixelPosX -= (input.X - player.pMouseStartPixelPan.X) / player.fCameraScaleX;
-          player.fCameraPixelPosY -= (input.Y - player.pMouseStartPixelPan.Y) / player.fCameraScaleY;
+          player.fCameraPixelPosX -= (input.Mouse.X - player.pMouseStartPixelPan.X) / player.fCameraScaleX;
+          player.fCameraPixelPosY -= (input.Mouse.Y - player.pMouseStartPixelPan.Y) / player.fCameraScaleY;
 
-          player.pMouseStartPixelPan = input;
+          player.pMouseStartPixelPan = mousePos;
        }
 
-       private void HandleZooming(Player player)
+       private static void HandleZooming(Player player, Input input)
        {
-          bool zoomNegative = Input.KeyStatuses[UsedKeyKeys.OemMinus].IsDown;
-          bool zoomPositive = Input.KeyStatuses[UsedKeyKeys.OemPlus].IsDown;
+          bool zoomNegative = input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Period && 
+                       x.Values.Contains(Input.BtnState.Pressed));
+          bool zoomPositive = input.Keyboard.KeyboardState
+             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Comma && 
+                       x.Values.Contains(Input.BtnState.Pressed));
           if (! zoomNegative && ! zoomPositive)
           {
              return;
           }
-          var mousePos = Input.GetMousePos();
+          var mousePos = new Point(input.Mouse.X, input.Mouse.Y);
           float fMouseWorldX_BeforeZoom, fMouseWorldY_BeforeZoom;
           ScreenToWorld(
              mousePos.X,
@@ -632,10 +701,10 @@ namespace Game
           player.fCameraPixelPosY += fMouseWorldY_BeforeZoom - fMouseWorldY_AfterZoom;
        }
 
-       private void HandleMouseSelection(Player player)
+       private static void HandleMouseSelection(Player player, Input input)
        {
-          if (!Input.GetMouseLeft()) return;
-          var mousePos = Input.GetMousePos();
+          if (!input.Mouse.LeftButton.Contains(Input.BtnState.Pressed)) return;
+          var mousePos = new Point(input.Mouse.X, input.Mouse.Y);
           float fMouseWorldX, fMouseWorldY;
           ScreenToWorld(
              mousePos.X,
