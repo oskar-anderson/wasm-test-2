@@ -14,10 +14,7 @@ namespace Game
        public readonly GameData GameData;
        public ISoundEngine SoundEngine { get; set; } = null!;
 
-       public delegate void UpdateLogicExitEventDelegate();
-       public UpdateLogicExitEventDelegate UpdateLogicExitEvent { get; set; } = null!;
-
-       public BaseInputV2 Input { get; set; } = null!;
+       public BaseInput Input { get; set; } = null!;
 
        protected BaseBattleship(GameData gameData)
        {

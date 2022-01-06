@@ -31,7 +31,6 @@ namespace Game
                     .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Escape && 
                               x.Values.Contains(Input.BtnState.Pressed)) 
                  ) return true;
-             basegame.UpdateLogicExitEvent();
              return false;
           }
 
@@ -40,7 +39,6 @@ namespace Game
                        x.Values.Contains(Input.BtnState.Pressed))
              )
           {
-             basegame.UpdateLogicExitEvent();
              return false;
           }
 

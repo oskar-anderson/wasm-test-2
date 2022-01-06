@@ -58,7 +58,11 @@ namespace ConsoleApp
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
                         bool running = BaseBattleship.Update(timeCap, game);
-                        if (!running) { break; }
+                        if (!running)
+                        {
+                            Helper.FixConsole();
+                            break;
+                        }
                         game.Draw(timeCap, game.GameData);
                     }
                     

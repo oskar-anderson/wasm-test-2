@@ -79,7 +79,7 @@ namespace WebApp.Pages.Battleship
                 DbQueries.Delete(id);
             }
 
-            BaseBattleship game = new WebBattle(gameData, new WebInputV2(Input.GetDefaultInput()));
+            BaseBattleship game = new WebBattle(gameData, new WebInput(Input.GetDefaultInput()));
             
             DoGame(game);
             GameData = game.GameData;
@@ -239,7 +239,7 @@ namespace WebApp.Pages.Battleship
                     Y = 0
                 }
             };
-            BaseBattleship game = new WebBattle(gameData, new WebInputV2(input));
+            BaseBattleship game = new WebBattle(gameData, new WebInput(input));
 
             DoGame(game);
             GameData = game.GameData;

@@ -52,7 +52,7 @@ namespace WebApp.ApiControllers
 				settings.AllowedPlacementType,
 				-1,
 				-1,
-				new WebInputV2(Input.GetDefaultInput())
+				new WebInput(Input.GetDefaultInput())
 			);
 			GameViewDTO gameViewDto = GetGameViewDto(game);
 			return TurnApiReturnValueToJson(gameViewDto);
@@ -68,7 +68,7 @@ namespace WebApp.ApiControllers
 		{
 			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInputV2(gameDataAndInput.Input));
+			BaseBattleship game = new WebBattle(gameData, new WebInput(gameDataAndInput.Input));
 			
 			BaseBattleship.Update(1d, game);
 			game.GameData.FrameCount++;
@@ -83,7 +83,7 @@ namespace WebApp.ApiControllers
 		public ActionResult<string> GetDrawArea(GameDataAndInput gameDataAndInput)
 		{
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInputV2(gameDataAndInput.Input));
+			BaseBattleship game = new WebBattle(gameData, new WebInput(gameDataAndInput.Input));
 			TileData.CharInfo[][] drawArea = GetDrawArea(game.GameData);
 			return TurnApiReturnValueToJson(drawArea);
 		}

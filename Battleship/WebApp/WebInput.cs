@@ -1,35 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Domain;
+﻿using Domain.Model;
 using Game;
-using RogueSharp;
 
 namespace WebApp
 {
-    public class WebInput : BaseC_Input, BaseI_Input
+    public class WebInput: BaseInput
     {
-        public override Dictionary<UsedKeyKeys, KeyStatus> KeyStatuses { get; set; }
+        public Input NewInput;
 
-        public WebInput()
+        public WebInput(Input newInput)
         {
-            this.KeyStatuses = ResetKeyboardState();
+            this.NewInput = newInput;
         }
-
-        public override Point GetMousePos()
+        
+        public Input UpdateInput(Input oldInput)
         {
-            return Point.Zero;
-        }
-
-        public override bool GetMouseLeft()
-        {
-            return false;
-        }
-
-        public override void UpdateKeyboardState()
-        {
-            // do nothing
-            // updating needs to be done from page
+            return this.NewInput;
         }
     }
 }

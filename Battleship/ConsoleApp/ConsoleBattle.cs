@@ -45,8 +45,7 @@ namespace ConsoleApp
              // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
              SoundEngineOptionFlag.LoadPlugins;
           SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-          UpdateLogicExitEvent = Helper.FixConsole;
-          Input = new ConsoleInputV2(ConsoleEngine);
+          Input = new ConsoleInput(ConsoleEngine);
        }
 
        /// <param name="gameTime">Provides a snapshot of timing values.</param>
