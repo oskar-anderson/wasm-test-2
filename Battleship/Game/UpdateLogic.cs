@@ -6,7 +6,6 @@ using Domain;
 using Domain.Model;
 using Domain.Tile;
 using Game.Pack;
-using IrrKlang;
 using RogueSharp;
 using Point = RogueSharp.Point;
 
@@ -17,9 +16,9 @@ namespace Game
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     public class UpdateLogic
     {
-       /// <param name="gameTime">Provides a snapshot of timing values.</param>
-       /// <param name="basegame">Base game with game data, input, web/console exit logic</param>
-       public static bool Update(double gameTime, BaseBattleship basegame)
+       /// <param name="deltaTime">Time since last update in seconds.</param>
+       /// <param name="basegame">Base game with game data and input handling</param>
+       public static bool Update(double deltaTime, BaseBattleship basegame)
        {
           basegame.GameData.Input = basegame.Input.UpdateInput(basegame.GameData.Input);
           if (basegame.GameData.State == GameState.GameOver)
@@ -42,7 +41,7 @@ namespace Game
              return false;
           }
 
-          basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = (float) Math.Max(-1f, basegame.GameData.ActivePlayer.fKeyboardMoveTimeout - gameTime);
+          basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = (float) Math.Max(-1f, basegame.GameData.ActivePlayer.fKeyboardMoveTimeout - deltaTime);
           HandlePlayerMovement(out bool posChanged, basegame.GameData.ActivePlayer, basegame.GameData.Board2D, basegame.GameData.Input);
           basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = posChanged ? 0.1f : basegame.GameData.ActivePlayer.fKeyboardMoveTimeout;
           
@@ -50,7 +49,7 @@ namespace Game
           
 
           HandleZooming(basegame.GameData.ActivePlayer, basegame.GameData.Input);
-          HandleKeyboardPanning(gameTime, basegame.GameData.ActivePlayer, basegame.GameData.Input);
+          HandleKeyboardPanning(deltaTime, basegame.GameData.ActivePlayer, basegame.GameData.Input);
           HandleMousePanning(basegame.GameData.ActivePlayer, basegame.GameData.Input);
           HandleMouseSelection(basegame.GameData.ActivePlayer, basegame.GameData.Input);
           
@@ -167,7 +166,7 @@ namespace Game
                    PlaceShip(shipPlacementStatus.modelPoints, (Rectangle) shipPlacementStatus.hitboxRect, 
                       gameData.Board2D, gameData.ActivePlayer, 
                       gameData.ShipSizes.Count, gameData.ActivePlayer.Sprite);
-                   basegame.SoundEngine.Play2D("../../../../../media/flashlight_holster.ogg");
+                   basegame.SoundEngine.Play2D("media/flashlight_holster.ogg");
                 }
 
                 if (activeKeys[dialogRot].isActive && gameData.Input.Keyboard.KeyboardState
@@ -203,7 +202,7 @@ namespace Game
                       gameData.Board2D.Set(gameData.ActivePlayer.Sprite.Pos, TextureValue.HitWater);
                       (gameData.ActivePlayer, gameData.InactivePlayer) = (gameData.InactivePlayer, gameData.ActivePlayer);
 
-                      basegame.SoundEngine.Play2D("../../../../../media/Water_Impact_2.wav");
+                      basegame.SoundEngine.Play2D("media/Water_Impact_2.wav");
                       return;
                    }
                    if (TextureValue.IntactShip == selectedOppTileValue)
@@ -227,7 +226,7 @@ namespace Game
                             selectedOppTileValue,
                             TextureValue.HitShip, 
                             changes));
-                         basegame.SoundEngine.Play2D("../../../../../media/bigExp.wav");
+                         basegame.SoundEngine.Play2D("media/bigExp.wav");
 
                          if (IsOver(gameData, out string winner))
                          {
@@ -244,7 +243,7 @@ namespace Game
                                TextureValue.HitShip, 
                                null)
                          );
-                         basegame.SoundEngine.Play2D("../../../../../media/missileExplode.wav");
+                         basegame.SoundEngine.Play2D("media/missileExplode.wav");
                       }
                    }
                    else {
@@ -600,7 +599,7 @@ namespace Game
           
        }
 
-       private static void HandleKeyboardPanning(double gameTime, Player player, Input input)
+       private static void HandleKeyboardPanning(double deltaTime, Player player, Input input)
        {
           if (input.Keyboard.KeyboardState
                 .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyJ && 
@@ -608,7 +607,7 @@ namespace Game
                 )
              )
           {
-             player.fCameraPixelPosX -= (float) (50 * gameTime);
+             player.fCameraPixelPosX -= (float) (50 * deltaTime);
           }
 
           if (input.Keyboard.KeyboardState
@@ -617,7 +616,7 @@ namespace Game
              )
           )
           {
-             player.fCameraPixelPosY += (float) (50 * gameTime);
+             player.fCameraPixelPosY += (float) (50 * deltaTime);
           }
 
           if (input.Keyboard.KeyboardState
@@ -626,7 +625,7 @@ namespace Game
              )
           )
           {
-             player.fCameraPixelPosX += (float) (50 * gameTime);
+             player.fCameraPixelPosX += (float) (50 * deltaTime);
           }
 
           if (input.Keyboard.KeyboardState
@@ -635,7 +634,7 @@ namespace Game
              )
           )
           {
-             player.fCameraPixelPosY -= (float) (50 * gameTime);
+             player.fCameraPixelPosY -= (float) (50 * deltaTime);
           }
        }
 

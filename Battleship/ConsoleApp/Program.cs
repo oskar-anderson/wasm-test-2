@@ -8,6 +8,7 @@ using Domain;
 using Domain.Model;
 using Game;
 using Microsoft.EntityFrameworkCore;
+using SFML.Window;
 using Point = RogueSharp.Point;
 
 namespace ConsoleApp
@@ -52,15 +53,17 @@ namespace ConsoleApp
                 GameResult Gameloop(BaseBattleship game)
                 {
                     DateTime startTime = DateTime.Now;
-                    while (true)
+                    Window window = ((ConsoleBattle) game).Window;
+                    while (window.IsOpen)
                     {
+                        window.DispatchEvents();
                         double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
                         bool running = BaseBattleship.Update(timeCap, game);
                         if (!running)
                         {
-                            Helper.FixConsole();
+                            window.Close();
                             break;
                         }
                         game.Draw(timeCap, game.GameData);

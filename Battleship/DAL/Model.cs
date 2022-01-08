@@ -70,6 +70,8 @@ namespace DAL
         }
         public override GameState State { get; set; }
         public override int FrameCount { get; set; }
+        public override List<double> DeltaTimes { get; set; } = null!;
+        public override double ElapsedTime { get; set; }
         [NotMapped] public override Input Input { get; set; } = null!;
         public string InputDbFriendly 
         {
@@ -101,6 +103,8 @@ namespace DAL
             ShipSizes = gameData.ShipSizes;
             State = gameData.State;
             FrameCount = gameData.FrameCount;
+            DeltaTimes = gameData.DeltaTimes;
+            ElapsedTime = gameData.ElapsedTime;
             Input = gameData.Input;
         }
 
@@ -118,6 +122,8 @@ namespace DAL
                 ShipSizes = gameData.ShipSizes,
                 State = gameData.State,
                 FrameCount = gameData.FrameCount,
+                DeltaTimes = gameData.DeltaTimes,
+                ElapsedTime = gameData.ElapsedTime,
                 Input = gameData.Input
             };
             return game;

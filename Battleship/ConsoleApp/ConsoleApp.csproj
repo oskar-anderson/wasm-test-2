@@ -16,9 +16,16 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9" />
+      <PackageReference Include="sdl2" Version="2.0.5" />
+      <PackageReference Include="SFML.Net" Version="2.5.0" />
         <Reference Include="irrKlang.NET4">
             <HintPath>..\Vendor\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <None Include="$(SolutionDir)media\**" CopyToOutputDirectory="PreserveNewest" LinkBase="media\" />
     </ItemGroup>
 
 </Project>

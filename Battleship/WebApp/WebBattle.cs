@@ -35,7 +35,7 @@ namespace WebApp
             SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
         }
 
-        public override void Draw(double gameTime, GameData data)
+        public override void Draw(double deltaTime, GameData data)
         {
             // this cannot be used
             throw new System.NotImplementedException();

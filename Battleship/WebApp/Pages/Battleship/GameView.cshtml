@@ -44,7 +44,7 @@
                             @for (int x = 0; x < Model.GameBoard.GetLength(1); x++)
                             {
                                 TileData.CharInfo charInfo = Model.GameBoard[y, x];
-                                string colCss = Model.ColorIntToCssString[charInfo.GetColor()];
+                                string colCss = Model.ColorIntToCssString[charInfo.GetColor().IntVal];
                                 string character = charInfo.GetGlyphString();
                                 character = character == " " ? "." : character;
                                 <em style="color: @colCss;">@character</em>

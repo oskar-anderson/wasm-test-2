@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ConsoleGameEngineCore;
 using Domain;
 using Domain.Model;
 using Game;
 using IrrKlang;
 using RogueSharp;
 using Point = RogueSharp.Point;
+using SFML;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace ConsoleApp
 {
     public class ConsoleBattle : BaseBattleship
     {
-       public static ConsoleEngine ConsoleEngine = null!;
+       public RenderWindow Window = null!;
        
 
-       public const int ScreenWidth = 60;
-       public const int ScreenHeight = 45;
-       private const int FontW = 8;
-       private const int FontH = 8;
+       public const int ScreenWidth = 480;
+       public const int ScreenHeight = 360;
+       public const int FontW = 8;
+       public const int FontH = 8;
 
        
 
@@ -36,7 +38,12 @@ namespace ConsoleApp
 
        private void Initialize()
        {
-          ConsoleEngine = new ConsoleEngine(ScreenWidth, ScreenHeight, FontW, FontH);
+          Window = new RenderWindow(new VideoMode(480, 360), "Battleships");
+          Window.Closed += (sender, e) =>
+          {
+             Window.Close();
+          };
+          Window.SetFramerateLimit(0);
           Console.OutputEncoding = Encoding.Unicode;
           const SoundEngineOptionFlag options = 
              SoundEngineOptionFlag.Use3DBuffers | 
@@ -45,14 +52,14 @@ namespace ConsoleApp
              // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
              SoundEngineOptionFlag.LoadPlugins;
           SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-          Input = new ConsoleInput(ConsoleEngine);
+          Input = new ConsoleInput(Window);
        }
 
-       /// <param name="gameTime">Provides a snapshot of timing values.</param>
+       /// <param name="deltaTime">Provides a snapshot of timing values.</param>
        /// <param name="gameData">Game data</param>
-       public override void Draw(double gameTime, GameData gameData)
+       public override void Draw(double deltaTime, GameData gameData)
        {
-          ConsoleDrawLogic.Draw(gameTime, gameData);
+          ConsoleDrawLogic.Draw(deltaTime, gameData, Window);
        }
     }
 }

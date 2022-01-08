@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Vendor\ConsoleGameEngine-Core-0.0.3\ConsoleGameEngineCore.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,7 +17,10 @@
             <HintPath>..\Vendor\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
         </Reference>
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <None Include="$(SolutionDir)media\**" CopyToOutputDirectory="PreserveNewest" LinkBase="media\"/>
+    </ItemGroup>
     
     
 

@@ -62,16 +62,16 @@ namespace Game
           GameData = new GameData(allowAdjacentPlacement, boardMap, shipList, activePlayer, inactivePlayer, sprites);
        }
 
-       /// <param name="gameTime">Provides a snapshot of timing values.</param>
-       /// <param name="baseBattleship">Base game object with all game data, input handling and web/conssole exit strategy</param>
-       public static bool Update(double gameTime, BaseBattleship baseBattleship)
+       /// <param name="deltaTime">Time since last update in seconds.</param>
+       /// <param name="baseBattleship">Base game object with all game data, input handling</param>
+       public static bool Update(double deltaTime, BaseBattleship baseBattleship)
        {
-          return UpdateLogic.Update(gameTime, baseBattleship);
+          return UpdateLogic.Update(deltaTime, baseBattleship);
        }
 
 
-       /// <param name="gameTime">Provides a snapshot of timing values.</param>
+       /// <param name="deltaTime">Time since last update in seconds.</param>
        /// <param name="data">Game data</param>
-       public abstract void Draw(double gameTime, GameData data);
+       public abstract void Draw(double deltaTime, GameData data);
     }
 }

@@ -3,25 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using ConsoleGameEngineCore;
 using Domain;
 using Domain.Model;
 using Game;
+using RogueSharp;
+using SFML;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace ConsoleApp
 {
     public class ConsoleInput: BaseInput
     {
-        private readonly ConsoleEngine engine;
-        public ConsoleInput(ConsoleEngine engine)
+        private readonly RenderWindow window;
+        public ConsoleInput(RenderWindow window)
         {
-            this.engine = engine;
+            this.window = window;
         }
 
-        public List<Input.BtnState> GetKeyState(ConsoleKey ck, string identifierKey, Input? oldInput)
+        public List<Input.BtnState> GetKeyState(Keyboard.Key key, string identifierKey, Input? oldInput)
         {
             var keyValues = new List<Input.BtnState>();
-            if (GetKey(ck))
+            if (GetKey(key))
             {
                 keyValues.Add(Input.BtnState.Pressed);
                 if (oldInput != null && 
@@ -63,19 +66,23 @@ namespace ConsoleApp
             };
             
             var leftButton = GetMouseButtonState(
-                engine.GetMouseLeft(),
+                SFML.Window.Mouse.IsButtonPressed(Mouse.Button.Left),
                 oldInput != null && oldInput.Mouse.LeftButton.Contains(Input.BtnState.Pressed)
             );
             var middleButton = GetMouseButtonState(
-                engine.GetMouseLeft(),
+                SFML.Window.Mouse.IsButtonPressed(Mouse.Button.Middle),
                 oldInput != null && oldInput.Mouse.LeftButton.Contains(Input.BtnState.Pressed)
             );
             var rightButton = GetMouseButtonState(
-                engine.GetMouseLeft(),
+                SFML.Window.Mouse.IsButtonPressed(Mouse.Button.Right),
                 oldInput != null && oldInput.Mouse.LeftButton.Contains(Input.BtnState.Pressed)
             );
 
-            Point p = engine.GetMousePos();
+            Point p = new Point()
+            {
+                X = SFML.Window.Mouse.GetPosition(window).X,
+                Y = SFML.Window.Mouse.GetPosition(window).Y
+            };
             var mousePos = new RogueSharp.Point(p.X, p.Y);
             
             
@@ -102,117 +109,117 @@ namespace ConsoleApp
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyR,
-                            Values = GetKeyState(ConsoleKey.R, Input.KeyboardInput.KeyboardIdentifierList.KeyR.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.R, Input.KeyboardInput.KeyboardIdentifierList.KeyR.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyX,
-                            Values = GetKeyState(ConsoleKey.X, Input.KeyboardInput.KeyboardIdentifierList.KeyX.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.X, Input.KeyboardInput.KeyboardIdentifierList.KeyX.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Escape,
-                            Values = GetKeyState(ConsoleKey.Escape, Input.KeyboardInput.KeyboardIdentifierList.Escape.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Escape, Input.KeyboardInput.KeyboardIdentifierList.Escape.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyC,
-                            Values = GetKeyState(ConsoleKey.C, Input.KeyboardInput.KeyboardIdentifierList.KeyC.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.C, Input.KeyboardInput.KeyboardIdentifierList.KeyC.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyZ,
-                            Values = GetKeyState(ConsoleKey.Z, Input.KeyboardInput.KeyboardIdentifierList.KeyZ.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Z, Input.KeyboardInput.KeyboardIdentifierList.KeyZ.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit1,
-                            Values = GetKeyState(ConsoleKey.D1, Input.KeyboardInput.KeyboardIdentifierList.Digit1.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Num1, Input.KeyboardInput.KeyboardIdentifierList.Digit1.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit2,
-                            Values = GetKeyState(ConsoleKey.D2, Input.KeyboardInput.KeyboardIdentifierList.Digit2.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Num2, Input.KeyboardInput.KeyboardIdentifierList.Digit2.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Digit3,
-                            Values = GetKeyState(ConsoleKey.D3, Input.KeyboardInput.KeyboardIdentifierList.Digit3.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Num3, Input.KeyboardInput.KeyboardIdentifierList.Digit3.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyA,
-                            Values = GetKeyState(ConsoleKey.A, Input.KeyboardInput.KeyboardIdentifierList.KeyA.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.A, Input.KeyboardInput.KeyboardIdentifierList.KeyA.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyW,
-                            Values = GetKeyState(ConsoleKey.W, Input.KeyboardInput.KeyboardIdentifierList.KeyW.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.W, Input.KeyboardInput.KeyboardIdentifierList.KeyW.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyD,
-                            Values = GetKeyState(ConsoleKey.D, Input.KeyboardInput.KeyboardIdentifierList.KeyD.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.D, Input.KeyboardInput.KeyboardIdentifierList.KeyD.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyS,
-                            Values = GetKeyState(ConsoleKey.S, Input.KeyboardInput.KeyboardIdentifierList.KeyS.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.S, Input.KeyboardInput.KeyboardIdentifierList.KeyS.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft,
-                            Values = GetKeyState(ConsoleKey.LeftArrow, Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Left, Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.ArrowUp,
-                            Values = GetKeyState(ConsoleKey.UpArrow, Input.KeyboardInput.KeyboardIdentifierList.ArrowUp.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Up, Input.KeyboardInput.KeyboardIdentifierList.ArrowUp.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.ArrowRight,
-                            Values = GetKeyState(ConsoleKey.RightArrow, Input.KeyboardInput.KeyboardIdentifierList.ArrowRight.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Right, Input.KeyboardInput.KeyboardIdentifierList.ArrowRight.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.ArrowDown,
-                            Values = GetKeyState(ConsoleKey.DownArrow, Input.KeyboardInput.KeyboardIdentifierList.ArrowDown.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Down, Input.KeyboardInput.KeyboardIdentifierList.ArrowDown.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyJ,
-                            Values = GetKeyState(ConsoleKey.J, Input.KeyboardInput.KeyboardIdentifierList.KeyJ.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.J, Input.KeyboardInput.KeyboardIdentifierList.KeyJ.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyI,
-                            Values = GetKeyState(ConsoleKey.I, Input.KeyboardInput.KeyboardIdentifierList.KeyI.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.I, Input.KeyboardInput.KeyboardIdentifierList.KeyI.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyL,
-                            Values = GetKeyState(ConsoleKey.L, Input.KeyboardInput.KeyboardIdentifierList.KeyL.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.L, Input.KeyboardInput.KeyboardIdentifierList.KeyL.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.KeyK,
-                            Values = GetKeyState(ConsoleKey.K, Input.KeyboardInput.KeyboardIdentifierList.KeyK.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.K, Input.KeyboardInput.KeyboardIdentifierList.KeyK.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Slash,
-                            Values = GetKeyState(ConsoleKey.OemMinus, Input.KeyboardInput.KeyboardIdentifierList.Slash.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Slash, Input.KeyboardInput.KeyboardIdentifierList.Slash.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Period,
-                            Values = GetKeyState(ConsoleKey.OemPeriod, Input.KeyboardInput.KeyboardIdentifierList.Period.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Period, Input.KeyboardInput.KeyboardIdentifierList.Period.Key, oldInput),
                         },
                         new Input.KeyboardInput.KeyboardKey()
                         {
                             Identifier = Input.KeyboardInput.KeyboardIdentifierList.Comma,
-                            Values = GetKeyState(ConsoleKey.OemComma, Input.KeyboardInput.KeyboardIdentifierList.Comma.Key, oldInput),
+                            Values = GetKeyState(Keyboard.Key.Comma, Input.KeyboardInput.KeyboardIdentifierList.Comma.Key, oldInput),
                         },
                     }
                 },
@@ -220,18 +227,10 @@ namespace ConsoleApp
             };
             return result;
         }
-        
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern short GetAsyncKeyState(int vKey);
 
-        private bool GetKey(ConsoleKey key)
+        private bool GetKey(Keyboard.Key key)
         {
-            if (false)
-            {
-                return engine.GetKey((ConsoleKey) (int) key);
-            }
-            short s = GetAsyncKeyState((int) key);
-            return (s & 0x8000) > 0;
+            return SFML.Window.Keyboard.IsKeyPressed(key);
         }
     }
 }

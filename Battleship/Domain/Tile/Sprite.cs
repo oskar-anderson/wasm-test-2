@@ -48,7 +48,7 @@ namespace Domain.Tile
                     .Append("~@@~")
                     .Append("~@@~")
                     .Append("~~~~"),
-                new int[]
+                new TileColor[]
                 {
                     TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC,
                     TileData.C.DC, TileData.C.DR, TileData.C.DR, TileData.C.DC,
@@ -62,7 +62,7 @@ namespace Domain.Tile
                     .Append("~@@~")
                     .Append("~@@~")
                     .Append("~~~~"),
-                new int[]
+                new TileColor[]
                 {
                     TileData.C.DC, TileData.C.DC, TileData.C.DC, TileData.C.DC,
                     TileData.C.DC, TileData.C._G, TileData.C._G, TileData.C.DC,
