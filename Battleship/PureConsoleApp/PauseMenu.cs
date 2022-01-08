@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace ConsoleApp
+namespace PureConsoleApp
 {
     public static class PauseMenu
     {

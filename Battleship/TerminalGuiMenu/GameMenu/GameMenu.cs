@@ -3,23 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using ConsoleApp.TerminalGuiPlus;
 using Domain;
-using Domain.Model;
-using RogueSharp;
+using TerminalGuiMenu.TerminalGuiPlus;
 using Terminal.Gui;
-using static ConsoleApp.GameMenu.ColorSchemeHolder;
-using Point = RogueSharp.Point;
+using static TerminalGuiMenu.GameMenu.ColorSchemeHolder;
 
-namespace ConsoleApp.GameMenu
+namespace TerminalGuiMenu.GameMenu
 {
 	[SuppressMessage("ReSharper", "IdentifierTypo")]
 	[SuppressMessage("ReSharper", "InconsistentNaming")]
 	[SuppressMessage("ReSharper", "ConvertClosureToMethodGroup")]
 	[SuppressMessage("ReSharper", "SuggestVarOrType_SimpleTypes")]
-	internal static class Menu
+	public static class Menu
 	{
 		private static Window? _window;
 		private static MenuResult ruleSetHolder = null!;
@@ -275,39 +270,38 @@ namespace ConsoleApp.GameMenu
 			var SxuUMJkC = new Label(string.Concat(Enumerable.Repeat("=", 24))) {X = 1, Y = ntSrASFe.Y + 1};
 			var hLYKsHBT = new Label("Colors are interpreted differently by terminals, adjust the colors here or in terminal setting RGB values") {X = 1, Y = SxuUMJkC.Y + 1};
 			var HtAEFVmk = new Label("Window Color") {X = 1, Y = hLYKsHBT.Y + 1};
-			var windowColors = WindowCS.GetAll();
+			var windowColors = ColorSchemeHolder.WindowCS.GetAll();
 			RadioGroup windowsRadio = new RadioGroup()
 			{
 				X = 1, 
 				Y = HtAEFVmk.Y + 1, 
 				RadioLabels = windowColors.Select(e => ustring.Make(e.Name)).ToArray(), 
 				SelectedItem = windowColors.Select(e => e.ColorScheme).ToList().IndexOf(GetActiveInteractableScheme()),
-				SelectedItemChanged = (selectedItemChangedArgs) =>
-				{
-					var newColor = windowColors[selectedItemChangedArgs.SelectedItem].ColorScheme;
-					if (_window == null) { throw new Exception("value was null"); }
-					_window.ColorScheme = newColor;
-					SetActiveWindowScheme(newColor);
-				},
 				ColorScheme = GetActiveInteractableScheme()
 			};
-			
+			windowsRadio.SelectedItemChanged += (selectedItemChangedArgs) =>
+			{
+				var newColor = windowColors[selectedItemChangedArgs.SelectedItem].ColorScheme;
+				if (_window == null) { throw new Exception("value was null"); }
+				_window.ColorScheme = newColor;
+				SetActiveWindowScheme(newColor);
+			};
 			var TQuCEEMe = new Label("Interactable Color") {X = 1, Y = HtAEFVmk.Y + windowColors.Length + 2};
 			var NaGdSesG = new Label("There is a weird bug with keyboard navigation skipping buttons sometimes") {X = 40, Y = TQuCEEMe.Y + 1};
-			var interactableColors = InteractableCS.GetAll();
+			var interactableColors = ColorSchemeHolder.InteractableCS.GetAll();
 			RadioGroup interactableRadio = new RadioGroup()
 			{
 				X = 1, 
 				Y = HtAEFVmk.Y + windowColors.Length + 3, 
 				RadioLabels = interactableColors.Select(e => ustring.Make(e.Name)).ToArray(), 
 				SelectedItem = interactableColors.Select(e => e.ColorScheme).ToList().IndexOf(GetActiveInteractableScheme()),
-				SelectedItemChanged = (selectedItemChangedArgs) =>
-				{
-					var newColor = interactableColors[selectedItemChangedArgs.SelectedItem].ColorScheme;
-					SetActiveInteractableScheme(newColor);
-					LoadMenu();
-				},
 				ColorScheme = GetActiveInteractableScheme()
+			};
+			interactableRadio.SelectedItemChanged += (selectedItemChangedArgs) =>
+			{
+				var newColor = interactableColors[selectedItemChangedArgs.SelectedItem].ColorScheme;
+				SetActiveInteractableScheme(newColor);
+				LoadMenu();
 			};
 			
 			var ITVidmDZ = new MyButton("Back") { X = 1, Y = Pos.Bottom(interactableRadio) + 1, Clicked = () => PopAndExec(), ColorScheme = GetActiveInteractableScheme()};

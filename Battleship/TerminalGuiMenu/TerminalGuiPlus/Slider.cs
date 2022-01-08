@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using System.Text;
-using ConsoleApp.GameMenu;
 using Terminal.Gui;
-using static ConsoleApp.GameMenu.ColorSchemeHolder;
+using static TerminalGuiMenu.GameMenu.ColorSchemeHolder;
 
-namespace ConsoleApp.TerminalGuiPlus
+namespace TerminalGuiMenu.TerminalGuiPlus
 {
     public static class Slider
     {

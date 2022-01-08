@@ -1,6 +1,6 @@
 ﻿using Terminal.Gui;
 
-namespace ConsoleApp.GameMenu
+namespace TerminalGuiMenu.GameMenu
 {
     public static class MenubarHolder
     {

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DAL\DAL.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Game\Game.csproj" />
+      <ProjectReference Include="..\TerminalGuiMenu\TerminalGuiMenu.csproj" />
+      <ProjectReference Include="..\Vendor\ConsoleGameEngine-Core-0.0.3\ConsoleGameEngineCore.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Reference Include="irrKlang.NET4">
+            <HintPath>..\Vendor\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>

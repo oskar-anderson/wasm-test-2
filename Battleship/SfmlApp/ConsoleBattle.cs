@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using Domain;
 using Domain.Model;
 using Game;
 using IrrKlang;
-using RogueSharp;
-using Point = RogueSharp.Point;
-using SFML;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace ConsoleApp
+namespace SfmlApp
 {
     public class ConsoleBattle : BaseBattleship
     {

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    // dotnet ef migrations add DbCreation01 --project DAL --startup-project ConsoleApp --context DAL.AppDbContext
-    // dotnet ef database update             --project DAL --startup-project ConsoleApp
-    // dotnet ef database drop               --project DAL --startup-project ConsoleApp
-    // dotnet ef Migrations remove           --project DAL --startup-project ConsoleApp --context DAL.AppDbContext
+    // dotnet ef migrations add DbCreation01 --project DAL --startup-project SfmlApp --context DAL.AppDbContext
+    // dotnet ef database update             --project DAL --startup-project SfmlApp
+    // dotnet ef database drop               --project DAL --startup-project SfmlApp
+    // dotnet ef Migrations remove           --project DAL --startup-project SfmlApp --context DAL.AppDbContext
     
     // cd WebApp
     // dotnet build

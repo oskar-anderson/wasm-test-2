@@ -2,7 +2,7 @@
 using NStack;
 using Terminal.Gui;
 
-namespace ConsoleApp.TerminalGuiPlus
+namespace TerminalGuiMenu.TerminalGuiPlus
 {
     public class MyButton : View {
 		ustring? text;

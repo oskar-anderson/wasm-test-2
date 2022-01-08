@@ -2,7 +2,7 @@
 using Terminal.Gui;
 using Attribute = Terminal.Gui.Attribute;
 
-namespace ConsoleApp.GameMenu
+namespace TerminalGuiMenu.GameMenu
 {
     [SuppressMessage("ReSharper", "IdentifierTypo")]
     public static class ColorSchemeHolder

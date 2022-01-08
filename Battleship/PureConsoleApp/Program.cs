@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using ConsoleApp.GameMenu;
+using TerminalGuiMenu.GameMenu;
 using DAL;
 using Domain;
 using Domain.Model;
 using Game;
-using Microsoft.EntityFrameworkCore;
-using SFML.Window;
-using Point = RogueSharp.Point;
 
-namespace ConsoleApp
+namespace PureConsoleApp
 {
     internal static class Program
     {
@@ -53,17 +48,15 @@ namespace ConsoleApp
                 GameResult Gameloop(BaseBattleship game)
                 {
                     DateTime startTime = DateTime.Now;
-                    Window window = ((ConsoleBattle) game).Window;
-                    while (window.IsOpen)
+                    while (true)
                     {
-                        window.DispatchEvents();
                         double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
                         bool running = BaseBattleship.Update(timeCap, game);
                         if (!running)
                         {
-                            window.Close();
+                            Helper.FixConsole();
                             break;
                         }
                         game.Draw(timeCap, game.GameData);
@@ -83,7 +76,6 @@ namespace ConsoleApp
                 PauseMenu.PauseResult result;
                 while (true)
                 {
-                    Console.CursorVisible = true;
                     result = PauseMenu.Run();
                     if (result == PauseMenu.PauseResult.LoadDb)
                     {
@@ -108,7 +100,6 @@ namespace ConsoleApp
                         || result == PauseMenu.PauseResult.LoadJson
                         || result == PauseMenu.PauseResult.Cont)
                     {
-                        Console.CursorVisible = false;
                         gameResult = Gameloop(game);
                         if (gameResult.IsOver)
                         {

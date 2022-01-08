@@ -13,7 +13,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace ConsoleApp
+namespace SfmlApp
 {
    public static class ConsoleDrawLogic
    {

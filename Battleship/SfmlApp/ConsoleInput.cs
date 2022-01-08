@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Domain;
 using Domain.Model;
 using Game;
 using RogueSharp;
-using SFML;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace ConsoleApp
+namespace SfmlApp
 {
     public class ConsoleInput: BaseInput
     {

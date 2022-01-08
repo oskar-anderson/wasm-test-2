@@ -11,11 +11,10 @@
       <ProjectReference Include="..\DAL\DAL.csproj" />
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\Game\Game.csproj" />
-      <ProjectReference Include="..\Vendor\Terminal.Gui\Terminal.Gui.csproj" />
+      <ProjectReference Include="..\TerminalGuiMenu\TerminalGuiMenu.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9" />
       <PackageReference Include="sdl2" Version="2.0.5" />
       <PackageReference Include="SFML.Net" Version="2.5.0" />
         <Reference Include="irrKlang.NET4">
