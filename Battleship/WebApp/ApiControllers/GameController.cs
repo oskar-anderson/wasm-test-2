@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Model.Api;
 using System.Text.Json;
 using Domain;
@@ -27,7 +22,6 @@ namespace WebApp.ApiControllers
 		[Produces("application/json")]
 		public ActionResult<string> CheckValidGameSettings(ValidGameSettingsInRuleSet settings)
 		{
-			System.Diagnostics.Debug.WriteLine("In CheckValidGameSettings");
 			string errorMsgText = "";
 			bool areSettingsValid = Utils.TryBtnStart(settings.Ships, settings.BoardWidth, settings.BoardHeight, settings.AllowedPlacementType, ref errorMsgText, out _);
 			var result = new ValidGameSettingsOut()
@@ -64,11 +58,11 @@ namespace WebApp.ApiControllers
 		[Produces("application/json")]
 		// Unfortunately API input has to be string otherwise automatic deserialization to the class fails
 		// if the class has a property with a JSONIgnore tag
-		public ActionResult<string> DoGame(GameDataAndInput gameDataAndInput)
+		public ActionResult<string> DoGame(GameDataSerializable gameDataSerializable)
 		{
 			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
-			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInput(gameDataAndInput.Input));
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
 			
 			BaseBattleship.Update(1d, game);
 			game.GameData.FrameCount++;
@@ -80,10 +74,10 @@ namespace WebApp.ApiControllers
 		[HttpPost("GetDrawArea")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		public ActionResult<string> GetDrawArea(GameDataAndInput gameDataAndInput)
+		public ActionResult<string> GetDrawArea(GameDataSerializable gameDataSerializable)
 		{
-			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataAndInput.GameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInput(gameDataAndInput.Input));
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
 			TileData.CharInfo[][] drawArea = GetDrawArea(game.GameData);
 			return TurnApiReturnValueToJson(drawArea);
 		}

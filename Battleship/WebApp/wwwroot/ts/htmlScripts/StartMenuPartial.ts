@@ -1,10 +1,10 @@
 ﻿import Rendering from "../Rendering.js";
 
 export default class StartMenuPartial {
-    public static main(): void {
+    public static main(rendering: Rendering): void {
         document.getElementById("newGameBtn")?.addEventListener(
             "click", 
-            () => Rendering.renderByName('NewGame')
+            () => rendering.renderByName('NewGame')
         );
     }
 }

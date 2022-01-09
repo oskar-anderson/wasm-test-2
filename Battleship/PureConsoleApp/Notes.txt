@@ -1,0 +1,53 @@
+﻿
+Menus:
+https://github.com/arthurvaverko/ConsoleMenu - very simple
+https://github.com/tomakita/Colorful.Console - FIGlet font banner
+
+Gui:
+https://github.com/migueldeicaza/gui.cs - most popular
+https://github.com/mono/mono-curses - bad directory layout, missing features
+https://github.com/phonicUK/clrcli - Quite nice, changes terminal colors, ide display problems but works OK
+https://github.com/Haydend/ConsoleDraw - Quite nice
+https://github.com/AnthonyMastrean/ConsoleEx - simple, lots of useful features
+https://github.com/ollelogdahl/ConsoleGameEngine
+
+
+
+Interesting:
+https://www.gridsagegames.com/blog/2015/02/ascii-vs-tiles/ && https://www.reddit.com/r/roguelikedev/comments/3ueyqp/faq_friday_26_animation/ && https://kyzrati.itch.io/polybot-7 - explosion animations
+https://standardcombo.itch.io/pyramid-builder
+https://github.com/peterbrittain/asciimatics - python based ascii game gui
+https://stackoverflow.com/questions/1631414/what-is-the-best-battleship-ai?rq=1
+https://www.youtube.com/watch?v=32CpsAgKQUY
+https://github.com/FaronBracy/RogueSharp - possible logic for drawing shapes, lines
+
+Fonts:
+DejaVu Sans Mono - not good
+Source code Pro - not good
+http://strlen.com/square/ - square font
+Inconsolata - https://github.com/googlefonts/Inconsolata - almost 1:2
+
+
+Undesired:
+FlagConsole https://github.com/flagbug/FlagConsole - Demos threw error
+https://github.com/goblinfactory/konsole - too complicated, gives errors in rider, bad samples
+https://github.com/TomaszRewak/C-sharp-console-gui-framework - too complicated, does not work
+https://github.com/elw00d/consoleframework - too complicated, xml based
+https://github.com/Maxwolf/WolfCurses - Not checked, low star rating
+https://github.com/sushihangover/CursesSharp - requires VS (nmake)
+
+
+
+https://github.com/NikolayIT/CSharpConsoleGames
+https://www.reddit.com/r/gamedev/comments/7ut82r/optimization_tips_on_console_based_game_in_c/
+https://stackoverflow.com/questions/12355378/read-from-location-on-console-c-sharp
+https://stackoverflow.com/questions/29920056/c-sharp-something-faster-than-console-write?noredirect=1&lq=1
+https://stackoverflow.com/questions/2754518/how-can-i-write-fast-colored-output-to-console
+https://stackoverflow.com/questions/5272177/console-writeline-slow
+https://stackoverflow.com/questions/3670057/does-console-writeline-block
+
+
+https://www.reddit.com/r/roguelikedev/comments/j2qzn0/is_a_c_roguelike_possible_with_only_the_builtin/
+https://www.reddit.com/r/roguelikedev/comments/9yyyye/terminallike_libraries_for_c/
+https://stackoverflow.com/questions/3984487/is-there-any-console-graphics-library-for-net
+https://www.reddit.com/r/roguelikedev/comments/5uwj11/why_do_all_graphical_terminal_libraries_offer_no/

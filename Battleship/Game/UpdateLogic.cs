@@ -24,17 +24,17 @@ namespace Game
           if (basegame.GameData.State == GameState.GameOver)
           {
              if (!basegame.GameData.Input.Keyboard.KeyboardState
-                    .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyZ && 
+                    .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyZ.Key && 
                               x.Values.Contains(Input.BtnState.Pressed)) 
                  && !basegame.GameData.Input.Keyboard.KeyboardState
-                    .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Escape && 
+                    .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.Escape.Key && 
                               x.Values.Contains(Input.BtnState.Pressed)) 
                  ) return true;
              return false;
           }
 
           if (basegame.GameData.Input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Escape && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.Escape.Key && 
                        x.Values.Contains(Input.BtnState.Pressed))
              )
           {
@@ -83,7 +83,7 @@ namespace Game
                 };
 
                 if (activeKeys[dialogStart].isActive && gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == dialogStart && 
+                       .Any(x => x.Identifier.Key == dialogStart.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo))
                     )
@@ -114,7 +114,7 @@ namespace Game
                 }
                           
                 if (activeKeys[dialogRandomize].isActive && gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == dialogRandomize && 
+                       .Any(x => x.Identifier.Key == dialogRandomize.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo)))
                 {
@@ -141,7 +141,7 @@ namespace Game
                 }
 
                 if (activeKeys[dialogClear].isActive && gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == dialogClear && 
+                       .Any(x => x.Identifier.Key == dialogClear.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo))
                     )
@@ -157,7 +157,7 @@ namespace Game
 
                 if (shipPlacementStatus.isPlaceable && activeKeys[dialogAction].isActive && 
                     gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == dialogAction && 
+                       .Any(x => x.Identifier.Key == dialogAction.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo))
                     )
@@ -170,7 +170,7 @@ namespace Game
                 }
 
                 if (activeKeys[dialogRot].isActive && gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == dialogRot && 
+                       .Any(x => x.Identifier.Key == dialogRot.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo))
                     )
@@ -183,7 +183,7 @@ namespace Game
              case GameState.Shooting:
                 string selectedOppTileValue = gameData.Board2D.Get(gameData.ActivePlayer.Sprite.Pos);
                 if (gameData.Input.Keyboard.KeyboardState
-                       .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyZ && 
+                       .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyZ.Key && 
                                  x.Values.Contains(Input.BtnState.Pressed) && 
                                  ! x.Values.Contains(Input.BtnState.Echo)) && 
                     !(TextureValue.HitShip == selectedOppTileValue || 
@@ -252,7 +252,7 @@ namespace Game
                 }
 
                 if (gameData.Input.Keyboard.KeyboardState
-                      .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyR && 
+                      .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyR.Key && 
                                 x.Values.Contains(Input.BtnState.Pressed) && 
                                 ! x.Values.Contains(Input.BtnState.Echo))
                     && gameData.ActivePlayer.ShootingHistory.Count != 0)
@@ -423,10 +423,10 @@ namespace Game
           Point playerPosBefore = new Point(player.Sprite.Pos.X, player.Sprite.Pos.Y);
           Rectangle bounds = new Rectangle(0,0, board.GetWidth(), board.GetHeight());
           if (input.Keyboard.KeyboardState
-                 .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyA && 
+                 .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyA.Key && 
                            x.Values.Contains(Input.BtnState.Pressed) 
                            || 
-                           x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft && 
+                           x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.ArrowLeft.Key && 
                            x.Values.Contains(Input.BtnState.Pressed)
                            )
           )
@@ -443,10 +443,10 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyS && 
+                .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyS.Key && 
                           x.Values.Contains(Input.BtnState.Pressed) 
                           || 
-                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowDown && 
+                          x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.ArrowDown.Key && 
                           x.Values.Contains(Input.BtnState.Pressed)
                 )
              )
@@ -463,10 +463,10 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyD && 
+                .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyD.Key && 
                           x.Values.Contains(Input.BtnState.Pressed) 
                           || 
-                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowRight && 
+                          x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.ArrowRight.Key && 
                           x.Values.Contains(Input.BtnState.Pressed)
                 )
              )
@@ -483,10 +483,10 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyW && 
+                .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyW.Key && 
                           x.Values.Contains(Input.BtnState.Pressed) 
                           || 
-                          x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.ArrowUp && 
+                          x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.ArrowUp.Key && 
                           x.Values.Contains(Input.BtnState.Pressed)
                 )
              )
@@ -602,7 +602,7 @@ namespace Game
        private static void HandleKeyboardPanning(double deltaTime, Player player, Input input)
        {
           if (input.Keyboard.KeyboardState
-                .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyJ && 
+                .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyJ.Key && 
                           x.Values.Contains(Input.BtnState.Pressed) 
                 )
              )
@@ -611,7 +611,7 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyK && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyK.Key && 
                        x.Values.Contains(Input.BtnState.Pressed) 
              )
           )
@@ -620,7 +620,7 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyL && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyL.Key && 
                        x.Values.Contains(Input.BtnState.Pressed) 
              )
           )
@@ -629,7 +629,7 @@ namespace Game
           }
 
           if (input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.KeyI && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.KeyI.Key && 
                        x.Values.Contains(Input.BtnState.Pressed) 
              )
           )
@@ -656,10 +656,10 @@ namespace Game
        private static void HandleZooming(Player player, Input input)
        {
           bool zoomNegative = input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Period && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.Period.Key && 
                        x.Values.Contains(Input.BtnState.Pressed));
           bool zoomPositive = input.Keyboard.KeyboardState
-             .Any(x => x.Identifier == Input.KeyboardInput.KeyboardIdentifierList.Comma && 
+             .Any(x => x.Identifier.Key == Input.KeyboardInput.KeyboardIdentifierList.Comma.Key && 
                        x.Values.Contains(Input.BtnState.Pressed));
           if (! zoomNegative && ! zoomPositive)
           {

@@ -1,10 +1,26 @@
 import GameViewController from "./GameViewController.js";
 import StartMenuPartial from "./htmlScripts/StartMenuPartial.js";
 import NewGamePartial from "./htmlScripts/NewGamePartial.js";
+import GameData from "./model/GameData.js";
 
 export default class Rendering {
     
-    public static render(template: string, data = {}, targetElementId: string) {
+    public GameView = "Error";
+    public NewGamePartial = "Error";
+    public StartMenuPartial = "Error";
+    
+    constructor() {
+        // do not forget to call init   
+    }
+
+    public async init(): Promise<Rendering> {
+        this.GameView = await fetch('html/GameView.html').then(x => x.text());
+        this.NewGamePartial = await fetch('html/NewGamePartial.html').then(x => x.text());
+        this.StartMenuPartial = await fetch('html/StartMenuPartial.html').then(x => x.text());
+        return this;
+    }
+    
+    public render(template: string, data = {}, targetElementId: string) {
         // replace marked variables with values
         let rendered = "";
         try {
@@ -18,28 +34,21 @@ export default class Rendering {
         elTarget.innerHTML = rendered;
     }
 
-    public static async renderByName(name: string, model = {}, targetElementId = "mainBody") {
-        let gameView = await fetch('html/GameView.html').then(x => x.text());
-        let newGamePartial = await fetch('html/NewGamePartial.html').then(x => x.text());
-        let startMenuPartial = await fetch('html/StartMenuPartial.html').then(x => x.text());
+    public renderByName(name: string, model = {}, targetElementId = "mainBody") {
         switch (name) {
             case "GameView":
-                console.log("in index.cshtml renderByName GameView");
-                console.log(model);
-                Rendering.render(gameView, model, targetElementId);
+                this.render(this.GameView, model, targetElementId);
                 break;
             case "GameViewController":
-                console.log("in index.cshtml renderByName GameViewController");
-                console.log(model);
-                await GameViewController.RunGame(model);
+                (new GameViewController(<GameData> model, this)).runGame();
                 break;
             case "NewGame":
-                Rendering.render(newGamePartial, {}, targetElementId);
-                NewGamePartial.main();
+                this.render(this.NewGamePartial, {}, targetElementId);
+                NewGamePartial.main(this);
                 break;
             case "StartMenu":
-                Rendering.render(startMenuPartial, {}, targetElementId);
-                StartMenuPartial.main();
+                this.render(this.StartMenuPartial, {}, targetElementId);
+                StartMenuPartial.main(this);
                 break;
             default:
                 throw Error("Invalid render name");

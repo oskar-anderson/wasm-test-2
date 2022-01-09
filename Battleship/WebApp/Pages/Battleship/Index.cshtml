@@ -19,6 +19,8 @@
 <script type="module">
     import Rendering from "./jsSrc/Rendering.js";
 
-    Rendering.renderByName("StartMenu");
+    new Rendering().init().then((x) => {
+        x.renderByName("StartMenu");
+    });
 
 </script>

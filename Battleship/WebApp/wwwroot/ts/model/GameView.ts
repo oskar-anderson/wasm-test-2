@@ -1,7 +1,8 @@
 ﻿import CharInfo from "./CharInfo.js";
+import GameData from "./GameData.js"
 
 export default class GameView {
-    GameData: object;
+    GameData: GameData;
     Board: CharInfo[][];
     ShipPlacementStatus: string;
     
@@ -11,6 +12,7 @@ export default class GameView {
         if ([_gameData, _board, _shipPlacementStatus].includes(undefined)) {
             throw Error("Object has undefined fields!");
         }
+        // @ts-ignore
         this.GameData = _gameData!;
         this.Board = _board!;
         this.ShipPlacementStatus = _shipPlacementStatus!;

@@ -1,6 +1,7 @@
 ﻿import AreGameSettingsValid from "./model/AreGameSettingsValid.js";
 import GameSettings from "./model/GameSettings.js";
 import GameView from "./model/GameView.js";
+import GameData from "./model/GameData.js";
 
 export default class ServerRestApiGameMethods {
     
@@ -36,7 +37,7 @@ export default class ServerRestApiGameMethods {
             });
     }
 
-    public static async DoGame(gameData: object): Promise<GameView> {
+    public static async DoGame(gameData: GameData): Promise<GameView> {
         let url = window.location.protocol + "//" + window.location.host + "/api/Game/DoGame";
         return await fetch(url, {
             method: 'POST',

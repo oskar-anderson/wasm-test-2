@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Domain.Model
 {
@@ -132,7 +133,7 @@ namespace Domain.Model
                         },
                     }
                 },
-                Mouse =
+                Mouse = new MouseInput()
                 {
                     LeftButton = new List<BtnState>(),
                     MiddleButton = new List<BtnState>(),

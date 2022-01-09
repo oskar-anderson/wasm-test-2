@@ -1,11 +1,12 @@
 ﻿import GameSettings from "../model/GameSettings.js";
 import GameMethods from "../ServerRestApiGameMethods.js";
 import Rendering from "../Rendering.js";
+import {KeyboardIdentifierList} from "../model/Input.js";
 
 export default class NewGamePartial {
 
 
-    public static main(): void {
+    public static main(rendering: Rendering): void {
         let sliderHeight = document.getElementById("BoardHeight") as HTMLInputElement | null;
         let outputHeight = document.getElementById("BoardHeightIndicator");
         if (sliderHeight === null) throw Error('sliderHeight is null!');
@@ -28,11 +29,11 @@ export default class NewGamePartial {
         };
         let startBtn = document.querySelector("#Start");
         if (startBtn === null) throw Error('outputWidth is null!');
-        startBtn.addEventListener("click", NewGamePartial.launchGame);
+        startBtn.addEventListener("click", () => NewGamePartial.launchGame(rendering));
     }
 
 
-    public static async launchGame(): Promise<void> {
+    public static async launchGame(rendering: Rendering): Promise<void> {
         console.log("in launchGame");
         let settings = NewGamePartial.getGameSettings();
         console.log("after getGameSettings");
@@ -46,9 +47,11 @@ export default class NewGamePartial {
             return;
         }
         let gameViewDTO = await GameMethods.StartGame(settings);
+        // @ts-ignore
+        gameViewDTO.GameData.Input = KeyboardIdentifierList.getDefaultInput();
         // let gameViewData = await GameMethods.DoGame(gameViewDTO.GameData);
         console.log("calling render");
-        await Rendering.renderByName("GameViewController", gameViewDTO.GameData);
+        await rendering.renderByName("GameViewController", gameViewDTO.GameData);
     }
 
     public static getGameSettings(): GameSettings {
