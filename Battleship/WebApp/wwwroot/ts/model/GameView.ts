@@ -3,11 +3,11 @@ import GameData from "./GameData.js"
 
 export default class GameView {
     GameData: GameData;
-    Board: CharInfo[][];
+    Board: number[];
     ShipPlacementStatus: string;
     
     constructor(_gameData: object | undefined, 
-                _board: CharInfo[][] | undefined, 
+                _board: number[] | undefined, 
                 _shipPlacementStatus: string | undefined) {
         if ([_gameData, _board, _shipPlacementStatus].includes(undefined)) {
             throw Error("Object has undefined fields!");

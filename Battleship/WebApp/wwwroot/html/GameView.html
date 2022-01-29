@@ -32,25 +32,9 @@
             <div class="container">
                 <div class="row">
                     <div id="board" class="col capsizedText PressStart2PFont" style="font-size: 12px; line-height: 12px; padding: 0; border: solid 4px black;">
-                        @{
-                            for (let y = 0; y < Model.Board.length; y++)
-                            {
-                                <p style="display: flex; margin-top: 0; margin-bottom: 0;">
-                                    @for (let x = 0; x < Model.Board[0].length; x++)
-                                    {
-                                        let charInfo = Model.Board[y][x];
-                                        let colCss = `rgb(${charInfo.Color.RgbR}, ${charInfo.Color.RgbG}, ${charInfo.Color.RgbB})`;
-                                        let character = charInfo.Glyph;
-                                        if (character === " ") {
-                                            <em>&nbsp;</em>
-                                        }
-                                        else {
-                                            <em style="color: @colCss;">@character</em>
-                                        }
-                                    }
-                                </p>
-                            }
-                        }
+                        <canvas>
+                            
+                        </canvas>
                     </div>
                 </div>
             </div>

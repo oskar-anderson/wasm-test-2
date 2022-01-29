@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using Domain.Model.Api;
 using System.Text.Json;
 using Domain;
@@ -94,8 +95,10 @@ namespace WebApp.ApiControllers
 			
 			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
 			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
+
+			List<byte> boardPixelsRgbaSerialized = SfmlApp.ConsoleDrawLogic.GetBoardAsImage(game.GameData);
 			
-			GameViewDTO result = new GameViewDTO(gameDataSerializable, board, "todo");
+			GameViewDTO result = new GameViewDTO(gameDataSerializable, boardPixelsRgbaSerialized, "todo");
 			return result;
 		}
 		

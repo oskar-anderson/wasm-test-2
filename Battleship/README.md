@@ -41,3 +41,8 @@ This project is done for ICD0008 C# course the purpose of learning C#, databases
 - https://www.gridsagegames.com/rexpaint/
 - https://en.wikipedia.org/wiki/Code_page_775
 - web font [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?query=press&sidebar.open=true&selection.family=Press+Start+2P)
+
+
+## Notes
+
+dotnet publish --self-contained --use-current-runtime --configuration Release

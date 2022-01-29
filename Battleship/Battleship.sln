@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PureConsoleApp", "PureConso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalGuiMenu", "TerminalGuiMenu\TerminalGuiMenu.csproj", "{A830132C-5CE0-4F46-83F0-54330B2C2401}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl2App", "Sdl2App\Sdl2App.csproj", "{D116F011-CEB4-4722-BF20-1DD23E15D320}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -146,6 +148,18 @@ Global
 		{A830132C-5CE0-4F46-83F0-54330B2C2401}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A830132C-5CE0-4F46-83F0-54330B2C2401}.Release|x64.ActiveCfg = Release|Any CPU
 		{A830132C-5CE0-4F46-83F0-54330B2C2401}.Release|x64.Build.0 = Release|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug|x64.Build.0 = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug64|Any CPU.ActiveCfg = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug64|Any CPU.Build.0 = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug64|x64.ActiveCfg = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Debug64|x64.Build.0 = Debug|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Release|x64.ActiveCfg = Release|Any CPU
+		{D116F011-CEB4-4722-BF20-1DD23E15D320}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

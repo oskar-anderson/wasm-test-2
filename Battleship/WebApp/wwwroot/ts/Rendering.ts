@@ -2,6 +2,7 @@ import GameViewController from "./GameViewController.js";
 import StartMenuPartial from "./htmlScripts/StartMenuPartial.js";
 import NewGamePartial from "./htmlScripts/NewGamePartial.js";
 import GameData from "./model/GameData.js";
+import GameViewPartial from "./htmlScripts/GameViewPartial.js";
 
 export default class Rendering {
     
@@ -38,6 +39,8 @@ export default class Rendering {
         switch (name) {
             case "GameView":
                 this.render(this.GameView, model, targetElementId);
+                // @ts-ignore
+                GameViewPartial.draw(model.Board, 320,320);
                 break;
             case "GameViewController":
                 (new GameViewController(<GameData> model, this)).runGame();

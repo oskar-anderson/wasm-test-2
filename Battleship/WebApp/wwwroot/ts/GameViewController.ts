@@ -166,7 +166,7 @@ export default class GameViewController {
 
     public async gameLoop(): Promise<GameData> {
         let gameView: GameView | null = null;
-        let isTestingLocalData = true;
+        let isTestingLocalData = false;
         if (isTestingLocalData) {
             gameView = JSON.parse(dataSet);
             this.FrameCount++;

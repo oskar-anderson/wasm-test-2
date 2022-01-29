@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,20 +7,18 @@ using Domain;
 using Domain.Model;
 using Domain.Tile;
 using Game;
+using RogueSharp;
 using SFML;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using Color = SFML.Graphics.Color;
-using Font = SFML.Graphics.Font;
-using Point = RogueSharp.Point;
 
-namespace SfmlApp
+namespace Sdl2App
 {
    public static class ConsoleDrawLogic
    {
       private static readonly Point BoardOffset = new Point(0, 5);
-      private static readonly Font Font = new Font(AppDomain.CurrentDomain.BaseDirectory + "/media/Font/PressStart2P.ttf");
+      private static readonly Font Font = new Font("media/Font/PressStart2P.ttf");
       
       /// <summary>
       /// This is called when the game should draw itself.
@@ -53,20 +49,10 @@ namespace SfmlApp
             for (int x = 0; x < map.GetWidth(); x++)
             {
                TileData.CharInfo tile = map.Get(new RogueSharp.Point(x, y));
-               var text = new Text(
-                  tile.GetGlyphString(), 
-                  Font)
-               {
-                  FillColor = new Color(
-                     tile.Color.RgbR, 
-                     tile.Color.RgbG, 
-                     tile.Color.RgbB
-                     ), 
-                  Position = new Vector2f(
-                     (x + BoardOffset.X) * ConsoleBattle.FontW, 
-                     (y + BoardOffset.Y) * ConsoleBattle.FontH), 
-                  CharacterSize = 8
-               };
+               Point screenCoord = new Point(
+                  (x + BoardOffset.X) * ConsoleBattle.FontW,
+                  (y + BoardOffset.Y) * ConsoleBattle.FontH);
+               var text = new Text(tile.GetGlyphString(), Font) { FillColor = new Color(tile.Color.RgbR, tile.Color.RgbG, tile.Color.RgbB), Position = new Vector2f(screenCoord.X, screenCoord.Y), CharacterSize = 8};
                window.Draw(text);
             }
          }
@@ -188,71 +174,6 @@ namespace SfmlApp
          
          window.Display();
          gameData.FrameCount++;
-      }
-
-      public static List<byte> GetBoardAsImage(GameData gameData)
-      {
-         var window = new RenderWindow(new VideoMode(480, 360), "Battleships");
-         window.SetVisible(false);
-         TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
-         BaseDraw.GetDrawArea(gameData, ref map);
-         for (int y = 0; y < map.GetHeight(); y++)
-         {
-            for (int x = 0; x < map.GetWidth(); x++)
-            {
-               TileData.CharInfo tile = map.Get(new RogueSharp.Point(x, y));
-               var text = new Text(
-                  tile.GetGlyphString(), 
-                  Font)
-               {
-                  FillColor = new Color(
-                     tile.Color.RgbR, 
-                     tile.Color.RgbG, 
-                     tile.Color.RgbB
-                  ), 
-                  Position = new Vector2f(
-                     (x + BoardOffset.X) * ConsoleBattle.FontW, 
-                     (y + BoardOffset.Y) * ConsoleBattle.FontH), 
-                  CharacterSize = 8
-               };
-               window.Draw(text);
-            }
-         }
-
-         var texture = new Texture(window.Size.X, window.Size.Y);
-         texture.Update(window);
-         return texture.CopyToImage().Pixels.ToList();
-         var image = texture.CopyToImage();
-         if (false)
-         {
-            Bitmap bitmap = new Bitmap(new MemoryStream(image.Pixels));
-            bitmap.Save(AppDomain.CurrentDomain.BaseDirectory + "/output.png",ImageFormat.Png);
-         }
-
-         Bitmap pic = new Bitmap((int) window.Size.X, (int) window.Size.Y, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-         for (int x = 0; x < window.Size.X; x++)
-         {
-            for (int y = 0; y < window.Size.Y; y++)
-            {
-               long arrayIdx = (y * window.Size.X + x) * 4;
-               System.Drawing.Color c = System.Drawing.Color.FromArgb(
-                  image.Pixels[arrayIdx + 3],
-                  image.Pixels[arrayIdx],
-                  image.Pixels[arrayIdx + 1],
-                  image.Pixels[arrayIdx + 2]
-               );
-               pic.SetPixel(x, y, c);
-            }
-         }
-         pic.Save(AppDomain.CurrentDomain.BaseDirectory + "/output2.png",ImageFormat.Png);
-         
-         image.SaveToFile(AppDomain.CurrentDomain.BaseDirectory + "/screen.png");
-         window.Close();
-         // return image.Pixels.ToString()!;
-         
-
-         // End draw transformed elements
-
       }
    }
 }

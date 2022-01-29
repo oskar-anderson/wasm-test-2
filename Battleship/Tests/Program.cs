@@ -22,7 +22,20 @@ namespace Tests
             // Pack(1);
             // SoundTest();
             // MultiArrayTest();
-            StackReversesOnSerializationTest();
+            // StackReversesOnSerializationTest();
+            ByteArrSerializationTest();
+        }
+
+        private static void ByteArrSerializationTest()
+        {
+            var list = new List<Byte>()
+            {
+                0,
+                0,
+                0,
+                0
+            };
+            var result = System.Text.Json.JsonSerializer.Serialize(list.ToArray());
         }
 
         private static void RandomTimeTest()
