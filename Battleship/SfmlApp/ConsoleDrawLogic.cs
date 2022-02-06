@@ -13,6 +13,8 @@ using SFML;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
 using Color = SFML.Graphics.Color;
 using Font = SFML.Graphics.Font;
 using Point = RogueSharp.Point;
@@ -190,7 +192,7 @@ namespace SfmlApp
          gameData.FrameCount++;
       }
 
-      public static List<byte> GetBoardAsImage(GameData gameData)
+      public static string GetBoardAsImage(GameData gameData)
       {
          var window = new RenderWindow(new VideoMode(480, 360), "Battleships");
          window.SetVisible(false);
@@ -221,7 +223,35 @@ namespace SfmlApp
 
          var texture = new Texture(window.Size.X, window.Size.Y);
          texture.Update(window);
-         return texture.CopyToImage().Pixels.ToList();
+         var pixels = texture.CopyToImage().Pixels;
+         var image12 = new SixLabors.ImageSharp.Image<Rgba32>((int) window.Size.X, (int) window.Size.Y);
+         for (int y = 0; y < window.Size.Y; y++)
+         {
+            for (int x = 0; x < window.Size.X; x++)
+            {
+               image12[x, y] = new Rgba32(
+                  pixels[(y * window.Size.X + x) * 4 + 0],
+                  pixels[(y * window.Size.X + x) * 4 + 1],
+                  pixels[(y * window.Size.X + x) * 4 + 2],
+                  pixels[(y * window.Size.X + x) * 4 + 3]);
+            }
+         }
+
+         if (true)
+         {
+            using MemoryStream ms = new MemoryStream();
+            image12.Save(ms, new PngEncoder());
+            byte[] imageBytes = ms.ToArray();
+            var base64String = Convert.ToBase64String(imageBytes);
+            window.Close();
+            return base64String;   
+         }
+
+         if (false)
+         {
+            // return texture.CopyToImage().Pixels;
+         }
+         
          var image = texture.CopyToImage();
          if (false)
          {
