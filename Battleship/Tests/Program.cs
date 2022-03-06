@@ -9,7 +9,10 @@ using Troschuetz.Random.Generators;
 using IrrKlang;
 using NUnit.Framework;
 using System.Text.Json.Serialization;
+using Domain.Model.Api;
 using Game.Pack;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace Tests
 {
@@ -23,7 +26,50 @@ namespace Tests
             // SoundTest();
             // MultiArrayTest();
             // StackReversesOnSerializationTest();
-            ByteArrSerializationTest();
+            // ByteArrSerializationTest();
+            GetDrawAreaAsPicturePerformanceTest();
+            // GetDrawPerformanceTest();
+        }
+
+        private static GameData GetGameData()
+        {
+            var json = System.IO.File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}/SampleData/GameState1.json");
+            GameViewDTO gameViewDTO = JsonSerializer.Deserialize<GameViewDTO>(json)!;
+            GameData gameData = GameDataSerializable.ToGameModelSerializable(gameViewDTO.GameData);
+            return gameData;
+        }
+
+        private static void GetDrawAreaAsPicturePerformanceTest()
+        {
+            GameData gameData = GetGameData();
+            int times = 100;
+            var stopwatch = Stopwatch.StartNew();
+            for (int i = 0; i < times; i++)
+            {
+                SfmlApp.ConsoleDrawLogic.GetDrawAreaAsPicture(gameData);
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine($"Loop {nameof(SfmlApp.ConsoleDrawLogic.GetDrawAreaAsPicture)}({nameof(gameData)}) {times} Times: " + stopwatch.Elapsed);
+        }
+
+        private static void GetDrawPerformanceTest()
+        {
+            var gameData = GetGameData();
+            var window = new RenderWindow(new VideoMode(480, 360), "Battleships");
+
+            int times = 1000;
+            window.SetFramerateLimit(0);
+            var stopwatch = Stopwatch.StartNew();
+            for (int i = 0; i < times; i++)
+            {
+                SfmlApp.ConsoleDrawLogic.Draw(1, gameData, window);
+            }
+            window.Close();
+
+            stopwatch.Stop();
+            Console.WriteLine($"Loop {nameof(SfmlApp.ConsoleDrawLogic.Draw)}() {times} Times: " + stopwatch.Elapsed);
+
         }
 
         private static void ByteArrSerializationTest()

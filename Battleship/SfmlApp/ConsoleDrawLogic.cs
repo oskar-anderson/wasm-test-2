@@ -17,6 +17,7 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using Color = SFML.Graphics.Color;
 using Font = SFML.Graphics.Font;
+using Image = SFML.Graphics.Image;
 using Point = RogueSharp.Point;
 
 namespace SfmlApp
@@ -25,7 +26,7 @@ namespace SfmlApp
    {
       private static readonly Point BoardOffset = new Point(0, 5);
       private static readonly Font Font = new Font(AppDomain.CurrentDomain.BaseDirectory + "/media/Font/PressStart2P.ttf");
-      
+
       /// <summary>
       /// This is called when the game should draw itself.
       /// </summary>
@@ -191,8 +192,83 @@ namespace SfmlApp
          window.Display();
          gameData.FrameCount++;
       }
+      
+      
+      public static string GetDrawAreaAsPicture(GameData gameData)
+      {
+         var fontSize = new Vector2i(8, 8);
+         var window = new RenderWindow(new VideoMode(480, 360), "Battleships");
+         window.SetFramerateLimit(0);
+         TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
 
-      public static string GetBoardAsImage(GameData gameData)
+         var mapPool = new Text[map.GetHeight(), map.GetWidth()];
+         for (int y = 0; y < map.GetHeight(); y++)
+         {
+            for (int x = 0; x < map.GetWidth(); x++)
+            {
+               mapPool[y,x] = new Text(" ", Font)
+               {
+                  CharacterSize = 8
+               };
+            } 
+         }
+         
+         
+         BaseDraw.GetDrawArea(gameData, ref map);
+         for (int y = 0; y < map.GetHeight(); y++)
+         {
+            for (int x = 0; x < map.GetWidth(); x++)
+            {
+               TileData.CharInfo tile = map.Get(new RogueSharp.Point(x, y));
+               Point screenCoord = new Point(
+                  x * fontSize.X,
+                  y * fontSize.Y);
+               // var text = new Text(tile.GetGlyphString(), Font) { FillColor = new Color(tile.Color.RgbR, tile.Color.RgbG, tile.Color.RgbB), Position = new Vector2f(screenCoord.X, screenCoord.Y), CharacterSize = 8};
+               var text = mapPool[y, x];
+               text.DisplayedString = tile.GetGlyphString();
+               text.FillColor = new Color(tile.Color.RgbR, tile.Color.RgbG, tile.Color.RgbB);
+               text.Position = new Vector2f(screenCoord.X, screenCoord.Y);
+               /*
+               */
+               window.Draw(text);
+            }
+         }
+         
+         
+         var texture = new Texture(window.Size.X, window.Size.Y);
+         texture.Update(window);
+         var pixels = texture.CopyToImage().Pixels;
+         int windowSizeX = (int) window.Size.X;
+         int windowSizeY = (int) window.Size.Y;
+         window.Close();
+         
+         var base64String = RgbaArrToBase64PngString(pixels, windowSizeX, windowSizeY);
+         return base64String;
+      }
+
+      public static string RgbaArrToBase64PngString(byte[] pixels, int width ,int height)
+      {
+         var image = new SixLabors.ImageSharp.Image<Rgba32>(width, height);
+         for (int y = 0; y < height; y++)
+         {
+            for (int x = 0; x < width; x++)
+            {
+               image[x, y] = new Rgba32(
+                  pixels[(y * width + x) * 4 + 0],
+                  pixels[(y * width + x) * 4 + 1],
+                  pixels[(y * width + x) * 4 + 2],
+                  pixels[(y * width + x) * 4 + 3]);
+            }
+         }
+         
+         using MemoryStream ms = new MemoryStream();
+         image.Save(ms, new PngEncoder());
+         byte[] imageBytes = ms.ToArray();
+         var base64String = Convert.ToBase64String(imageBytes);
+         return base64String;
+      }
+
+      public static List<byte> GetBoardAsImage(GameData gameData)
       {
          var window = new RenderWindow(new VideoMode(480, 360), "Battleships");
          window.SetVisible(false);
@@ -223,66 +299,9 @@ namespace SfmlApp
 
          var texture = new Texture(window.Size.X, window.Size.Y);
          texture.Update(window);
-         var pixels = texture.CopyToImage().Pixels;
-         var image12 = new SixLabors.ImageSharp.Image<Rgba32>((int) window.Size.X, (int) window.Size.Y);
-         for (int y = 0; y < window.Size.Y; y++)
-         {
-            for (int x = 0; x < window.Size.X; x++)
-            {
-               image12[x, y] = new Rgba32(
-                  pixels[(y * window.Size.X + x) * 4 + 0],
-                  pixels[(y * window.Size.X + x) * 4 + 1],
-                  pixels[(y * window.Size.X + x) * 4 + 2],
-                  pixels[(y * window.Size.X + x) * 4 + 3]);
-            }
-         }
-
-         if (true)
-         {
-            using MemoryStream ms = new MemoryStream();
-            image12.Save(ms, new PngEncoder());
-            byte[] imageBytes = ms.ToArray();
-            var base64String = Convert.ToBase64String(imageBytes);
-            window.Close();
-            return base64String;   
-         }
-
-         if (false)
-         {
-            // return texture.CopyToImage().Pixels;
-         }
-         
-         var image = texture.CopyToImage();
-         if (false)
-         {
-            Bitmap bitmap = new Bitmap(new MemoryStream(image.Pixels));
-            bitmap.Save(AppDomain.CurrentDomain.BaseDirectory + "/output.png",ImageFormat.Png);
-         }
-
-         Bitmap pic = new Bitmap((int) window.Size.X, (int) window.Size.Y, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-         for (int x = 0; x < window.Size.X; x++)
-         {
-            for (int y = 0; y < window.Size.Y; y++)
-            {
-               long arrayIdx = (y * window.Size.X + x) * 4;
-               System.Drawing.Color c = System.Drawing.Color.FromArgb(
-                  image.Pixels[arrayIdx + 3],
-                  image.Pixels[arrayIdx],
-                  image.Pixels[arrayIdx + 1],
-                  image.Pixels[arrayIdx + 2]
-               );
-               pic.SetPixel(x, y, c);
-            }
-         }
-         pic.Save(AppDomain.CurrentDomain.BaseDirectory + "/output2.png",ImageFormat.Png);
-         
-         image.SaveToFile(AppDomain.CurrentDomain.BaseDirectory + "/screen.png");
          window.Close();
-         // return image.Pixels.ToString()!;
-         
-
-         // End draw transformed elements
-
+         var pixels = texture.CopyToImage().Pixels.ToList();
+         return pixels;
       }
    }
 }

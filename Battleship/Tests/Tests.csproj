@@ -16,10 +16,17 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Game\Game.csproj" />
+      <ProjectReference Include="..\SfmlApp\SfmlApp.csproj" />
 
         <Reference Include="irrKlang.NET4, Version=1.0.6617.18847, Culture=neutral, PublicKeyToken=a854741bd80517c7">
             <HintPath>..\Vendor\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="SampleData\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

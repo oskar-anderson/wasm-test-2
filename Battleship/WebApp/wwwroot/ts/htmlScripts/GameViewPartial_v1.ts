@@ -1,4 +1,4 @@
-﻿export default class GameViewPartial {
+﻿export default class GameViewPartial_v1 {
 
 
     public static draw(board: number[], height: number, width: number) {
@@ -14,7 +14,7 @@
         canvas.width = width * scale;
         canvas.height = height * scale;
         
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "#FFF";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // Loop through each color and draw that section

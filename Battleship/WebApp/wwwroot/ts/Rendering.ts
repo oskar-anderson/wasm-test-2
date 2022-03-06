@@ -2,10 +2,11 @@ import GameViewController from "./GameViewController.js";
 import StartMenuPartial from "./htmlScripts/StartMenuPartial.js";
 import NewGamePartial from "./htmlScripts/NewGamePartial.js";
 import GameData from "./model/GameData.js";
-import GameViewPartial from "./htmlScripts/GameViewPartial.js";
+import GameViewPartial_v1 from "./htmlScripts/GameViewPartial_v1.js";
 
 export default class Rendering {
     
+    public GameView_v1 = "Error";
     public GameView = "Error";
     public NewGamePartial = "Error";
     public StartMenuPartial = "Error";
@@ -15,6 +16,7 @@ export default class Rendering {
     }
 
     public async init(): Promise<Rendering> {
+        this.GameView_v1 = await fetch('html/GameView_v1.html').then(x => x.text());
         this.GameView = await fetch('html/GameView.html').then(x => x.text());
         this.NewGamePartial = await fetch('html/NewGamePartial.html').then(x => x.text());
         this.StartMenuPartial = await fetch('html/StartMenuPartial.html').then(x => x.text());
@@ -37,10 +39,14 @@ export default class Rendering {
 
     public renderByName(name: string, model = {}, targetElementId = "mainBody") {
         switch (name) {
+            case "GameView_v1":
+                this.render(this.GameView_v1, model, targetElementId);
+                // @ts-ignore
+                GameViewPartial_v1.draw(model.Board, 360,480);
+                break;
             case "GameView":
                 this.render(this.GameView, model, targetElementId);
                 // @ts-ignore
-                GameViewPartial.draw(model.Board, 320,320);
                 break;
             case "GameViewController":
                 (new GameViewController(<GameData> model, this)).runGame();

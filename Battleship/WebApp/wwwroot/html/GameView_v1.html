@@ -1,0 +1,46 @@
+﻿<html lang="en">
+<head>
+    <title>Battleship</title>
+</head>
+<style>
+
+</style>
+<body>
+<div class="main">
+    <h2>Battleship</h2>
+    <div>
+        FrameCount: @Model.GameData.FrameCount
+    </div>
+
+
+    @{
+    if(Model.GameData.State === 2) {
+    <div>
+        <h3>Game Over! @Model.GameData.ActivePlayer.Name Won!</h3>
+        <p style="text-align: center">
+            <a onclick="renderByName('StartMenu')">Try Again</a>
+        </p>
+    </div>
+    } else {
+    <h3>@Model.GameData.ActivePlayer.Name turn</h3>
+    }
+    }
+
+
+
+    <form method="post">
+        <div class="container">
+            <div class="row">
+                <canvas style="padding: 0; border: solid 4px black;">
+
+                </canvas>
+            </div>
+        </div>
+        <br />
+        <br />
+
+    </form>
+
+</div>
+</body>
+</html>

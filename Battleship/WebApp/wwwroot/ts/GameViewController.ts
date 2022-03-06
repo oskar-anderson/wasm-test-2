@@ -4,6 +4,7 @@ import {BtnState, Input, KeyboardIdentifier, KeyboardIdentifierList, KeyboardKey
 import GameView from "./model/GameView.js";
 import GameData from "./model/GameData.js";
 import dataSet from "./TestPerformanceUsingLocalData.js";
+import GameView_v1 from "./model/GameView_v1.js";
 
 export default class GameViewController {
     
@@ -17,13 +18,18 @@ export default class GameViewController {
         this.Rendering = rendering;
     }
     
+    public async runGameLoop() {
+        // return await this.gameLoop_v1()
+        return await this.gameLoop();
+    }
+    
     public async runGame() {
-        this.Gamedata = await this.gameLoop();
+        this.Gamedata = await this.runGameLoop();
         this.registerListeners();
         while (true) {
             if (! this.IsEventListenerDisabled) {
                 this.Gamedata.Input = KeyboardIdentifierList.getDefaultInput();
-                this.Gamedata = await this.gameLoop();
+                this.Gamedata = await this.runGameLoop();
                 if (this.Gamedata.ElapsedTime > 9000) {
                     break;
                 }
@@ -151,7 +157,7 @@ export default class GameViewController {
                     break;
             }
             this.Gamedata.Input = input;
-            this.Gamedata = await this.gameLoop();
+            this.Gamedata = await this.runGameLoop();
         
             
             this.IsEventListenerDisabled = false;
@@ -165,17 +171,39 @@ export default class GameViewController {
     }
 
     public async gameLoop(): Promise<GameData> {
-        let gameView: GameView | null = null;
+        let gameView = await gameMethods.DoGame(this.Gamedata);
+        console.log(gameView);
+        await this.Rendering.renderByName("GameView", gameView!);
+        return gameView!.GameData;
+    };
+
+    public async gameLoop_v1(): Promise<GameData> {
+        let gameView: GameView | null | GameView_v1 = null;
         let isTestingLocalData = false;
+        let isV1CanvasRendering = true
         if (isTestingLocalData) {
             gameView = JSON.parse(dataSet);
             this.FrameCount++;
             gameView!.GameData.FrameCount = this.FrameCount;
         } else {
-            gameView = await gameMethods.DoGame(this.Gamedata);
+            if (isV1CanvasRendering) {
+                gameView = await gameMethods.DoGame_v1(this.Gamedata);
+            } 
+            else
+            {
+                gameView = await gameMethods.DoGame(this.Gamedata);
+            }
+            
         }
         console.log(gameView);
-        await this.Rendering.renderByName("GameView", gameView!);
+        if (isV1CanvasRendering) {
+            await this.Rendering.renderByName("GameView_v1", gameView!);
+        }
+        else
+        {
+            await this.Rendering.renderByName("GameView", gameView!);
+        }
+        
         return gameView!.GameData;
     };
 }

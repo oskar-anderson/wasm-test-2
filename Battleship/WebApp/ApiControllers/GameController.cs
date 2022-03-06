@@ -7,7 +7,6 @@ using Domain;
 using Domain.Tile;
 using Domain.Model;
 using Game;
-using WebApp.ApiControllers.Models;
 
 namespace WebApp.ApiControllers
 {
@@ -72,6 +71,24 @@ namespace WebApp.ApiControllers
 			return TurnApiReturnValueToJson(gameViewDto);
 		}
 		
+		[HttpPost("DoGame_v1")]
+		[Consumes("application/json")]
+		[Produces("application/json")]
+		// Unfortunately API input has to be string otherwise automatic deserialization to the class fails
+		// if the class has a property with a JSONIgnore tag
+		public ActionResult<string> DoGame_v1(GameDataSerializable gameDataSerializable)
+		{
+			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
+			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
+			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
+			
+			BaseBattleship.Update(1d, game);
+			game.GameData.FrameCount++;
+
+			GameViewDTO_v1 gameViewDto = GetGameViewDto_v1(game);
+			return TurnApiReturnValueToJson(gameViewDto);
+		}
+
 		[HttpPost("GetDrawArea")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
@@ -96,9 +113,22 @@ namespace WebApp.ApiControllers
 			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
 			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
 
-			List<byte> boardPixelsRgbaSerialized = SfmlApp.ConsoleDrawLogic.GetBoardAsImage(game.GameData);
+			string base64Picture = SfmlApp.ConsoleDrawLogic.GetDrawAreaAsPicture(game.GameData);
 			
-			GameViewDTO result = new GameViewDTO(gameDataSerializable, boardPixelsRgbaSerialized, "todo");
+			GameViewDTO result = new GameViewDTO(gameDataSerializable, base64Picture, "todo");
+			return result;
+		}
+		
+		private GameViewDTO_v1 GetGameViewDto_v1(BaseBattleship game)
+		{
+			GameDataSerializable gameDataSerializable = new GameDataSerializable(game.GameData);
+			
+			TileData.CharInfo[][] board = GetDrawArea(game.GameData);
+			UpdateLogic.ShipPlacementStatus shipPlacementStatus = UpdateLogic.GetShipPlacementStatus(game.GameData);
+
+			List<byte> boardPixelsRgbaSerialized = SfmlApp.ConsoleDrawLogic.GetBoardAsImage(game.GameData);
+
+			GameViewDTO_v1 result = new GameViewDTO_v1(gameDataSerializable, boardPixelsRgbaSerialized, "todo");
 			return result;
 		}
 		

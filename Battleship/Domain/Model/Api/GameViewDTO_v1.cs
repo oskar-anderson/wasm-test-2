@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using Domain.Model;
-using Domain.Tile;
+using System.Collections.Generic;
 
-namespace WebApp.ApiControllers.Models
+namespace Domain.Model.Api
 {
-    public class GameViewDTO
+    public class GameViewDTO_v1
     {
         public GameDataSerializable GameData { get; set; }
         public List<byte> Board { get; set; }
         public string ShipPlacementStatus { get; set; }
 
-        public GameViewDTO(GameDataSerializable gameData, List<byte> board, string shipPlacementStatus)
+        public GameViewDTO_v1(GameDataSerializable gameData, List<byte> board, string shipPlacementStatus)
         {
             GameData = gameData;
             Board = board;
