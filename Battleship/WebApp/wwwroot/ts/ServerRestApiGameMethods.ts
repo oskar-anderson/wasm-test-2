@@ -3,6 +3,7 @@ import GameSettings from "./model/GameSettings.js";
 import GameView from "./model/GameView.js";
 import GameData from "./model/GameData.js";
 import GameView_v1 from "./model/GameView_v1.js";
+import GameView_v2 from "./model/GameView_v2.js";
 
 export default class ServerRestApiGameMethods {
     
@@ -65,6 +66,22 @@ export default class ServerRestApiGameMethods {
         }).then((response) => response.json()).
         then((data) => {
             return GameView_v1.mapJsonToObject(data);
+        }).catch((err) => {
+            throw Error(err);
+        });
+    }
+
+    public static async DoGame_v2(gameData: GameData): Promise<GameView_v2> {
+        let url = window.location.protocol + "//" + window.location.host + "/api/Game/DoGame_v2";
+        return await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(gameData),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then((response) => response.json()).
+        then((data) => {
+            return GameView_v2.mapJsonToObject(data);
         }).catch((err) => {
             throw Error(err);
         });

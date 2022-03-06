@@ -23,6 +23,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DAL\DAL.csproj" />
       <ProjectReference Include="..\SfmlApp\SfmlApp.csproj" />
+      <ProjectReference Include="..\Utils\Utils.csproj" />
         <Reference Include="irrKlang.NET4">
             <HintPath>..\Vendor\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
         </Reference>
@@ -52,6 +53,10 @@
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Details.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Edit.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="wwwroot\ts\model\GameView_v2.ts" />
     </ItemGroup>
     <!--  
     Lines like this should be removed:

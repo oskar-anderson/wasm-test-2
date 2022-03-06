@@ -1,0 +1,83 @@
+﻿<html lang="en">
+<head>
+    <title>Battleship</title>
+</head>
+<style>
+
+</style>
+<body>
+<div class="main">
+    <h2>Battleship</h2>
+    <div>
+        FrameCount: @Model.GameData.FrameCount
+    </div>
+
+
+    @{
+    if(Model.GameData.State === 2) {
+    <div>
+        <h3>Game Over! @Model.GameData.ActivePlayer.Name Won!</h3>
+        <p style="text-align: center">
+            <a onclick="renderByName('StartMenu')">Try Again</a>
+        </p>
+    </div>
+    } else {
+    <h3>@Model.GameData.ActivePlayer.Name turn</h3>
+    }
+    }
+
+
+
+    <form method="post">
+        <div class="container">
+            <div class="row">
+                <div id="board" class="col capsizedText PressStart2PFont" style="font-size: 16px; line-height: 16px; padding: 0;">
+                    @{
+                    let ColorIntToCssString =
+                    {
+                    0: "rgb(12,     12,     12 )",            // Black
+                    1: "rgb(0,      55,     218)",            // DarkBlue
+                    2: "rgb(19,     161,    14 )",            // DarkGreen
+                    3: "rgb(58,     150,    221)",            // DarkCyan
+                    4: "rgb(197,    15,     31 )",            // DarkRed
+                    5: "rgb(136,    23,     152)",            // DarkMagenta
+                    6: "rgb(193,    156,    0  )",            // DarkYellow
+                    7: "rgb(204,    204,    204)",            // Gray
+                    8: "rgb(118,    118,    118)",            // DarkGrey
+                    9: "rgb(59,     120,    255)",            // Blue
+                    10: "rgb(22,    192,    12 )",            // Green
+                    11: "rgb(97,    214,    214)",            // Cyan
+                    12: "rgb(231,   72,     86 )",            // Red
+                    13: "rgb(180,   0,      158)",            // Magenta
+                    14: "rgb(249,   241,    165)",            // Yellow
+                    15: "rgb(242,   242,    242)"             // White
+                    };
+
+                    for (let y = 0; y < Model.Board.length; y++)
+                    {
+                    <p style="display: flex; margin-top: 0; margin-bottom: 0;">
+                        @for (let x = 0; x < Model.Board[0].length; x++)
+                        {
+                        let charInfo = Model.Board[y][x];
+                        let colCss = ColorIntToCssString[charInfo.Color.IntVal];
+                        let character = charInfo.Glyph;
+                        character = character === " " ? "." : character;
+                        <em style="color: @colCss;">@character</em>
+                        }
+                    </p>
+                    }
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+
+    </form>
+
+</div>
+</body>
+</html>
+<script type="module">
+
+</script>

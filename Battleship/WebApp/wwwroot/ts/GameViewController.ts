@@ -5,6 +5,7 @@ import GameView from "./model/GameView.js";
 import GameData from "./model/GameData.js";
 import dataSet from "./TestPerformanceUsingLocalData.js";
 import GameView_v1 from "./model/GameView_v1.js";
+import GameView_v2 from "./model/GameView_v2.js";
 
 export default class GameViewController {
     
@@ -19,8 +20,8 @@ export default class GameViewController {
     }
     
     public async runGameLoop() {
-        // return await this.gameLoop_v1()
         return await this.gameLoop();
+        // return await this.gameLoop();
     }
     
     public async runGame() {
@@ -174,6 +175,14 @@ export default class GameViewController {
         let gameView = await gameMethods.DoGame(this.Gamedata);
         console.log(gameView);
         await this.Rendering.renderByName("GameView", gameView!);
+        return gameView!.GameData;
+    };
+
+    public async gameLoop_v2(): Promise<GameData> {
+        // add [JsonIgnore] to Domain.Tile.TileData.TileColor rgb properties
+        let gameView = await gameMethods.DoGame_v2(this.Gamedata);
+        console.log(gameView);
+        await this.Rendering.renderByName("GameView_v2", gameView!);
         return gameView!.GameData;
     };
 

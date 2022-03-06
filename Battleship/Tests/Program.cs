@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Domain.Model;
 using RogueSharp;
@@ -13,6 +16,7 @@ using Domain.Model.Api;
 using Game.Pack;
 using SFML.Graphics;
 using SFML.Window;
+using Utils;
 
 namespace Tests
 {
@@ -27,8 +31,10 @@ namespace Tests
             // MultiArrayTest();
             // StackReversesOnSerializationTest();
             // ByteArrSerializationTest();
-            GetDrawAreaAsPicturePerformanceTest();
+            // GetDrawAreaAsPicturePerformanceTest();
             // GetDrawPerformanceTest();
+            // SaveGameDataAsGzip();
+            ReadGameDataFromGzip();
         }
 
         private static GameData GetGameData()
@@ -37,6 +43,13 @@ namespace Tests
             GameViewDTO gameViewDTO = JsonSerializer.Deserialize<GameViewDTO>(json)!;
             GameData gameData = GameDataSerializable.ToGameModelSerializable(gameViewDTO.GameData);
             return gameData;
+        }
+        
+        private static GameViewDTO_v2 GetGameViewDTO()
+        {
+            var json = System.IO.File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}/SampleData/GameState1.json");
+            GameViewDTO_v2 gameViewDTO = JsonSerializer.Deserialize<GameViewDTO_v2>(json)!;
+            return gameViewDTO;
         }
 
         private static void GetDrawAreaAsPicturePerformanceTest()
@@ -51,6 +64,21 @@ namespace Tests
 
             stopwatch.Stop();
             Console.WriteLine($"Loop {nameof(SfmlApp.ConsoleDrawLogic.GetDrawAreaAsPicture)}({nameof(gameData)}) {times} Times: " + stopwatch.Elapsed);
+        }
+
+        private static void SaveGameDataAsGzip()
+        {
+            var gameData = GetGameViewDTO();
+            string json = JsonSerializer.Serialize(gameData, new JsonSerializerOptions() { WriteIndented = true });
+            var result = Compression.Compress(json);
+            File.WriteAllTextAsync("gameDataAsGzip.txt", result);
+        }
+        
+        private static void ReadGameDataFromGzip()
+        {
+            string input = File.ReadAllText($"gameDataAsGzip.txt");
+            var result = Compression.Decompress(input);
+            File.WriteAllTextAsync("gameDataAsJson.json", result);
         }
 
         private static void GetDrawPerformanceTest()

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
 using Domain.Model.Api;
 using System.Text.Json;
 using Domain;
@@ -23,7 +26,7 @@ namespace WebApp.ApiControllers
 		public ActionResult<string> CheckValidGameSettings(ValidGameSettingsInRuleSet settings)
 		{
 			string errorMsgText = "";
-			bool areSettingsValid = Utils.TryBtnStart(settings.Ships, settings.BoardWidth, settings.BoardHeight, settings.AllowedPlacementType, ref errorMsgText, out _);
+			bool areSettingsValid = Game.Utils.TryBtnStart(settings.Ships, settings.BoardWidth, settings.BoardHeight, settings.AllowedPlacementType, ref errorMsgText, out _);
 			var result = new ValidGameSettingsOut()
 			{
 				AreSettingsValid = areSettingsValid,
@@ -89,15 +92,24 @@ namespace WebApp.ApiControllers
 			return TurnApiReturnValueToJson(gameViewDto);
 		}
 
-		[HttpPost("GetDrawArea")]
+		[HttpPost("DoGame_v2")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		public ActionResult<string> GetDrawArea(GameDataSerializable gameDataSerializable)
+		public ActionResult<string> DoGame_v2(GameDataSerializable gameDataSerializable)
 		{
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
 			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
-			TileData.CharInfo[][] drawArea = GetDrawArea(game.GameData);
-			return TurnApiReturnValueToJson(drawArea);
+			
+			BaseBattleship.Update(1d, game);
+			game.GameData.FrameCount++;
+
+			GameViewDTO_v2 gameViewDTO_v2 = new GameViewDTO_v2(
+				new GameDataSerializable(game.GameData),
+				GetDrawArea(game.GameData), 
+				"Todo"
+				);
+			
+			return TurnApiReturnValueToJson(gameViewDTO_v2);
 		}
 
 		private ActionResult<string> TurnApiReturnValueToJson(object o)

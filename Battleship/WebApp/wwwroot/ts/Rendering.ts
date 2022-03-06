@@ -6,6 +6,7 @@ import GameViewPartial_v1 from "./htmlScripts/GameViewPartial_v1.js";
 
 export default class Rendering {
     
+    public GameView_v2 = "Error";
     public GameView_v1 = "Error";
     public GameView = "Error";
     public NewGamePartial = "Error";
@@ -16,6 +17,7 @@ export default class Rendering {
     }
 
     public async init(): Promise<Rendering> {
+        this.GameView_v2 = await fetch('html/GameView_v2.html').then(x => x.text());
         this.GameView_v1 = await fetch('html/GameView_v1.html').then(x => x.text());
         this.GameView = await fetch('html/GameView.html').then(x => x.text());
         this.NewGamePartial = await fetch('html/NewGamePartial.html').then(x => x.text());
@@ -39,6 +41,9 @@ export default class Rendering {
 
     public renderByName(name: string, model = {}, targetElementId = "mainBody") {
         switch (name) {
+            case "GameView_v2":
+                this.render(this.GameView_v2, model, targetElementId);
+                break;
             case "GameView_v1":
                 this.render(this.GameView_v1, model, targetElementId);
                 // @ts-ignore
