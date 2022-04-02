@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Text.Json;
 using Domain.Model;
@@ -34,7 +36,8 @@ namespace Tests
             // GetDrawAreaAsPicturePerformanceTest();
             // GetDrawPerformanceTest();
             // SaveGameDataAsGzip();
-            ReadGameDataFromGzip();
+            // ReadGameDataFromGzip();
+            GitTest();
         }
 
         private static GameData GetGameData()
@@ -292,6 +295,21 @@ namespace Tests
             {
                 Console.WriteLine("deserialized: " + deserialized.Order.Pop() + "; original: " + serializeMe.Order.Pop());
             }
+        }
+
+        /// <summary>
+        /// Doxygen generates descriptions for public functions
+        /// </summary>
+        public static void GitTest()
+        {
+            string gitCommand = "git";
+            string gitAddArgument = @"add -A";
+            string gitCommitArgument = @"commit -m ""automated commit""";
+            string gitPushArgument = @"push origin master";
+
+            Process.Start(gitCommand, gitAddArgument);
+            Process.Start(gitCommand, gitCommitArgument);
+            Process.Start(gitCommand, gitPushArgument);
         }
 
         private static void SoundTest()

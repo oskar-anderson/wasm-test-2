@@ -41,7 +41,6 @@ namespace WebApp.ApiControllers
 		[Produces("application/json")]
 		public ActionResult<string> StartGame(ValidGameSettingsInRuleSet settings)
 		{
-			Console.WriteLine(settings);
 			BaseBattleship game = new WebBattle(
 				settings.BoardHeight,
 				settings.BoardWidth,
@@ -51,8 +50,13 @@ namespace WebApp.ApiControllers
 				-1,
 				new WebInput(Input.GetDefaultInput())
 			);
-			GameViewDTO gameViewDto = GetGameViewDto(game);
-			return TurnApiReturnValueToJson(gameViewDto);
+			GameViewDTO_v2 gameViewDTO_v2 = new GameViewDTO_v2(
+				new GameDataSerializable(game.GameData),
+				GetDrawArea(game.GameData), 
+				"Todo"
+			);
+
+			return TurnApiReturnValueToJson(gameViewDTO_v2);
 		}
 		
 

@@ -23,7 +23,7 @@ export default class ServerRestApiGameMethods {
             });
     }
 
-    public static async StartGame(settings: GameSettings): Promise<GameView> {
+    public static async StartGame(settings: GameSettings): Promise<GameView_v2> {
         let url = window.location.protocol + "//" + window.location.host + "/api/Game/StartGame";
         return await fetch(url, {
             method: 'POST',
@@ -33,7 +33,7 @@ export default class ServerRestApiGameMethods {
             }
         }).then((response) => response.json()).
             then((data) => {
-                return GameView.mapJsonToObject(data);
+                return GameView_v2.mapJsonToObject(data);
             }).catch((err) => {
                 throw Error(err);
             });

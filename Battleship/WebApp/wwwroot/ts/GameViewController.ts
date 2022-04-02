@@ -20,8 +20,8 @@ export default class GameViewController {
     }
     
     public async runGameLoop() {
-        return await this.gameLoop();
-        // return await this.gameLoop();
+        // allows to easily test different game loops [this.gameLoop_v2() / this.gameLoop_v1() / this.gameLoop()]
+        return await this.gameLoop_v2();
     }
     
     public async runGame() {
@@ -187,30 +187,16 @@ export default class GameViewController {
     };
 
     public async gameLoop_v1(): Promise<GameData> {
-        let gameView: GameView | null | GameView_v1 = null;
+        let gameView: null | GameView_v1 = null;
         let isTestingLocalData = false;
-        let isV1CanvasRendering = true
         if (isTestingLocalData) {
             gameView = JSON.parse(dataSet);
             this.FrameCount++;
             gameView!.GameData.FrameCount = this.FrameCount;
         } else {
-            if (isV1CanvasRendering) {
-                gameView = await gameMethods.DoGame_v1(this.Gamedata);
-            } 
-            else
-            {
-                gameView = await gameMethods.DoGame(this.Gamedata);
-            }
-            
-        }
-        console.log(gameView);
-        if (isV1CanvasRendering) {
+            gameView = await gameMethods.DoGame_v1(this.Gamedata);
+            console.log(gameView);
             await this.Rendering.renderByName("GameView_v1", gameView!);
-        }
-        else
-        {
-            await this.Rendering.renderByName("GameView", gameView!);
         }
         
         return gameView!.GameData;

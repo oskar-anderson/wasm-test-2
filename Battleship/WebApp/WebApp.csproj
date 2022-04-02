@@ -54,10 +54,7 @@
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Edit.cshtml" />
       <UpToDateCheckInput Remove="Pages\GameDataCRUD\Index.cshtml" />
     </ItemGroup>
-
-    <ItemGroup>
-      <TypeScriptCompile Include="wwwroot\ts\model\GameView_v2.ts" />
-    </ItemGroup>
+    
     <!--  
     Lines like this should be removed:
     <ItemGroup>

@@ -45,7 +45,7 @@ namespace Game
           HandlePlayerMovement(out bool posChanged, basegame.GameData.ActivePlayer, basegame.GameData.Board2D, basegame.GameData.Input);
           basegame.GameData.ActivePlayer.fKeyboardMoveTimeout = posChanged ? 0.1f : basegame.GameData.ActivePlayer.fKeyboardMoveTimeout;
           
-          ResolvePhase(basegame);
+          ResolvePhase(basegame.GameData);
           
 
           HandleZooming(basegame.GameData.ActivePlayer, basegame.GameData.Input);
@@ -56,9 +56,8 @@ namespace Game
           return true;
        }
 
-       private static void ResolvePhase(BaseBattleship basegame)
+       private static void ResolvePhase(GameData gameData)
        {
-          var gameData = basegame.GameData;
           switch (gameData.State)
           {
              case GameState.Placement:
@@ -166,7 +165,6 @@ namespace Game
                    PlaceShip(shipPlacementStatus.modelPoints, (Rectangle) shipPlacementStatus.hitboxRect, 
                       gameData.Board2D, gameData.ActivePlayer, 
                       gameData.ShipSizes.Count, gameData.ActivePlayer.Sprite);
-                   basegame.SoundEngine.Play2D("media/flashlight_holster.ogg");
                 }
 
                 if (activeKeys[dialogRot].isActive && gameData.Input.Keyboard.KeyboardState
@@ -201,8 +199,7 @@ namespace Game
                       );
                       gameData.Board2D.Set(gameData.ActivePlayer.Sprite.Pos, TextureValue.HitWater);
                       (gameData.ActivePlayer, gameData.InactivePlayer) = (gameData.InactivePlayer, gameData.ActivePlayer);
-
-                      basegame.SoundEngine.Play2D("media/Water_Impact_2.wav");
+                      
                       return;
                    }
                    if (TextureValue.IntactShip == selectedOppTileValue)
@@ -226,7 +223,6 @@ namespace Game
                             selectedOppTileValue,
                             TextureValue.HitShip, 
                             changes));
-                         basegame.SoundEngine.Play2D("media/bigExp.wav");
 
                          if (IsOver(gameData, out string winner))
                          {
@@ -243,7 +239,6 @@ namespace Game
                                TextureValue.HitShip, 
                                null)
                          );
-                         basegame.SoundEngine.Play2D("media/missileExplode.wav");
                       }
                    }
                    else {
