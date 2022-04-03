@@ -311,6 +311,7 @@ namespace Tests
             var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}";
             executeProcess("git", @"add -A");
             executeProcess("git", $@"commit -m ""program executed at {currentTime}""");
+            Console.WriteLine("test");
         }
 
         private static void SoundTest()
