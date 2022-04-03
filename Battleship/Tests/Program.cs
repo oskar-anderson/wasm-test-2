@@ -305,31 +305,31 @@ namespace Tests
         {
             var executeProcess = (string command, string argument) =>
             {
-                var process = Process.Start(command, argument);
-                process.WaitForExit();
+                var proc = new Process 
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = command,
+                        Arguments = argument,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    }
+                };
+                proc.Start();
+                string output = "";
+                while (!proc.StandardOutput.EndOfStream)
+                {
+                    output = proc.StandardOutput.ReadLine() ?? "unexpected";
+                }
+                proc.WaitForExit();
+                return output;
             };
             var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}";
             executeProcess("git", @"add -A");
             executeProcess("git", $@"commit -m ""program executed at {currentTime}""");
             
-            var proc = new Process 
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "git",
-                    Arguments = "log --oneline",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-            proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine() ?? throw new InvalidOperationException("Unexpected");
-                Console.WriteLine(line);
-                // do something with line
-            }
+            
             Console.WriteLine("test");
         }
 
