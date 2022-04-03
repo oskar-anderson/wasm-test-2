@@ -311,7 +311,6 @@ namespace Tests
                     {
                         FileName = command,
                         Arguments = argument,
-                        UseShellExecute = false,
                         RedirectStandardOutput = true,
                     }
                 };
