@@ -18,9 +18,8 @@ namespace Game
     {
        /// <param name="deltaTime">Time since last update in seconds.</param>
        /// <param name="basegame">Base game with game data and input handling</param>
-       public static bool Update(double deltaTime, BaseBattleship basegame)
+       public virtual bool Update(double deltaTime, BaseBattleship basegame)
        {
-          basegame.GameData.Input = basegame.Input.UpdateInput(basegame.GameData.Input);
           if (basegame.GameData.State == GameState.GameOver)
           {
              if (!basegame.GameData.Input.Keyboard.KeyboardState

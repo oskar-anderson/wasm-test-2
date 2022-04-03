@@ -47,8 +47,7 @@ namespace WebApp.ApiControllers
 				settings.Ships,
 				settings.AllowedPlacementType,
 				-1,
-				-1,
-				new WebInput(Input.GetDefaultInput())
+				-1
 			);
 			GameViewDTO_v2 gameViewDTO_v2 = new GameViewDTO_v2(
 				new GameDataSerializable(game.GameData),
@@ -69,9 +68,10 @@ namespace WebApp.ApiControllers
 		{
 			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
+			BaseBattleship game = new WebBattle(gameData);
 			
-			BaseBattleship.Update(1d, game);
+			// TODO! Input is actually not being modified
+			new WebUpdateLogic(gameData.Input).Update(1d, game);
 			game.GameData.FrameCount++;
 
 			GameViewDTO gameViewDto = GetGameViewDto(game);
@@ -87,9 +87,9 @@ namespace WebApp.ApiControllers
 		{
 			// GameDataSerializable gameDataSerializable = JsonSerializer.Deserialize<GameDataSerializable>(gameDataSerializableString)!;
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
+			BaseBattleship game = new WebBattle(gameData);
 			
-			BaseBattleship.Update(1d, game);
+			new WebUpdateLogic(gameData.Input).Update(1d, game);
 			game.GameData.FrameCount++;
 
 			GameViewDTO_v1 gameViewDto = GetGameViewDto_v1(game);
@@ -102,9 +102,9 @@ namespace WebApp.ApiControllers
 		public ActionResult<string> DoGame_v2(GameDataSerializable gameDataSerializable)
 		{
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData, new WebInput(gameData.Input));
+			BaseBattleship game = new WebBattle(gameData);
 			
-			BaseBattleship.Update(1d, game);
+			new WebUpdateLogic(gameData.Input).Update(1d, game);
 			game.GameData.FrameCount++;
 
 			GameViewDTO_v2 gameViewDTO_v2 = new GameViewDTO_v2(

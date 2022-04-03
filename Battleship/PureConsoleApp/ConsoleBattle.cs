@@ -41,7 +41,6 @@ namespace PureConsoleApp
                 // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
                 SoundEngineOptionFlag.LoadPlugins;
             SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-            Input = new ConsoleInput(ConsoleEngine);
         }
         
         public override void Draw(double deltaTime, GameData gameData)

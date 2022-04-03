@@ -16,18 +16,7 @@ namespace SfmlApp
             List<Menu.MenuAction> menuTree = new List<Menu.MenuAction>() { Menu.getMenuMain() };
             while (true)
             {
-                // Console.CursorVisible = false;
-                bool isContinueActive;
-                try
-                {
-                    isContinueActive = DbQueries.SavesAmount() != 0;
-                }
-                catch
-                {
-                    isContinueActive = false;
-                }
-
-                RuleSet ruleSet = Menu.Start(menuTree, isContinueActive);
+                RuleSet ruleSet = Menu.Start(menuTree, false);
                 
                 ConsoleBattle game;
                 switch (ruleSet.ExitCode)
@@ -56,7 +45,7 @@ namespace SfmlApp
                         double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
-                        bool running = BaseBattleship.Update(timeCap, game);
+                        bool running = new UpdateLogic().Update(timeCap, game);;
                         if (!running)
                         {
                             window.Close();

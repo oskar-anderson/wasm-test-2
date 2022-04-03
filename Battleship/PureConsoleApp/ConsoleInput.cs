@@ -8,7 +8,7 @@ using Game;
 
 namespace PureConsoleApp
 {
-    public class ConsoleInput: BaseInput
+    public class ConsoleInput
     {
         private readonly ConsoleEngine engine;
         public ConsoleInput(ConsoleEngine engine)

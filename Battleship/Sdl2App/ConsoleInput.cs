@@ -8,7 +8,7 @@ using SFML.Window;
 
 namespace Sdl2App
 {
-    public class ConsoleInput: BaseInput
+    public class ConsoleInput
     {
         private readonly RenderWindow window;
         public ConsoleInput(RenderWindow window)

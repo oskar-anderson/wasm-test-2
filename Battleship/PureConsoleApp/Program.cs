@@ -53,7 +53,7 @@ namespace PureConsoleApp
                         double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
-                        bool running = BaseBattleship.Update(timeCap, game);
+                        bool running = new UpdateLogic().Update(timeCap, game);
                         if (!running)
                         {
                             Helper.FixConsole();

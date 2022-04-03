@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Management.Automation;
 using System.Text;
 using System.Text.Json;
 using Domain.Model;
@@ -19,7 +18,9 @@ using Domain.Model.Api;
 using Game.Pack;
 using SFML.Graphics;
 using SFML.Window;
+using SkiaSharp;
 using Utils;
+
 
 namespace Tests
 {
@@ -38,7 +39,8 @@ namespace Tests
             // GetDrawPerformanceTest();
             // SaveGameDataAsGzip();
             // ReadGameDataFromGzip();
-            GitTest();
+            RunSkia();
+            // using (var game = new GameTest()) { game.Run(); }
         }
 
         private static GameData GetGameData()
@@ -279,6 +281,34 @@ namespace Tests
             return packedRects;
         }
 
+        public static void RunSkia()
+        {
+            // Create an image and fill it blue
+            SKBitmap bmp = new(640, 480);
+            using SKCanvas canvas = new(bmp);
+            canvas.Clear(SKColor.Parse("#003366"));
+
+            // Draw lines with random positions and thicknesses
+            Random rand = new(0);
+            SKPaint paint = new() { Color = SKColors.White.WithAlpha(100), IsAntialias = true };
+            for (int i = 0; i < 100; i++)
+            {
+                SKPoint pt1 = new(rand.Next(bmp.Width), rand.Next(bmp.Height));
+                SKPoint pt2 = new(rand.Next(bmp.Width), rand.Next(bmp.Height));
+                paint.StrokeWidth = rand.Next(1, 10);
+                canvas.DrawLine(pt1, pt2, paint);
+            }
+
+            // Save the image to disk
+            SKFileWStream fs = new("quickstart.jpg");
+            bmp.Encode(fs, SKEncodedImageFormat.Jpeg, quality: 85);
+        }
+
+        public static void RunMonogame()
+        {
+            
+        }
+
         private class SerializeMe
         {
             public Stack<int> Order { get; set; } = new Stack<int>();
@@ -296,39 +326,6 @@ namespace Tests
             {
                 Console.WriteLine("deserialized: " + deserialized.Order.Pop() + "; original: " + serializeMe.Order.Pop());
             }
-        }
-
-        /// <summary>
-        /// Doxygen generates descriptions for public functions
-        /// </summary>
-        public static void GitTest()
-        {
-            var executeProcess = (string command, string argument) =>
-            {
-                var proc = new Process 
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = command,
-                        Arguments = argument,
-                        RedirectStandardOutput = true,
-                    }
-                };
-                proc.Start();
-                string output = "";
-                while (!proc.StandardOutput.EndOfStream)
-                {
-                    output = proc.StandardOutput.ReadLine() ?? "unexpected";
-                }
-                proc.WaitForExit();
-                return output;
-            };
-            var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}";
-            executeProcess("git", @"add -A");
-            Console.WriteLine(executeProcess("git", $@"commit -m ""program executed at {currentTime}"""));
-            
-            
-            Console.WriteLine("test");
         }
 
         private static void SoundTest()

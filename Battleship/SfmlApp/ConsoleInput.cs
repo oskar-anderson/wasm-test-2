@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Model;
 using Game;
@@ -8,7 +9,7 @@ using SFML.Window;
 
 namespace SfmlApp
 {
-    public class ConsoleInput: BaseInput
+    public class ConsoleInput
     {
         private readonly RenderWindow window;
         public ConsoleInput(RenderWindow window)
@@ -39,7 +40,7 @@ namespace SfmlApp
             return keyValues;
         }
 
-        public Input.MouseInput GetMouseState(Input? oldInput)
+        public Input.MouseInput GetMouseState(Input? oldInput, Window window)
         {
             List<Input.BtnState> GetMouseButtonState(bool isPressed, bool isEcho)
             {
@@ -218,7 +219,7 @@ namespace SfmlApp
                         },
                     }
                 },
-                Mouse = GetMouseState(oldInput)
+                Mouse = GetMouseState(oldInput, window)
             };
             return result;
         }

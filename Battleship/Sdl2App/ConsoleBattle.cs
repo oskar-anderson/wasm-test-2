@@ -47,7 +47,6 @@ namespace Sdl2App
              // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
              SoundEngineOptionFlag.LoadPlugins;
           SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-          Input = new ConsoleInput(Window);
        }
 
        /// <param name="deltaTime">Provides a snapshot of timing values.</param>

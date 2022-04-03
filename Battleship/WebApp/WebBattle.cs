@@ -11,17 +11,15 @@ namespace WebApp
 {
     public class WebBattle : BaseBattleship
     {
-        public WebBattle(GameData gameData, BaseInput webInput) : base(gameData)
+        public WebBattle(GameData gameData) : base(gameData)
         {
             // Initialize();
-            Input = webInput;
         }
 
-        public WebBattle(int boardHeight, int boardWidth, string ships, int allowAdjacentPlacement, int startingPlayerType, int secondPlayerType, BaseInput webInput)
+        public WebBattle(int boardHeight, int boardWidth, string ships, int allowAdjacentPlacement, int startingPlayerType, int secondPlayerType)
             : base(boardHeight, boardWidth, ships, allowAdjacentPlacement, startingPlayerType, secondPlayerType)
         {
             // Initialize();
-            Input = webInput;
         }
 
         private void Initialize()

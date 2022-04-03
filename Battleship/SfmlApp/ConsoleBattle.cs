@@ -40,14 +40,6 @@ namespace SfmlApp
           };
           Window.SetFramerateLimit(0);
           Console.OutputEncoding = Encoding.Unicode;
-          const SoundEngineOptionFlag options = 
-             SoundEngineOptionFlag.Use3DBuffers | 
-             SoundEngineOptionFlag.MultiThreaded | 
-             // SoundEngineOptionFlag.PrintDebugInfoIntoDebugger |
-             // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
-             SoundEngineOptionFlag.LoadPlugins;
-          SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
-          Input = new ConsoleInput(Window);
        }
 
        /// <param name="deltaTime">Provides a snapshot of timing values.</param>

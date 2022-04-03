@@ -49,17 +49,13 @@ namespace TerminalGuiMenu.GameMenu
 			IsContinueActive = isContinueActive;
 			ruleSetHolder = new MenuResult() { ExitCode = ExitResult.Exit };
 			MenuViewLevel = menuActions;
-			MenuBar? menuBar = MenubarHolder.MenuBar; // all these menubar assignments allow app to stop and reload with new menubar
-
 			Application.Init ();
 			Colors.ColorSchemes["Menu"] = GetActiveTopScheme(); // This is for app top and the MenuItems (MenuBarItem children)
-			menuBar.ColorScheme = GetActiveTopScheme();		   // This is for the MenuBarItem. Does not like curly bracket init. App needs to be init first.
-			_window = new Window() { Title = "BattleShip", X = 0, Y = 1, Width = Dim.Fill(), Height = Dim.Percent (80)};
+			_window = new Window() { X = 0, Y = 0, Width = 60, Height = 45};
 			
 			Application.Top.Add(_window);
-            Application.Top.Add(menuBar);
 
-            LoadMenu();
+			LoadMenu();
             
             //Application.Driver.PrepareToRun();
             var runToken = Application.Begin (Application.Top);

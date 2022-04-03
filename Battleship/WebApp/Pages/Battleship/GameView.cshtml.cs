@@ -79,9 +79,9 @@ namespace WebApp.Pages.Battleship
                 DbQueries.Delete(id);
             }
 
-            BaseBattleship game = new WebBattle(gameData, new WebInput(Input.GetDefaultInput()));
+            BaseBattleship game = new WebBattle(gameData);
             
-            DoGame(game);
+            DoGame(game, Input.GetDefaultInput());
             GameData = game.GameData;
             GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
             GameDataSerialized = JsonSerializer.Serialize(gameDataSerializableSave, new JsonSerializerOptions() { WriteIndented = true });
@@ -239,18 +239,18 @@ namespace WebApp.Pages.Battleship
                     Y = 0
                 }
             };
-            BaseBattleship game = new WebBattle(gameData, new WebInput(input));
+            BaseBattleship game = new WebBattle(gameData);
 
-            DoGame(game);
+            DoGame(game, input);
             GameData = game.GameData;
             GameDataSerializable gameDataSerializableSave = new GameDataSerializable(game.GameData);
             GameDataSerialized = JsonSerializer.Serialize(gameDataSerializableSave, new JsonSerializerOptions() { WriteIndented = true });
             return Page();
         }
 
-        private void DoGame(BaseBattleship game)
+        private void DoGame(BaseBattleship game, Input input)
         {
-            BaseBattleship.Update(1d, game);
+            new WebUpdateLogic(input).Update(1d, game);
             GameBoard = WebDrawLogic.GetDraw(game.GameData);
         }
 

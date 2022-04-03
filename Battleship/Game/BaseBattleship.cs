@@ -14,7 +14,7 @@ namespace Game
        public readonly GameData GameData;
        public ISoundEngine SoundEngine { get; set; } = null!;
 
-       public BaseInput Input { get; set; } = null!;
+       public UpdateLogic UpdateLogic = null!;
 
        protected BaseBattleship(GameData gameData)
        {
@@ -61,14 +61,6 @@ namespace Game
           
           GameData = new GameData(allowAdjacentPlacement, boardMap, shipList, activePlayer, inactivePlayer, sprites);
        }
-
-       /// <param name="deltaTime">Time since last update in seconds.</param>
-       /// <param name="baseBattleship">Base game object with all game data, input handling</param>
-       public static bool Update(double deltaTime, BaseBattleship baseBattleship)
-       {
-          return UpdateLogic.Update(deltaTime, baseBattleship);
-       }
-
 
        /// <param name="deltaTime">Time since last update in seconds.</param>
        /// <param name="data">Game data</param>

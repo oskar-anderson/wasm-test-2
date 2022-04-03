@@ -8,11 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
       <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.0" />
+      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
       <PackageReference Include="NUnit" Version="3.12.0" />
       <PackageReference Include="RogueSharp" Version="4.2.0" />
-      <PackageReference Include="System.Management.Automation" Version="7.2.2" />
+      <PackageReference Include="SkiaSharp" Version="2.80.3" />
+      <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
       <PackageReference Include="Troschuetz.Random" Version="5.0.1" />
     </ItemGroup>
 
