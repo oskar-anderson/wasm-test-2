@@ -313,7 +313,6 @@ namespace Tests
                         Arguments = argument,
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
-                        CreateNoWindow = true
                     }
                 };
                 proc.Start();
