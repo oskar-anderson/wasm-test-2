@@ -308,10 +308,9 @@ namespace Tests
                 var process = Process.Start(command, argument);
                 process.WaitForExit();
             };
-            var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("et-EE"))}";
+            var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}";
             executeProcess("git", @"add -A");
             executeProcess("git", $@"commit -m ""program executed at {currentTime}""");
-            executeProcess("git", @"push origin master");
         }
 
         private static void SoundTest()
