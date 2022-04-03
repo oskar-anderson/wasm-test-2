@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -302,14 +303,15 @@ namespace Tests
         /// </summary>
         public static void GitTest()
         {
-            string gitCommand = "git";
-            string gitAddArgument = @"add -A";
-            string gitCommitArgument = @"commit -m ""automated commit""";
-            string gitPushArgument = @"push origin master";
-
-            Process.Start(gitCommand, gitAddArgument);
-            Process.Start(gitCommand, gitCommitArgument);
-            Process.Start(gitCommand, gitPushArgument);
+            var executeProcess = (string command, string argument) =>
+            {
+                var process = Process.Start(command, argument);
+                process.WaitForExit();
+            };
+            var currentTime = $"{DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("et-EE"))}";
+            executeProcess("git", @"add -A");
+            executeProcess("git", $@"commit -m ""program executed at {currentTime}""");
+            executeProcess("git", @"push origin master");
         }
 
         private static void SoundTest()

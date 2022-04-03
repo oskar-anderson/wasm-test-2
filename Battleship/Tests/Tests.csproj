@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
       <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.0" />
       <PackageReference Include="NUnit" Version="3.12.0" />
       <PackageReference Include="RogueSharp" Version="4.2.0" />
