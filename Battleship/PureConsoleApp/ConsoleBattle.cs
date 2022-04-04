@@ -3,7 +3,6 @@ using System.Text;
 using ConsoleGameEngineCore;
 using Domain.Model;
 using Game;
-using IrrKlang;
 
 namespace PureConsoleApp
 {
@@ -34,13 +33,6 @@ namespace PureConsoleApp
         {
             ConsoleEngine = new ConsoleEngine(ScreenWidth, ScreenHeight, FontW, FontH);
             Console.OutputEncoding = Encoding.Unicode;
-            const SoundEngineOptionFlag options = 
-                SoundEngineOptionFlag.Use3DBuffers | 
-                SoundEngineOptionFlag.MultiThreaded | 
-                // SoundEngineOptionFlag.PrintDebugInfoIntoDebugger |
-                // SoundEngineOptionFlag.PrintDebugInfoToStdOut | 
-                SoundEngineOptionFlag.LoadPlugins;
-            SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Domain;
 using Domain.Model;
 using Domain.Tile;
-using IrrKlang;
 using RogueSharp;
 using Point = RogueSharp.Point;
 
@@ -12,7 +11,6 @@ namespace Game
     public class BaseBattleship
     {
        public readonly GameData GameData;
-       public ISoundEngine SoundEngine { get; set; } = null!; 
 
        public BaseBattleship(GameData gameData)
        {

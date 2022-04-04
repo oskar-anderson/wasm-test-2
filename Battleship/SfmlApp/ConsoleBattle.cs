@@ -2,7 +2,6 @@
 using System.Text;
 using Domain.Model;
 using Game;
-using IrrKlang;
 using SFML.Graphics;
 using SFML.Window;
 
