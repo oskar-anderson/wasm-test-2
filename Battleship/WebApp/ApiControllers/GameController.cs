@@ -70,7 +70,7 @@ namespace WebApp.ApiControllers
 			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
 			BaseBattleship game = new WebBattle(gameData);
 			
-			// TODO! Input is actually not being modified
+			// input is actually being modified in js not here.
 			new WebUpdateLogic(gameData.Input).Update(1d, game);
 			game.GameData.FrameCount++;
 

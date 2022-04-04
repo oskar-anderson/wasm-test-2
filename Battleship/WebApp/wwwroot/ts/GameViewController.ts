@@ -31,6 +31,7 @@ export default class GameViewController {
             if (! this.IsEventListenerDisabled) {
                 this.Gamedata.Input = KeyboardIdentifierList.getDefaultInput();
                 this.Gamedata = await this.runGameLoop();
+                console.log(this.Gamedata.ElapsedTime);
                 if (this.Gamedata.ElapsedTime > 9000) {
                     break;
                 }
@@ -178,14 +179,6 @@ export default class GameViewController {
         return gameView!.GameData;
     };
 
-    public async gameLoop_v2(): Promise<GameData> {
-        // add [JsonIgnore] to Domain.Tile.TileData.TileColor rgb properties
-        let gameView = await gameMethods.DoGame_v2(this.Gamedata);
-        console.log(gameView);
-        await this.Rendering.renderByName("GameView_v2", gameView!);
-        return gameView!.GameData;
-    };
-
     public async gameLoop_v1(): Promise<GameData> {
         let gameView: null | GameView_v1 = null;
         let isTestingLocalData = false;
@@ -198,7 +191,19 @@ export default class GameViewController {
             console.log(gameView);
             await this.Rendering.renderByName("GameView_v1", gameView!);
         }
-        
+
         return gameView!.GameData;
     };
+
+    public async gameLoop_v2(): Promise<GameData> {
+        // add [JsonIgnore] to Domain.Tile.TileData.TileColor rgb properties
+        console.log("gameLoop before api:   ", new Date().getTime());
+        let gameView = await gameMethods.DoGame_v2(this.Gamedata);
+        // console.log(gameView);
+        console.log("gameLoop after api:    ", new Date().getTime());
+        await this.Rendering.renderByName("GameView_v2", gameView!);
+        console.log("gameLoop after render: ", new Date().getTime());
+        return gameView!.GameData;
+    };
+
 }

@@ -19,9 +19,8 @@ export default class GameView_v2 {
     }
 
     public static mapJsonToObject(json: string): GameView_v2 {
-        console.log("mapJsonToObject");
-        console.log(json);
         let obj = JSON.parse(json);
-        return new GameView_v2(obj.GameData, obj.Board, obj.ShipPlacementStatus);
+        let result = new GameView_v2(obj.GameData, obj.Board, obj.ShipPlacementStatus);
+        return result;
     }
 }
