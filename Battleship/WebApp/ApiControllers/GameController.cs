@@ -41,7 +41,7 @@ namespace WebApp.ApiControllers
 		[Produces("application/json")]
 		public ActionResult<string> StartGame(ValidGameSettingsInRuleSet settings)
 		{
-			BaseBattleship game = new WebBattle(
+			BaseBattleship game = new BaseBattleship(
 				settings.BoardHeight,
 				settings.BoardWidth,
 				settings.Ships,

@@ -41,12 +41,5 @@ namespace SfmlApp
           Window.SetFramerateLimit(0);
           Console.OutputEncoding = Encoding.Unicode;
        }
-
-       /// <param name="deltaTime">Provides a snapshot of timing values.</param>
-       /// <param name="gameData">Game data</param>
-       public override void Draw(double deltaTime, GameData gameData)
-       {
-          ConsoleDrawLogic.Draw(deltaTime, gameData, Window);
-       }
     }
 }

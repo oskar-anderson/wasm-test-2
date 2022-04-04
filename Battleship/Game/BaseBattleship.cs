@@ -9,19 +9,17 @@ using Point = RogueSharp.Point;
 
 namespace Game
 {
-    public abstract class BaseBattleship
+    public class BaseBattleship
     {
        public readonly GameData GameData;
-       public ISoundEngine SoundEngine { get; set; } = null!;
+       public ISoundEngine SoundEngine { get; set; } = null!; 
 
-       public UpdateLogic UpdateLogic = null!;
-
-       protected BaseBattleship(GameData gameData)
+       public BaseBattleship(GameData gameData)
        {
           GameData = gameData;
        }
 
-       protected BaseBattleship(int boardHeight, int boardWidth, string ships, int allowAdjacentPlacement, int startingPlayerType, int secondPlayerType)
+       public BaseBattleship(int boardHeight, int boardWidth, string ships, int allowAdjacentPlacement, int startingPlayerType, int secondPlayerType)
        {
           List<Point> shipList;
           string errorMsg = "";
@@ -61,9 +59,5 @@ namespace Game
           
           GameData = new GameData(allowAdjacentPlacement, boardMap, shipList, activePlayer, inactivePlayer, sprites);
        }
-
-       /// <param name="deltaTime">Time since last update in seconds.</param>
-       /// <param name="data">Game data</param>
-       public abstract void Draw(double deltaTime, GameData data);
     }
 }

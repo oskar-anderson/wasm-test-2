@@ -4,6 +4,7 @@ using DAL;
 using Domain;
 using Domain.Model;
 using Game;
+using SFML.Graphics;
 using SFML.Window;
 using TerminalGuiMenu.GameMenu;
 
@@ -38,7 +39,7 @@ namespace SfmlApp
                 GameResult Gameloop(BaseBattleship game)
                 {
                     DateTime startTime = DateTime.Now;
-                    Window window = ((ConsoleBattle) game).Window;
+                    RenderWindow window = ((ConsoleBattle) game).Window;
                     while (window.IsOpen)
                     {
                         window.DispatchEvents();
@@ -51,7 +52,7 @@ namespace SfmlApp
                             window.Close();
                             break;
                         }
-                        game.Draw(timeCap, game.GameData);
+                        ConsoleDrawLogic.Draw(timeCap, game.GameData, window);
                     }
                     
                     var gameResult = new GameResult(UpdateLogic.IsOver(game.GameData, out string winner), game.GameData);

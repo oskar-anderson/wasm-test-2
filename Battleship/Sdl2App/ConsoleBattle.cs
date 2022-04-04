@@ -48,12 +48,5 @@ namespace Sdl2App
              SoundEngineOptionFlag.LoadPlugins;
           SoundEngine = new ISoundEngine(SoundOutputDriver.AutoDetect, options);
        }
-
-       /// <param name="deltaTime">Provides a snapshot of timing values.</param>
-       /// <param name="gameData">Game data</param>
-       public override void Draw(double deltaTime, GameData gameData)
-       {
-          ConsoleDrawLogic.Draw(deltaTime, gameData, Window);
-       }
     }
 }

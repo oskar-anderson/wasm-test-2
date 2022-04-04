@@ -59,7 +59,7 @@ namespace PureConsoleApp
                             Helper.FixConsole();
                             break;
                         }
-                        game.Draw(timeCap, game.GameData);
+                        ConsoleDrawLogic.Draw(timeCap, game.GameData);
                     }
                     
                     var gameResult = new GameResult(UpdateLogic.IsOver(game.GameData, out string winner), game.GameData);
