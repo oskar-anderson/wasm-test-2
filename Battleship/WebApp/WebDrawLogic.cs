@@ -10,10 +10,9 @@ namespace WebApp
 {
     public static class WebDrawLogic
     {
-        public static TileData.CharInfo[,] GetDraw(GameData gameData)
+        public static TileData.CharInfo[,] GetDraw(double deltaTime, GameData gameData)
         {
-            gameData.FrameCount++;
-            
+            BaseDraw.Draw(deltaTime, gameData);
             TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
             BaseDraw.GetDrawArea(gameData, ref map);
             return map;

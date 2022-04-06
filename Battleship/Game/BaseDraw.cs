@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Domain;
 using Domain.Model;
@@ -10,6 +11,22 @@ namespace Game
 {
     public static class BaseDraw
     {
+
+        public static void Draw(double deltaTime, GameData gameData)
+        {
+            gameData.ElapsedTime += deltaTime;
+            gameData.DeltaTimes.Add(deltaTime);
+            if (gameData.DeltaTimes.Count > 100)
+            {
+                gameData.DeltaTimes = gameData.DeltaTimes.Skip(Math.Max(0, gameData.DeltaTimes.Count - 100)).ToList();
+            }
+
+            // Draw transformed elements
+            double dFps = 1.0d / gameData.DeltaTimes.Average();
+            string sFps = Math.Floor(dFps).ToString(CultureInfo.InvariantCulture);
+            
+            gameData.FrameCount++;
+        }
         public static void Get_UI(GameData gameData)
         {
             gameData.ActivePlayer.UI_Reset();

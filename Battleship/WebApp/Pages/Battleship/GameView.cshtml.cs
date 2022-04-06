@@ -251,7 +251,7 @@ namespace WebApp.Pages.Battleship
         private void DoGame(BaseBattleship game, Input input)
         {
             new WebUpdateLogic(input).Update(1d, game);
-            GameBoard = WebDrawLogic.GetDraw(game.GameData);
+            GameBoard = WebDrawLogic.GetDraw(1d, game.GameData);
         }
 
         public IActionResult OnPostSave()

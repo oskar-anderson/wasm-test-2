@@ -18,9 +18,8 @@ namespace PureConsoleApp
          BaseDraw.Get_UI(gameData);
 
          // Draw transformed elements
-         double dFps = 1.0d / deltaTime;
-         string sFps = Math.Floor(dFps).ToString(CultureInfo.InvariantCulture);
-         Console.Title = "BattleShip FPS: " + sFps;
+         BaseDraw.Draw(deltaTime, gameData);
+         Console.Title = "BattleShip";
          
          TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
          BaseDraw.GetDrawArea(gameData, ref map);
@@ -110,7 +109,6 @@ namespace PureConsoleApp
          }
 
          ConsoleBattle.ConsoleEngine.DisplayBuffer();
-         gameData.FrameCount++;
       }
    }
 }

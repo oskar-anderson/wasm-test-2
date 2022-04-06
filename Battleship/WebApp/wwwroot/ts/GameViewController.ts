@@ -13,30 +13,34 @@ export default class GameViewController {
     public IsEventListenerDisabled: boolean = false;
     public Rendering: Rendering;
     public FrameCount: number = 0;
+    public CleanInput: Input | null = null;
     
     public constructor(gamedata: GameData, rendering: Rendering) {
         this.Gamedata = gamedata;
         this.Rendering = rendering;
     }
     
-    public async runGameLoop() {
+    public async runGameLoop(deltaTime: number) {
         // allows to easily test different game loops [this.gameLoop_v2() / this.gameLoop_v1() / this.gameLoop()]
-        return await this.gameLoop_v2();
+        return await this.gameLoop_v2(deltaTime);
     }
     
     public async runGame() {
-        this.Gamedata = await this.runGameLoop();
+        this.Gamedata = await this.runGameLoop(0.0);
         this.registerListeners();
-        while (true) {
-            if (! this.IsEventListenerDisabled) {
-                this.Gamedata.Input = KeyboardIdentifierList.getDefaultInput();
-                this.Gamedata = await this.runGameLoop();
-                console.log(this.Gamedata.ElapsedTime);
-                if (this.Gamedata.ElapsedTime > 9000) {
-                    break;
-                }
+        let startTime = performance.now();
+        while (this.Gamedata.ElapsedTime < 9000) {
+            if (this.IsEventListenerDisabled) {
+                continue  // do nothing
             }
-            await GameViewController.sleep(1);
+            let timeDiff = (performance.now() - startTime) / 1000; // in seconds
+            startTime = performance.now();
+            this.Gamedata.Input = this.CleanInput !== null ?
+                this.CleanInput :
+                KeyboardIdentifierList.getDefaultInput();
+            this.CleanInput = null;
+            this.Gamedata = await this.runGameLoop(timeDiff);
+            console.log(this.Gamedata.ElapsedTime);
         }
     }
 
@@ -86,10 +90,8 @@ export default class GameViewController {
                 return ;
             }
             this.IsEventListenerDisabled = true;
-            console.log("Pressed key:");
-            console.log(event.code);
-            console.log(event);
-
+            console.log("Pressed key:", event.code, event);
+            
             let input : Input = KeyboardIdentifierList.getDefaultInput();
             
             switch (event.code) {
@@ -158,10 +160,7 @@ export default class GameViewController {
 
                     break;
             }
-            this.Gamedata.Input = input;
-            this.Gamedata = await this.runGameLoop();
-        
-            
+            this.CleanInput = input;
             this.IsEventListenerDisabled = false;
         })
     }
@@ -172,14 +171,14 @@ export default class GameViewController {
         t.Values = [BtnState.Pressed];
     }
 
-    public async gameLoop(): Promise<GameData> {
-        let gameView = await gameMethods.DoGame(this.Gamedata);
+    public async gameLoop(deltaTime: number): Promise<GameData> {
+        let gameView = await gameMethods.DoGame(deltaTime, this.Gamedata);
         console.log(gameView);
         await this.Rendering.renderByName("GameView", gameView!);
         return gameView!.GameData;
     };
 
-    public async gameLoop_v1(): Promise<GameData> {
+    public async gameLoop_v1(deltaTime: number): Promise<GameData> {
         let gameView: null | GameView_v1 = null;
         let isTestingLocalData = false;
         if (isTestingLocalData) {
@@ -187,7 +186,7 @@ export default class GameViewController {
             this.FrameCount++;
             gameView!.GameData.FrameCount = this.FrameCount;
         } else {
-            gameView = await gameMethods.DoGame_v1(this.Gamedata);
+            gameView = await gameMethods.DoGame_v1(deltaTime, this.Gamedata);
             console.log(gameView);
             await this.Rendering.renderByName("GameView_v1", gameView!);
         }
@@ -195,11 +194,11 @@ export default class GameViewController {
         return gameView!.GameData;
     };
 
-    public async gameLoop_v2(): Promise<GameData> {
+    public async gameLoop_v2(deltaTime: number): Promise<GameData> {
         // add [JsonIgnore] to Domain.Tile.TileData.TileColor rgb properties
         console.log("gameLoop before api:   ", new Date().getTime());
-        let gameView = await gameMethods.DoGame_v2(this.Gamedata);
-        // console.log(gameView);
+        let gameView = await gameMethods.DoGame_v2(deltaTime, this.Gamedata);
+        console.log(gameView);
         console.log("gameLoop after api:    ", new Date().getTime());
         await this.Rendering.renderByName("GameView_v2", gameView!);
         console.log("gameLoop after render: ", new Date().getTime());

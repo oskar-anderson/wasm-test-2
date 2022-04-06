@@ -36,17 +36,8 @@ namespace SfmlApp
       {
          window.Clear();
          BaseDraw.Get_UI(gameData);
-         gameData.ElapsedTime += deltaTime;
-         gameData.DeltaTimes.Add(deltaTime);
-         if (gameData.DeltaTimes.Count > 100)
-         {
-            gameData.DeltaTimes = gameData.DeltaTimes.Skip(Math.Max(0, gameData.DeltaTimes.Count - 100)).ToList();
-         }
-
-         // Draw transformed elements
-         double dFps = 1.0d / gameData.DeltaTimes.Average();
-         string sFps = Math.Floor(dFps).ToString(CultureInfo.InvariantCulture);
-         window.SetTitle("BattleShip FPS: " + sFps);
+         BaseDraw.Draw(deltaTime, gameData);
+         window.SetTitle("BattleShip");
          
 
          TileData.CharInfo[,] map = new TileData.CharInfo[40, 40];
@@ -190,7 +181,6 @@ namespace SfmlApp
          }
          
          window.Display();
-         gameData.FrameCount++;
       }
       
       

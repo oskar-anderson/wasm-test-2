@@ -72,7 +72,7 @@ namespace WebApp.ApiControllers
 			
 			// input is actually being modified in js not here.
 			new WebUpdateLogic(gameData.Input).Update(1d, game);
-			game.GameData.FrameCount++;
+			BaseDraw.Draw(1d, gameData);
 
 			GameViewDTO gameViewDto = GetGameViewDto(game);
 			return TurnApiReturnValueToJson(gameViewDto);
@@ -90,7 +90,7 @@ namespace WebApp.ApiControllers
 			BaseBattleship game = new WebBattle(gameData);
 			
 			new WebUpdateLogic(gameData.Input).Update(1d, game);
-			game.GameData.FrameCount++;
+			BaseDraw.Draw(1d, gameData);
 
 			GameViewDTO_v1 gameViewDto = GetGameViewDto_v1(game);
 			return TurnApiReturnValueToJson(gameViewDto);
@@ -99,13 +99,13 @@ namespace WebApp.ApiControllers
 		[HttpPost("DoGame_v2")]
 		[Consumes("application/json")]
 		[Produces("application/json")]
-		public ActionResult<string> DoGame_v2(GameDataSerializable gameDataSerializable)
+		public ActionResult<string> DoGame_v2([FromBody] GameDataAndTimeDiff gameDataAndTimeDiff)
 		{
-			GameData gameData = GameDataSerializable.ToGameModelSerializable(gameDataSerializable);
-			BaseBattleship game = new WebBattle(gameData);
+			GameData gameDataWorkable = GameDataSerializable.ToGameModelSerializable(gameDataAndTimeDiff.GameData);
+			BaseBattleship game = new WebBattle(gameDataWorkable);
 			
-			new WebUpdateLogic(gameData.Input).Update(1d, game);
-			game.GameData.FrameCount++;
+			new WebUpdateLogic(gameDataWorkable.Input).Update(gameDataAndTimeDiff.DeltaTime, game);
+			BaseDraw.Draw(gameDataAndTimeDiff.DeltaTime, gameDataWorkable);
 
 			GameViewDTO_v2 gameViewDTO_v2 = new GameViewDTO_v2(
 				new GameDataSerializable(game.GameData),
