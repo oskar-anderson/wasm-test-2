@@ -39,8 +39,9 @@ namespace Tests
             // GetDrawPerformanceTest();
             // SaveGameDataAsGzip();
             // ReadGameDataFromGzip();
-            RunSkia();
+            // RunSkia();
             // using (var game = new GameTest()) { game.Run(); }
+            GameTest.Silknet();
         }
 
         private static GameData GetGameData()

@@ -43,6 +43,17 @@ This project is done for ICD0008 C# course the purpose of learning C#, databases
 - web font [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?query=press&sidebar.open=true&selection.family=Press+Start+2P)
 
 
+## Graphic API notes
+
+- https://github.com/dotnet/Silk.NET - PlatformNotSupportedException https://dotnet.github.io/Silk.NET/docs/hlu/troubleshooting.html, requires binaries
+- SDL2 - does not work (tried to include as nuget pkg.)
+- SFML - good, but could not get to work on linux platform
+- Veldrid - https://veldrid.dev/ low-level graphics API
+- Monogame - has built-in gameloop, Draw function is protected
+- Unity - 
+- TGUI - SFML graphics plugin, https://tgui.eu/
+- c++ based toolkits: Qt, wxWidgets - require learning c++
+
 ## Notes
 
 dotnet publish --self-contained --use-current-runtime --configuration Release
