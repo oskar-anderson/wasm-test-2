@@ -42,3 +42,27 @@ window.ReadCookie = (cname) => {
     }
     return 0;
 }
+
+
+window.JsFunctions = {
+    addKeyboardEventListener: function () {
+        let serializedEvent = (e) => {
+            return {
+                key: e.key,
+                code: e.keyCode.toString(),
+                location: e.location,
+                repeat: e.repeat,
+                ctrlKey: e.ctrlKey,
+                shiftKey: e.shiftKey,
+                altKey: e.altKey,
+                metaKey: e.metaKey,
+                type: e.type
+            };
+        }
+        window.document.addEventListener('keydown', (e) => {
+            DotNet.invokeMethodAsync('BlazorApp', 'JsKeyDown', serializedEvent(e))
+        })
+    },
+}
+
+console.log("utilities.js loaded");

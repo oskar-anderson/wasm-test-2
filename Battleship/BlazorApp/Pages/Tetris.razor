@@ -2,47 +2,54 @@
 @using BlazorApp.Tetris;
 @using BlazorApp.Pages.partials
 @using BlazorApp.Tetris.Enums;
-@inject IJSRuntime _jsRuntime;
+@using System.Diagnostics
+@inject IJSRuntime jsRuntime;
 
+@* ReSharper disable MemberCanBePrivate.Global *@
 @code {
-    GameData GameData = new GameData();
+    public GameData GameData = new GameData();
+
+    public static KeyboardEventArgs? KeyboardEventArgs = null;
     
     List<TetrominoStyle> nextTetrominos = new List<TetrominoStyle>();
     
     //The standard delay is how long the game waits before dropping the current tetromino by one row.
     int standardDelay = 1000;
 
-    //This flag is set if the player "hard drops" a tetromino all the way to the bottom
-    bool skipDelay = false;
-
     //This flag changes based on whether or not the user checks the "mute audio" checkbox.
     bool playAudio = true;
 
-    protected ElementReference gameBoardDiv;  // set by the @ref attribute
+    public ElementReference GameBoardDiv;  // set by the @ref attribute
 
     protected override async Task OnInitializedAsync()
     {
         
     }
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await _jsRuntime.InvokeVoidAsync("SetFocusToElement", gameBoardDiv);
+            // await jsRuntime.InvokeVoidAsync("JsFunctions.addKeyboardEventListener");
         }
     }
 
-    public void NewGame()
+    public async void NewGame()
     {
         GameData = new GameData();
+        KeyboardEventArgs = null;
+        nextTetrominos = new List<TetrominoStyle>();
+        playAudio = true;
+        await RunGame();
     }
 
     public async Task RunGame()
     {
         //Start playing the theme music
         if (playAudio)
-            await _jsRuntime.InvokeAsync<string>("PlayAudio", "theme");
+        {
+            await jsRuntime.InvokeAsync<string>("PlayAudio", "theme");
+        }
 
 
 
@@ -57,9 +64,7 @@
         //Start playing the game
         GameData.Grid.State = GameState.Playing;
 
-        //Focus the browser on the board div
-        await _jsRuntime.InvokeVoidAsync("SetFocusToElement", gameBoardDiv);
-
+        await GameBoardDiv.FocusAsync();
         //Where there is no tetromino with a row of 21 or greater
         while (!GameData.Grid.Cells.HasRow(21)) //Game loop
         {
@@ -84,31 +89,31 @@
         //Once there is a tetromino with a row of 21 or greater, the game is over.
         GameData.Grid.State = GameState.GameOver;
         ToggleAudio();
+        StateHasChanged();
     }
 
-    public async Task ToggleAudio()
+    public void ToggleAudio()
     {
         playAudio = !playAudio;
         PlayAudio(playAudio);
-        //Focus the browser on the board div
-        await _jsRuntime.InvokeVoidAsync("SetFocusToElement", gameBoardDiv);
     }
 
     public async void PlayAudio(bool on)
     {
-        await _jsRuntime.InvokeAsync<string>(on ? "PlayAudio" : "PauseAudio", "theme");
+        await jsRuntime.InvokeAsync<string>(on ? "PlayAudio" : "PauseAudio", "theme");
     }
 
     //Delays the game up to the passed-in amount of milliseconds in 50 millisecond intervals
     public async Task Delay(int millis)
     {
-        int totalDelay = 0;
-        while (totalDelay < millis && !skipDelay)
+        var sw = Stopwatch.StartNew();
+        while (sw.ElapsedMilliseconds < millis)
         {
-            totalDelay += 50;
-            await Task.Delay(50);
+            await Task.Delay(1);
+            if (KeyboardEventArgs == null) continue;
+            KeyDown(KeyboardEventArgs);
+            KeyboardEventArgs = null;
         }
-        skipDelay = false;
     }
 
     public async Task RunCurrentTetromino()
@@ -117,8 +122,15 @@
         while (GameData.CurrentTetromino!.CanMoveDown(GameData.Grid))
         {
             //Wait for the standard delay
-            await Delay(standardDelay);
-
+            var beforeMovingTetrominoDown = async () =>
+            {
+                await Delay(standardDelay);
+            };
+            var sw = Stopwatch.StartNew();
+            await beforeMovingTetrominoDown();
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+            
             //Move the tetromino down one row
             GameData.CurrentTetromino.MoveDown(GameData.Grid);
 
@@ -127,8 +139,11 @@
 
             //If the tetromino can no longer move down BUT can still move in other directions,
             //delay for an additional half-second to let the user move if they want.
-            if (!GameData.CurrentTetromino.CanMoveDown(GameData.Grid) && GameData.CurrentTetromino.CanMove(GameData.Grid))
-                await Delay(500);
+            if (!GameData.CurrentTetromino.CanMoveDown(GameData.Grid))
+            {
+                await Delay(standardDelay / 2);
+            }
+            KeyboardEventArgs = null;
         }
 
         //"Solidify" the current tetromino by adding its covered squares to the board's cells
@@ -138,22 +153,14 @@
     public void LevelChange()
     {
         //The user goes up a level for every 4000 points they score.
-        int counter = 1;
-        int scoreCopy = GameData.Score;
-        while(scoreCopy > 4000)
-        {
-            counter++;
-            scoreCopy -= 4000;
-        }
-
-        int newLevel = counter;
+        int newLevel = GameData.Score / 4000;
         if(newLevel != GameData.Level) //If the user has gone up a level
         {
             //Reduce the drop delay by 100 milliseconds for every level the User has made.
-            standardDelay = 1000 - ((newLevel - 1) * 100);
+            standardDelay = Math.Clamp(500 - newLevel * 100, 100, 500);
 
             //Set the new level
-            GameData.Level = newLevel;
+            GameData.Level = newLevel + 1;
         }
     }
 
@@ -202,46 +209,70 @@
                     break;
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(standardDelay / 2);
         }
         GameData.Grid.State = GameState.Playing;
     }
-
-    protected async Task KeyDown(KeyboardEventArgs e)
+    
+    protected void KeyDown(KeyboardEventArgs e)
     {
+        Console.WriteLine($"keypress: {e.Key}");
         if (GameData.Grid.State == GameState.Playing)
         {
             if (GameData.CurrentTetromino == null)
             {
                 throw new ArgumentException($"{nameof(GameData.CurrentTetromino)} cannot be null!");
             }
-            if (e.Key == "ArrowRight")
+            var hasStateChanged = false;
+            switch (e.Key)
             {
-                GameData.CurrentTetromino.MoveRight(GameData.Grid);
+                case "ArrowRight":
+                    if (GameData.CurrentTetromino.CanMoveRight(GameData.Grid))
+                    {
+                        GameData.CurrentTetromino.MoveRight(GameData.Grid);    
+                        hasStateChanged = true;
+                    }
+                    break;
+                case "ArrowLeft":
+                    if (GameData.CurrentTetromino.CanMoveLeft(GameData.Grid))
+                    {
+                        GameData.CurrentTetromino.MoveLeft(GameData.Grid);    
+                        hasStateChanged = true;
+                    }
+                    break;
+                case "ArrowDown":
+                case " ":
+                {
+                    int addToScore = GameData.CurrentTetromino.Drop(GameData.Grid);
+                    GameData.Score += addToScore;
+                    hasStateChanged = true;
+                    break;
+                }
+                case "ArrowUp":
+                    GameData.CurrentTetromino.Rotate();
+                    hasStateChanged = true;
+                    break;
+                case "m":
+                    ToggleAudio();
+                    break;
             }
-            if (e.Key == "ArrowLeft")
+            if (hasStateChanged)
             {
-                GameData.CurrentTetromino.MoveLeft(GameData.Grid);
-            }
-            if(e.Key == "ArrowDown" || e.Key == " ")
-            {
-                int addlScore = GameData.CurrentTetromino.Drop(GameData.Grid);
-                GameData.Score += addlScore;
-                skipDelay = true;
                 StateHasChanged();
             }
-            if(e.Key == "ArrowUp")
-            {
-                GameData.CurrentTetromino.Rotate();
-            }
-            if(e.Key == "m")
-            {
-                await ToggleAudio();
-            }
-            StateHasChanged();
         }
     }
+    
+    /// <summary>
+    /// Called by JavaScript when a Key Down event fires.
+    /// </summary>
+    [JSInvokable]
+    public static void JsKeyDown(KeyboardEventArgs e)
+    {
+        KeyboardEventArgs = e;
+    }
 }
+@* ReSharper restore MemberCanBePrivate.Global *@
 
 <audio id="theme" src="../sounds/tetris-theme.ogg" preload="auto" loop="loop"></audio>
 
@@ -267,7 +298,7 @@
 
 <div class="row">
     <div class="col">
-        <div class="tetris-container" tabindex="0" @onkeydown="KeyDown" @ref="gameBoardDiv">
+        <div class="tetris-container" tabindex="0" @onkeydown="KeyDown" @onkeydown:preventDefault @ref="GameBoardDiv">
             @for (int i = GameData.Grid.Height; i >= 1; i--)
             {
                 <div class="tetris-row">
