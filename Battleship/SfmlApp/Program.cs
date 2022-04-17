@@ -46,7 +46,7 @@ namespace SfmlApp
                         double elapsedTime = (DateTime.Now - startTime).TotalSeconds;
                         startTime = DateTime.Now;
                         double timeCap = Math.Min(elapsedTime, 0.05);  // 20 fps
-                        bool running = new UpdateLogic().Update(timeCap, game);;
+                        bool running = new ConsoleUpdateLogic(window).Update(timeCap, game);;
                         if (!running)
                         {
                             window.Close();
