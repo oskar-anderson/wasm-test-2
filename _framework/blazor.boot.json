@@ -7,9 +7,9 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorApp.dll": "sha256-Q\/+7Fn4h4lmB2QFUW+SxzFH+NsqhFGmqkVNPT5Yek04=",
-      "Domain.dll": "sha256-sb36KrQDpwmTX52VObBg+pfrzcAau4mhseqeqZ9gG8Q=",
-      "Game.dll": "sha256-jO4rkTq94wo\/JinhSfUEfSgRsV86CUCfeghy7BjyqA0=",
+      "BlazorApp.dll": "sha256-wbg+bc5Ur4PSgeGpS5e9pKiYAj6LgrtxPmeBhhFe1aM=",
+      "Domain.dll": "sha256-SXAt9VJm8xee24qawdiRilNvAj+EnmA4iY9O2rmxY7s=",
+      "Game.dll": "sha256-6eFT8TRGHvlTJG9jKbcWpt4yzX+WmVcTlqH11i2WcWI=",
       "Microsoft.AspNetCore.Components.dll": "sha256-dRey1KboWO77PVQCW0hR719qYRn6r+eoMAJRrzLcuSA=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-fhhFX3s9lN9hMAtc2LILc93LSHZZnreZkK5mK0lWZSQ=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-Ph2ZOl\/LOY2cCUG\/S2iA61YUWIsDlcAHFxzdTG43rPw=",
@@ -60,7 +60,7 @@
     "libraryInitializers": null,
     "pdb": null,
     "runtime": {
-      "dotnet.6.0.3.ouy3595844.js": "sha256-pRmcHKZN4T\/YbX9dj6ITT4sNtkJ9w07OLcwl4645nPg=",
+      "dotnet.6.0.3.0uxbbys9vm.js": "sha256-pRmcHKZN4T\/YbX9dj6ITT4sNtkJ9w07OLcwl4645nPg=",
       "dotnet.timezones.blat": "sha256-scXGarUHqfFWPq0d6kt1FgrQvd1\/ndIwUTFptznHbsc=",
       "dotnet.wasm": "sha256-AW7xegLOO5MgfdWQ5okeetFKzb4byQc4c+tkQjAO8+0=",
       "icudt_CJK.dat": "sha256-WPyI4hWDPnOw62Nr27FkzGjdbucZnQD+Ph+GOPhAedw=",
