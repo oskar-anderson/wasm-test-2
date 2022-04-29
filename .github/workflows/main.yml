@@ -19,19 +19,18 @@ jobs:
       with:
         dotnet-version: 6.0.201
 
-    - name: active directory
-      run: |
-        pwd
-    - name: change active directory
-      run: |
-        cd Battleship/BlazorApp
-        pwd
+    run: pwd
+    run: cd Battleship    
+    run: pwd
+
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
-      run: dotnet publish -c Release -o ../../release --nologo
-    - name: change active directory
-      run: cd ../..
-    
+      run: | 
+        pwd        
+        cd Battleship/BlazorApp        
+        pwd        
+        dotnet publish -c Release -o ../../release --nologo
+        
     # changes the base-tag in index.html from '/' to 'GithubPages' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to GitHubPages
       run: sed -i 's/<base href="\/" \/>/<base href="\/GithubPages\/" \/>/g' release/wwwroot/index.html
