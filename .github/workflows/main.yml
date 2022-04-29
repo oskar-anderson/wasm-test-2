@@ -21,6 +21,7 @@ jobs:
 
     - name: change active directory
       run: cd Battleship/BlazorApp
+    - run: pwd
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
       run: dotnet publish -c Release -o ../../release --nologo
