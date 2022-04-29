@@ -21,7 +21,9 @@ jobs:
 
     - name: path test
       run: pwd
-      run: cd Battleship    
+    - name: path test
+      run: cd Battleship
+    - name: path test    
       run: pwd
 
     # publishes Blazor project to the release-folder
