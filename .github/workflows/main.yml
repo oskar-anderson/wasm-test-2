@@ -24,6 +24,9 @@ jobs:
       with:
         dotnet-version: 6.0.201
 
+    - name: tree
+      run: |
+        sudo apt install tree
     - name: path test
       run: pwd
     - name: path test
@@ -54,10 +57,10 @@ jobs:
     # https://stackoverflow.com/questions/3455625/linux-command-to-print-directory-structure-in-the-form-of-a-tree
     - name: tree (with files)  
       run: find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" 
+
     - name: tree
-      run: |
-        sudo apt install tree
-        tree
+      run: tree
+
     - name: Commit wwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
