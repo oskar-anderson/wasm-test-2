@@ -1,3 +1,4 @@
+# stolen from https://github.com/swimburger-demos/GitHubPagesDemo/blob/main/.github/workflows/main.yml
 name: Deploy to GitHub Pages
 
 # Run workflow on every push to the master branch
@@ -9,6 +10,7 @@ jobs:
   deploy-to-github-pages:
     # use ubuntu-latest image to run steps on
     runs-on: ubuntu-latest
+    # https://stackoverflow.com/questions/70374602/getting-error-while-pushing-changes-to-my-own-public-repo-through-github-actions
     permissions:
       contents: write
       packages: write
@@ -49,8 +51,13 @@ jobs:
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
     
+    # https://stackoverflow.com/questions/3455625/linux-command-to-print-directory-structure-in-the-form-of-a-tree
     - name: tree (with files)  
       run: find . | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/|-\1/" 
+    - name: tree
+      run: |
+        sudo apt install tree
+        tree
     - name: Commit wwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
