@@ -4,11 +4,13 @@
 @using BlazorApp.Tetris.Enums;
 @using System.Diagnostics
 @inject IJSRuntime jsRuntime;
+@implements IDisposable
 
 @* ReSharper disable MemberCanBePrivate.Global *@
 @code {
     public GameData GameData = new GameData();
 
+    bool needToExit;
     public static KeyboardEventArgs? KeyboardEventArgs = null;
     
     List<TetrominoStyle> nextTetrominos = new List<TetrominoStyle>();
@@ -121,6 +123,11 @@
         //While the tetromino can still move down
         while (GameData.CurrentTetromino!.CanMoveDown(GameData.Grid))
         {
+            if (needToExit)
+            {
+                throw new Exception("Game exited!");
+            }
+            
             //Wait for the standard delay
             var beforeMovingTetrominoDown = async () =>
             {
@@ -270,6 +277,11 @@
     public static void JsKeyDown(KeyboardEventArgs e)
     {
         KeyboardEventArgs = e;
+    }
+    
+    public void Dispose()
+    {
+        needToExit = true;
     }
 }
 @* ReSharper restore MemberCanBePrivate.Global *@
